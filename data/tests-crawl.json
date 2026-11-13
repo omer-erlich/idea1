@@ -1,0 +1,2581 @@
+{
+ "meta": {
+  "source": "sheba.co.il test pages",
+  "retrieved": "2026-11-13",
+  "count": 223,
+  "withTitle": 213,
+  "withClinicLinks": 212,
+  "withUnitText": 95,
+  "missing": [
+   "colon-transit-time-test",
+   "colonoscopy-prep-with-moviprep-guide"
+  ]
+ },
+ "tests": [
+  {
+   "url": "https://www.sheba.co.il/cancer/tests/phi-prostate-cancer-early-detection-test",
+   "slug": "phi-prostate-cancer-early-detection-test",
+   "section": "cancer",
+   "title": "בדיקת PHI לגילוי מוקדם של סרטן הערמונית",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cancer/tests/trus-trans-rectal-ultrasound-prostate",
+   "slug": "trus-trans-rectal-ultrasound-prostate",
+   "section": "cancer",
+   "title": "TRUS – אולטרסאונד טראנס רקטלי של הערמונית",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__advanced-technology-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cancer/test/prostate-fusion-biopsy",
+   "slug": "prostate-fusion-biopsy",
+   "section": "cancer",
+   "title": "ביופסיית פיוז'ן – השיטה החכמה לבדיקת הערמונית",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__advanced-technology-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "כיצד מתבצעת ביופסיית פיוז'ן לערמונית?"
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/echo-heart-test-echocardiography",
+   "slug": "echo-heart-test-echocardiography",
+   "section": "cardiovascular",
+   "title": "בדיקת אקו-לב",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__non-invasive-cardiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: הבדיקה מתבצעת בשכיבה (על הגב ועל הצד) בחדר מעומעם תוך הצמדת מדבקות לרישום חשמלי של הלב ומריחת ג'ל על החזה לצורך העברת מתמר."
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/heart-mapping",
+   "slug": "heart-mapping",
+   "section": "cardiovascular",
+   "title": "מיפוי לב",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/transesophageal-echocardiogram",
+   "slug": "transesophageal-echocardiogram",
+   "section": "cardiovascular",
+   "title": "בדיקת אקו לב דרך הוושט",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__non-invasive-cardiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/stress-echocardiogram",
+   "slug": "stress-echocardiogram",
+   "section": "cardiovascular",
+   "title": "בדיקת אקוקרדיוגרפיה במאמץ",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__non-invasive-cardiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/adenosine-test",
+   "slug": "adenosine-test",
+   "section": "cardiovascular",
+   "title": "בדיקת אדנוזין",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__davidai-center-arrhythmias",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בליווי צמוד של רופא ואחות."
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/endopat-assessment-endothelial-function",
+   "slug": "endopat-assessment-endothelial-function",
+   "section": "cardiovascular",
+   "title": "בדיקה להערכת תפקוד האנדותל במכשיר אנדופאט",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת באמצעות אצבעון עם חיישנים"
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/brachial-artery-endothelial-function-test",
+   "slug": "brachial-artery-endothelial-function-test",
+   "section": "cardiovascular",
+   "title": "בדיקת הערכת תפקוד האנדותל בעורק הברכיאלי",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__non-invasive-cardiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/cardiovascular/tests/tilt-test",
+   "slug": "tilt-test",
+   "section": "cardiovascular",
+   "title": "בדיקת טילט",
+   "heading": null,
+   "clinicLinks": [
+    "cardiovascular__cardiology-clinics__fainting-syncope-clinic",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/gynecology/tests/women-tests-guide-by-age",
+   "slug": "women-tests-guide-by-age",
+   "section": "gynecology",
+   "title": "תמיד אישה: הבדיקות הרפואיות שכל אישה צריכה לעבור",
+   "heading": null,
+   "clinicLinks": [
+    "pregnancy__departments__delivery-rooms",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/gynecology/tests/hysteroscopy",
+   "slug": "hysteroscopy",
+   "section": "gynecology",
+   "title": "היסטרוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "היא יכולה להיות אבחנתית או ניתוחית ולרוב מתבצעת במרפאה ללא הרדמה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/ct-scan-reproductive-system",
+   "slug": "ct-scan-reproductive-system",
+   "section": "imaging",
+   "title": "CT של מערכת המין והרבייה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "אבחנה שמתבצעת באמצעות CT מונעת לעתים את הצורך בביצוע ניתוח סקירה או ביופסיה ניתוחית."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/5-facts-about-ct-scan",
+   "slug": "5-facts-about-ct-scan",
+   "section": "imaging",
+   "title": "5 עובדות על CT",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/ultrasound-breast",
+   "slug": "ultrasound-breast",
+   "section": "imaging",
+   "title": "בדיקת אולטרסאונד של השד",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__breast-imaging-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/cardiac-mri",
+   "slug": "cardiac-mri",
+   "section": "imaging",
+   "title": "בדיקת MRI של הלב",
+   "heading": "אגף דימות",
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/computed-tomography-ct-scan",
+   "slug": "computed-tomography-ct-scan",
+   "section": "imaging",
+   "title": "טומוגרפיה ממוחשבת CT",
+   "heading": "אגף דימות",
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/imaging-tests-under-anesthesia",
+   "slug": "imaging-tests-under-anesthesia",
+   "section": "imaging",
+   "title": "בדיקות דימות בהרדמה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "תהליך ההרדמה מתחיל בהערכה קדם ניתוחית על ידי רופא מרדים המתבצעת בדרך כלל כמה ימים לפני ביצוע הפעולה וההרדמה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/mr-angiography-mra",
+   "slug": "mr-angiography-mra",
+   "section": "imaging",
+   "title": "בדיקת MRI של כלי הדם (אנגיוגרפיה)",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/ct-heart-scan",
+   "slug": "ct-heart-scan",
+   "section": "imaging",
+   "title": "צנתור וירטואלי - CT לב",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/bone-mapping",
+   "slug": "bone-mapping",
+   "section": "imaging",
+   "title": "מיפוי עצמות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בשכיבה במשך חצי שעה עד שעה, לאחר קליטת החומר בשלד"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/computed-tomography-ct-scan-contrast-material",
+   "slug": "computed-tomography-ct-scan-contrast-material",
+   "section": "imaging",
+   "title": "בדיקת CT עם חומר ניגוד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/prostate-mri",
+   "slug": "prostate-mri",
+   "section": "imaging",
+   "title": "MRI של הערמונית",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__kidney-and-urinary-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מיקום מדויק של אזור ההישנות יסייע בהכוונת הטיפול בהמשך."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/heart-mri-children",
+   "slug": "heart-mri-children",
+   "section": "imaging",
+   "title": "MRI לב ו-CT אנגיו",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__cardiac-catheterization",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לפני הבדיקה, אנחנו בודקים את מיקום הלב באולטראסאונד ועל פי זה ממקמים מכשיר הקורא את פעימות הלב על ידי שימוש בגלי אולטראסאונד ומעביר את קריאת הפעימות אל הסורק באופן אלחוטי."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/mammography-breast-checks",
+   "slug": "mammography-breast-checks",
+   "section": "imaging",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests/brain-catheterization-cerebral-angiography",
+   "slug": "brain-catheterization-cerebral-angiography",
+   "section": "imaging",
+   "title": "צנתור מוח",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__interventional-neuroradiology-unit",
+    "imaging__clinics__interventional-radiology",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: צנתור מוח בגישה רדיאלית מתבצע באמצעות החדרה של צנתר דק מעורק כף היד לכלי הדם במוח לצורך צילום, אבחון ופעולות טיפוליות (כגון שליפת קריש או החדרת תומכן)."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/abdominal-digestive-system-ct-scan",
+   "slug": "abdominal-digestive-system-ct-scan",
+   "section": "imaging",
+   "title": "CT בטן ומערכת העיכול",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/angiography-blood-vessels-ct-scan",
+   "slug": "angiography-blood-vessels-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT של כלי הדם",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/arthrography-ct-scan",
+   "slug": "arthrography-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT ארתרוגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בשני שלבים: ארתרוגרפיה ו-CT"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/biopsy-ct-guided",
+   "slug": "biopsy-ct-guided",
+   "section": "imaging",
+   "title": "ביופסיה בהנחיית CT",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "במקרים רבים ביופסיה מתבצעת בהנחיית מכשיר CT וניטלת דגימה מממצאים באיברים פנימיים כגון: ריאה, כבד, כליה, בלוטות לימפה ועצמות"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/kidney-stones-ct-scan",
+   "slug": "kidney-stones-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT לאבנים בכליות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/kidneys-urinary-system-ct-scan",
+   "slug": "kidneys-urinary-system-ct-scan",
+   "section": "imaging",
+   "title": "CT כליות ומערכת השתן",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__kidney-and-urinary-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "תחילה שולחן הבדיקה נע במהירות דרך הסורק כדי לקבוע את המיקום ההתחלתי המיטבי לבדיקה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/myelography-ct-scan",
+   "slug": "myelography-ct-scan",
+   "section": "imaging",
+   "title": "CT מיאלוגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "במהלך החדרת המחט וההזרקה נעשה שימוש בצילום שיקוף (פלואורוסקופיה) כדי לעקוב אחר מיקום המחט והתפשטות חומר הניגוד."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/preparation-for-ct-scan-brain-chest-neck",
+   "slug": "preparation-for-ct-scan-brain-chest-neck",
+   "section": "imaging",
+   "title": "הכנה לבדיקת CT של המוח, בית החזה והצוואר",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/skeletal-ct-scan",
+   "slug": "skeletal-ct-scan",
+   "section": "imaging",
+   "title": "CT של מערכת השלד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/urography-ct-scan-ctu",
+   "slug": "urography-ct-scan-ctu",
+   "section": "imaging",
+   "title": "בדיקת CT אורוגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בהשגחת רופא מיחידת אורורדיולוגיה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/ct-ai-lung-cancer-early-detection-scan",
+   "slug": "ct-ai-lung-cancer-early-detection-scan",
+   "section": "imaging",
+   "title": "CT-AI לגילוי מוקדם של סרטן ריאות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__chest-and-lungs-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/drainage-ct-guided",
+   "slug": "drainage-ct-guided",
+   "section": "imaging",
+   "title": "ניקוז בהנחיית CT",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בדיקה יחסית קצרה ובדרך כלל נטולת סיבוכים, המחליפה ניקוז המתבצע בחדר ניתוח, ומטרתה ניקוז מורסה או הצטברות נוזלים בחלקים שונים של הגוף"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/pediatric-ct-scan",
+   "slug": "pediatric-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "כיצד נערכת בדיקת CT בילדים? האם תמיד יש צורך בהרדמה? איך מתכוננים אליה?"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/brain-ct-scan",
+   "slug": "brain-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT של הראש ועמוד השדרה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/abdomen-pelvis-ct-scan",
+   "slug": "abdomen-pelvis-ct-scan",
+   "section": "imaging",
+   "title": "בדיקת CT של הבטן והאגן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "אם צריך לשתות חומר ניגוד, השתייה מתבצעת במכון הרנטגן במשך כשעה-שעתיים לפני הבדיקה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-ct/head-and-neck-angiography",
+   "slug": "head-and-neck-angiography",
+   "section": "imaging",
+   "title": "בדיקת CTA: אנגיוגרפיה של הראש והצוואר",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/abdominal-organs-mri-scans",
+   "slug": "abdominal-organs-mri-scans",
+   "section": "imaging",
+   "title": "בדיקת MRI בטן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/arthrography-joints-mri",
+   "slug": "arthrography-joints-mri",
+   "section": "imaging",
+   "title": "בדיקת MRI ארתורגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בשני שלבים: ארתורגרפיה ו-MRI."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/brain-mri-scan",
+   "slug": "brain-mri-scan",
+   "section": "imaging",
+   "title": "בדיקת MRI של המוח ועמוד השדרה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בשכיבה בתוך מכשיר דמוי מנהרה, פתוח משני צדדיו."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/breast-mri-scan",
+   "slug": "breast-mri-scan",
+   "section": "imaging",
+   "title": "MRI של השד",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__breast-imaging-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "MRI היא הבדיקה הרגישה ביותר לגילוי סרטן שד ומתבצעת באמצעות מגנט (תהודה מגנטית), ללא קרינת רנטגן."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/chest-lungs-mri-scan",
+   "slug": "chest-lungs-mri-scan",
+   "section": "imaging",
+   "title": "בדיקת MRI של בית החזה והריאות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__chest-and-lungs-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/defecography-mri",
+   "slug": "defecography-mri",
+   "section": "imaging",
+   "title": "בדיקת MRI דפקוגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "היא מספקת מידע על תנועתיות האיברים ומצב השרירים והרקמות ומתבצעת בהתאם להמלצה רפואית."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/dynamic-abdominal-wall-mri-valsalva",
+   "slug": "dynamic-abdominal-wall-mri-valsalva",
+   "section": "imaging",
+   "title": "בדיקת MRI דופן הבטן דינמית במאמץ (ולסלבה)",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/dynamic-pelvic-mri-valsalva-inguinal-hernia",
+   "slug": "dynamic-pelvic-mri-valsalva-inguinal-hernia",
+   "section": "imaging",
+   "title": "בדיקת MRI אגן דינמי במאמץ",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בדיקת MRI אגן דינמי במאמץ (ולסלבה) מתבצעת בעת חשד לבקע מפשעתי ולצורך הערכה מדויקת של מצב דופן הבטן והמפשעות, גם במנוחה ומאמץ"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/fetal-brain-mri",
+   "slug": "fetal-brain-mri",
+   "section": "imaging",
+   "title": "MRI מוח עוברי",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__diagnostic-neuroradiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "שיתוף פעולה רב-תחומי: הפענוח מתבצע בשיתוף פעולה בין נוירו-רדיולוגים מומחים ורופאת נשים מומחית לדימות מוח עובר באולטרהסאונד וב-MRI."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/joint-cartilage-evaluation-mri-scan",
+   "slug": "joint-cartilage-evaluation-mri-scan",
+   "section": "imaging",
+   "title": "בדיקת MRI להערכת הסחוס המפרקי",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/kidneys-urography-mru-mri-scan",
+   "slug": "kidneys-urography-mru-mri-scan",
+   "section": "imaging",
+   "title": "אורוגרפיה בתהודה מגנטית (MRI)",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/mri-scans-under-anesthesia-videos",
+   "slug": "mri-scans-under-anesthesia-videos",
+   "section": "imaging",
+   "title": "סרטוני הדרכה לבדיקות MRI",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/mri-general",
+   "slug": "mri-general",
+   "section": "imaging",
+   "title": "מהי בדיקת MRI?",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/pediatric-mri-scan",
+   "slug": "pediatric-mri-scan",
+   "section": "imaging",
+   "title": "בדיקת MRI בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/pediatric-mri-scan-under-anesthesia",
+   "slug": "pediatric-mri-scan-under-anesthesia",
+   "section": "imaging",
+   "title": "בדיקת MRI בהרדמה לילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/pelvic-mri-scan",
+   "slug": "pelvic-mri-scan",
+   "section": "imaging",
+   "title": "MRI של רצפת האגן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/placental-mri",
+   "slug": "placental-mri",
+   "section": "imaging",
+   "title": "MRI של השליה",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לרוב היא מתבצעת בשליש האחרון של ההריון ולעתים בשבועות מוקדמים יותר - משבוע 20 ואילך."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/prenatal-fetal-mri-scan",
+   "slug": "prenatal-fetal-mri-scan",
+   "section": "imaging",
+   "title": "בדיקת MRI לעוברים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לרוב הבדיקה מתבצעת בשליש האחרון של ההריון ולעתים בשבועות מוקדמים יותר - משבוע 20 ואילך."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/prostate-biopsy-with-mri-guidnace",
+   "slug": "prostate-biopsy-with-mri-guidnace",
+   "section": "imaging",
+   "title": "ביופסיה של הערמונית בהנחיית MRI",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לאחר מכן סריקה נוספת לזיהוי מיקום המחט."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/skeletal-mri",
+   "slug": "skeletal-mri",
+   "section": "imaging",
+   "title": "MRI של מערכת השלד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-mri/preoperative-brain-mapping",
+   "slug": "preoperative-brain-mapping",
+   "section": "imaging",
+   "title": "מיפוי מוחי טרום ניתוחי",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקות מתבצעת בתוך מכשיר MRI מתקדם, כאשר במהלך הבדיקה המטופל יתבקש לבצע סדרת משימות פשוטות המותאמות באופן ספציפי למטופל על בסיס מיקום הגידול, שפת האם ומידת שיתוף הפעולה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/active-bleeding-digestive-system-mapping",
+   "slug": "active-bleeding-digestive-system-mapping",
+   "section": "imaging",
+   "title": "מיפוי לדמם פעיל במערכת העיכול",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/bile-duct-mapping",
+   "slug": "bile-duct-mapping",
+   "section": "imaging",
+   "title": "מיפוי דרכי מרה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/bone-mapping-pet-ct-technetium-99m-mdp",
+   "slug": "bone-mapping-pet-ct-technetium-99m-mdp",
+   "section": "imaging",
+   "title": "מיפוי עצמות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בשכיבה במשך חצי שעה עד שעה, לאחר קליטת החומר בשלד"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/bone-marrow-mapping-technetium-99-pet-ct",
+   "slug": "bone-marrow-mapping-technetium-99-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי מח עצם עם טכנציום 99 סולפור קולואיד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/brain-mapping-flutemetamol-f-18-pet-ct",
+   "slug": "brain-mapping-flutemetamol-f-18-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי מוח עם Flutemetamol F 18 באמצעות PET-CT",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/brain-mapping-pet-ct-f18-dopa",
+   "slug": "brain-mapping-pet-ct-f18-dopa",
+   "section": "imaging",
+   "title": "מיפוי מוח/ כל-גופי עם F18-DOPA",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/dynamic-kidney-mapping-dtpamag-3",
+   "slug": "dynamic-kidney-mapping-dtpamag-3",
+   "section": "imaging",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/esophageal-movement-mapping",
+   "slug": "esophageal-movement-mapping",
+   "section": "imaging",
+   "title": "מיפוי ושט",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/gastric-emptying-mapping",
+   "slug": "gastric-emptying-mapping",
+   "section": "imaging",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/heart-mapping-muga",
+   "slug": "heart-mapping-muga",
+   "section": "imaging",
+   "title": "מיפוי לב מוגה (MUGA)",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/liver-mapping-marked-red-blood-cells-pet-ct",
+   "slug": "liver-mapping-marked-red-blood-cells-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי כבד עם כדוריות דם אדומות מסומנות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/lungs-mapping-pet-ct",
+   "slug": "lungs-mapping-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי ריאות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "במידת הצורך מתבצעת בדיקת האוורור בדרך כלל למחרת באמצעות שאיפת תרסיס אוויר עם מעט חומר רדיואקטיבי המתפזר בכל אזורי הריאות המאווררים, בשכיבה מתחת למצלמה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/lymphatic-tract-mapping",
+   "slug": "lymphatic-tract-mapping",
+   "section": "imaging",
+   "title": "מיפוי דרכי לימפה",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/mapping-thyroid-gland-parathyroid-tc99m",
+   "slug": "mapping-thyroid-gland-parathyroid-tc99m",
+   "section": "imaging",
+   "title": "מיפוי בלוטת יותרת התריס (פראתירואיד) עם Tc99m-MIBI",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מיפוי בלוטת יותרת התריס נועד לאבחן בה אדנומה (גידול שפיר) ומאפשר לקבוע את המיקום המדויק שלה לקראת ניתוח להסרתה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pediatric-mapping-pet-ct-in-children",
+   "slug": "pediatric-mapping-pet-ct-in-children",
+   "section": "imaging",
+   "title": "מיפויים בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "המיפוי מתבצע באמצעות הזרקה לווריד של חומר רדיואקטיבי בכמות זעירה, המותאמת לגיל ולמשקל של הילד/ה הנבדק/ת."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pet-ct-examination-in-children",
+   "slug": "pet-ct-examination-in-children",
+   "section": "imaging",
+   "title": "בדיקת PET CT בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "כיצד נערכת בדיקת CT בילדים? איך מתכוננים אליה?"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pet-ct-examination-ga-dotatae68",
+   "slug": "pet-ct-examination-ga-dotatae68",
+   "section": "imaging",
+   "title": "מיפוי PET-CT עם GA68-FAPI",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pet-ct-fdg-injection",
+   "slug": "pet-ct-fdg-injection",
+   "section": "imaging",
+   "title": "PET-CT עם הזרקה של FDG",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "וכשהיסוד הרדיואקטיבי שבסוכר מתפרק, נפלטות קרני גמא שנקלטות בגלאי המכשיר ומאפשרות לו לחשב את מיקום פליטתן בגוף."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pet-ct-tests",
+   "slug": "pet-ct-tests",
+   "section": "imaging",
+   "title": "בדיקות PET-CT",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "נועד לאבחן גידול שפיר ומאפשר לקבוע את המיקום המדויק לקראת ניתוח להסרתה"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/pet-ct-mapping-body-ga68-fapi",
+   "slug": "pet-ct-mapping-body-ga68-fapi",
+   "section": "imaging",
+   "title": "מיפוי הגוף עם GA-68-FAPI",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לאחר הזרקת החומר הרדיואקטיבי יש לשכב במנוחה כחצי שעה ולאחר מכן המיפוי מתבצע במצלמת PET CT."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/renal-mapping-dmsa-pet-ct",
+   "slug": "renal-mapping-dmsa-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי כליות עם חומר רדיואקטיבי DMSA",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה, שמתבצעת בשכיבה על מיטת הסורק, מדגימה את הכליות באמצעות הזרקה תוך-ורידית של מעט חומר רדיואקטיבי מסוג DMSA, אשר נוטה להתרכז בקליפת הכליה (קורטקס)."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/renal-mapping-dtpa-pet-ct-kidney",
+   "slug": "renal-mapping-dtpa-pet-ct-kidney",
+   "section": "imaging",
+   "title": "בדיקת מיפוי כליות עם DTPA/ MAG-3",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/salivary-gland-mapping-pet-ct",
+   "slug": "salivary-gland-mapping-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי בלוטות הרוק",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/tear-duct-mapping",
+   "slug": "tear-duct-mapping",
+   "section": "imaging",
+   "title": "מיפוי דרכי הדמעות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/thyroid-mapping",
+   "slug": "thyroid-mapping",
+   "section": "imaging",
+   "title": "מיפוי בלוטת התריס",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/white-blood-cells-mapping-pet-ct",
+   "slug": "white-blood-cells-mapping-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי כדוריות דם לבנות (לויקוציטים) מסומנות",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-nuclear/whole-body-mapping-pet-ct",
+   "slug": "whole-body-mapping-pet-ct",
+   "section": "imaging",
+   "title": "מיפוי כל-גופי בשיטת PET-CT עם F-18 /Ga-68-PSMA",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__nuclear-medicine-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/fluoroscopy",
+   "slug": "fluoroscopy",
+   "section": "imaging",
+   "title": "בדיקות שיקוף בטן ומערכת העיכול",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__interventional-radiology",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/x-ray-imaging-appointment-scheduling",
+   "slug": "x-ray-imaging-appointment-scheduling",
+   "section": "imaging",
+   "title": "קביעת תור לצילומי רנטגן ובדיקות שיקוף",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/chest-x-ray",
+   "slug": "chest-x-ray",
+   "section": "imaging",
+   "title": "צילום רנטגן של בית החזה",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__chest-and-lungs-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הצילום מתבצע בעמידה למעט במקרים שבהם הנבדק אינו מסוגל לעמוד, ואז הצילום מתבצע בשכיבה או ישיבה."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/skeletal-x-ray",
+   "slug": "skeletal-x-ray",
+   "section": "imaging",
+   "title": "צילום רנטגן של השלד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/what-is-x-ray-imaging",
+   "slug": "what-is-x-ray-imaging",
+   "section": "imaging",
+   "title": "מהי בדיקת רנטגן?",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/esophagus-stomach-fluoroscopy-imaging",
+   "slug": "esophagus-stomach-fluoroscopy-imaging",
+   "section": "imaging",
+   "title": "בדיקת שיקוף בשיטת \"הניגוד הכפול\"",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__interventional-radiology",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/cystography-imaging-test",
+   "slug": "cystography-imaging-test",
+   "section": "imaging",
+   "title": "בדיקת ציסטוגרפיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/small-bowel-fluoroscopy-test",
+   "slug": "small-bowel-fluoroscopy-test",
+   "section": "imaging",
+   "title": "בדיקת מעבר מעי דק",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/barium-enema-fluoroscopy-test",
+   "slug": "barium-enema-fluoroscopy-test",
+   "section": "imaging",
+   "title": "בדיקת חוקן בריום",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/pediatric-x-ray-scan-for-children",
+   "slug": "pediatric-x-ray-scan-for-children",
+   "section": "imaging",
+   "title": "בדיקות רנטגן בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/pediatric-fluroscopy",
+   "slug": "pediatric-fluroscopy",
+   "section": "imaging",
+   "title": "שיקוף בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-rentgen/gastrografin-enema-before-stoma-closure",
+   "slug": "gastrografin-enema-before-stoma-closure",
+   "section": "imaging",
+   "title": "חוקן גסטרוגרפין לפני סגירת סטומה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/cystography-children-with-ultrasound",
+   "slug": "cystography-children-with-ultrasound",
+   "section": "imaging",
+   "title": "בדיקת ציסטוגרפיה בהנחיית אולטרסאונד בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/kidneys-urinary-tract-ultrasound",
+   "slug": "kidneys-urinary-tract-ultrasound",
+   "section": "imaging",
+   "title": "אולטרסאונד כליות ומערכת השתן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/abdominal-ultrasound",
+   "slug": "abdominal-ultrasound",
+   "section": "imaging",
+   "title": "אולטרסאונד בטן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/orthopedic-ultrasound-scan",
+   "slug": "orthopedic-ultrasound-scan",
+   "section": "imaging",
+   "title": "בדיקות אולטרסאונד שריר-שלד (MSK US)",
+   "heading": null,
+   "clinicLinks": [
+    "preventive-medicine__clinics__the-national-institute-of-sports-medicine",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/neck-ultrasound",
+   "slug": "neck-ultrasound",
+   "section": "imaging",
+   "title": "אולטרסאונד צוואר",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/ultrasound-guided-biopsy",
+   "slug": "ultrasound-guided-biopsy",
+   "section": "imaging",
+   "title": "ביופסיה בהנחיית אולטרסאונד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לקיחת דגימה מרקמת עצם או מרקמה רכה תוך כדי שימוש באולטרסאונד לצורך מיקום מדויק של המחט"
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/ultrasound-examination",
+   "slug": "ultrasound-examination",
+   "section": "imaging",
+   "title": "בדיקת אולטרסאונד (US)",
+   "heading": null,
+   "clinicLinks": [
+    "imaging__clinics__ultrasound-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/focused-ultrasound-mri-guidance",
+   "slug": "focused-ultrasound-mri-guidance",
+   "section": "imaging",
+   "title": "אולטרסאונד ממוקד תחת הכוונת MRI",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בזמן הטיפול מוכנס הנבדק למיטת ה- MRI הייעודית ומתבצעת סריקה ראשונית לצורך מיקום מדויק של הנבדק."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/testicular-ultrasound",
+   "slug": "testicular-ultrasound",
+   "section": "imaging",
+   "title": "אולטרסאונד אשכים",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/pediatric-ultrasound",
+   "slug": "pediatric-ultrasound",
+   "section": "imaging",
+   "title": "בדיקת אולטרסאונד (US) בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נערכת באמצעות מחשב שאליו מחובר מתמר (מעין מקל קטן)."
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/msk-us-skeletal-muscle-ultrasound",
+   "slug": "msk-us-skeletal-muscle-ultrasound",
+   "section": "imaging",
+   "title": "בדיקות אולטרסאונד שריר-שלד (MSK US)",
+   "heading": null,
+   "clinicLinks": [
+    "preventive-medicine__clinics__the-national-institute-of-sports-medicine",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/vascular-ultrasound-duplex-veins-legs",
+   "slug": "vascular-ultrasound-duplex-veins-legs",
+   "section": "imaging",
+   "title": "בדיקת אולטרסאונד של כלי דם – דופלקס ורידים ברגליים",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/soft-tissue-ultrasound",
+   "slug": "soft-tissue-ultrasound",
+   "section": "imaging",
+   "title": "בדיקת אולטרסאונד של רקמות רכות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/imaging/tests-us/drainage-us-guided",
+   "slug": "drainage-us-guided",
+   "section": "imaging",
+   "title": "ניקוז בהנחיית אולטרסאונד (US)",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "השיטה יעילה במיוחד לחלק מהמקרים שבהם המורסה או הקולקציה נמצאות במיקום הניתן להנחיית US, כגון אזורים צמודי עור, ריאות, בבטן, באגן או בסמוך לאיברים אחרים.."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/catheterization-hypertensive-patients",
+   "slug": "catheterization-hypertensive-patients",
+   "section": "internal-medicine",
+   "title": "צנתור לסובלים מיתר לחץ דם",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__blood-pressure-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/colonoscopy-general-instructions",
+   "slug": "colonoscopy-general-instructions",
+   "section": "internal-medicine",
+   "title": "הוראות כלליות לקראת בדיקת קולונוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/colonoscopy-without-anesthesia",
+   "slug": "colonoscopy-without-anesthesia",
+   "section": "internal-medicine",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/liver-diseases-tests",
+   "slug": "liver-diseases-tests",
+   "section": "internal-medicine",
+   "title": "בדיקות ייחודיות וחדשות למחלות כבד",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/preparation-colonoscopy-all-the-movies",
+   "slug": "preparation-colonoscopy-all-the-movies",
+   "section": "internal-medicine",
+   "title": "הכנה לקולונוסקופיה – סרטונים",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/preparation-colonoscopy-anesthesia",
+   "slug": "preparation-colonoscopy-anesthesia",
+   "section": "internal-medicine",
+   "title": "הכנה לקולונוסקופיה בהרדמה כללית",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/intestinal-ultrasound",
+   "slug": "intestinal-ultrasound",
+   "section": "internal-medicine",
+   "title": "אולטרסאונד מעי",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת באמצעות גלי קול על ידי רופא מיומן (ולא על ידי טכנאי אולטרסאונד), ומטרתה להעריך את מצב הדופן של המעי הדק והגס, כמו גם לזהות סיבוכים מחוץ למעי (אבסס, היצרות או פיסטולה)."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/endoscopic-tests",
+   "slug": "endoscopic-tests",
+   "section": "internal-medicine",
+   "title": "בדיקות אנדוסקופיות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בעיקר בעת חשד לאבנים בדרכי המרה"
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/fibroscan-630",
+   "slug": "fibroscan-630",
+   "section": "internal-medicine",
+   "title": "בדיקת פיברוסקאן להערכת הכבד",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__liver-diseases-excellence-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/bronchoscopy-lungs-test",
+   "slug": "bronchoscopy-lungs-test",
+   "section": "internal-medicine",
+   "title": "ברונכוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__lung-diseases-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/allergies-patch-test",
+   "slug": "allergies-patch-test",
+   "section": "internal-medicine",
+   "title": "מידע לנבדקים בתבחיני מטלית",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/tryptase-test",
+   "slug": "tryptase-test",
+   "section": "internal-medicine",
+   "title": "בדיקת טריפטז",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/tests/kidney-biopsy",
+   "slug": "kidney-biopsy",
+   "section": "internal-medicine",
+   "title": "ביופסיית כליה",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__institute-of-nephrology-and-hypertension",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/24-hour-esophagus-acidity-monitoring-test",
+   "slug": "24-hour-esophagus-acidity-monitoring-test",
+   "section": "internal-medicine",
+   "title": "ניטור חומציות ואימפדנס בוושט",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: הבדיקה מתבצעת באמצעות החדרת קטטר דק עם חיישנים דרך האף לוושט."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/allergy-tests",
+   "slug": "allergy-tests",
+   "section": "internal-medicine",
+   "title": "בדיקות אלרגיה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/anal-rectal-manometry-gastro-tests",
+   "slug": "anal-rectal-manometry-gastro-tests",
+   "section": "internal-medicine",
+   "title": "מנומטריה רקטלית",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נמשכת 20–30 דקות, ומתבצעת בעזרת קתטר דק וגמיש המוחדר בעדינות לפי הטבעת."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/capsule-endoscopy-small-intestine-test",
+   "slug": "capsule-endoscopy-small-intestine-test",
+   "section": "internal-medicine",
+   "title": "בדיקת אנדוסקופיה של המעי הדק באמצעות קפסולת וידיאו",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "internal-medicine__clinics__liver-diseases-excellence-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/colonoscopy",
+   "slug": "colonoscopy",
+   "section": "internal-medicine",
+   "title": "קולונוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__eosinophilic-esophagitis-clinic",
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/defecography-gastroenterology-imaging",
+   "slug": "defecography-gastroenterology-imaging",
+   "section": "internal-medicine",
+   "title": "דפקוגרפיה (צילום התרוקנות)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בישיבה על כיסא ייעודי המדמה את תנוחת ההתרוקנות."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/eeg-test",
+   "slug": "eeg-test",
+   "section": "internal-medicine",
+   "title": "בדיקת EEG",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__eeg-video-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נערכת במסגרת בירור נוירולוגי במבוגרים או בילדים עם חשד לפרכוס או כאלה הסובלים מפרכוסים"
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/endoscopic-ultrasound",
+   "slug": "endoscopic-ultrasound",
+   "section": "internal-medicine",
+   "title": "אולטרסאונד אנדוסקופי (EUS)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה: אולטרסאונד אנדוסקופי מתבצע בעת חשד למצבים כגון אבנים בדרכי המרה, דלקת חוזרת בלבלב וגידול בדרכי המרה והלבלב או כדי להעריך את מידת החדירה של גידול לשכבות שונות במערכת העיכול."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/ercp",
+   "slug": "ercp",
+   "section": "internal-medicine",
+   "title": "אנדוסקופיה של דרכי המרה והלבלב",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בעיקר בעת חשד לאבנים בדרכי המרה ויכולה לשמש גם להוצאתן או העברתן למעי"
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/esophagus-manometry-pressure-test-gastro-exams",
+   "slug": "esophagus-manometry-pressure-test-gastro-exams",
+   "section": "internal-medicine",
+   "title": "מנומטריה ושטית",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: הבדיקה נמשכת כ-20 דקות ומתבצעת באמצעות החדרת צינור גמיש בעל חיישני לחץ דרך האף."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/gastroscopy",
+   "slug": "gastroscopy",
+   "section": "internal-medicine",
+   "title": "גסטרוסקופיה (אנדוסקופיה של דרכי העיכול העליונות)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__eosinophilic-esophagitis-clinic",
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: הבדיקה מתבצעת באמצעות החדרת צינור פלסטי גמיש בקוטר 1.1 סנטימטר – שכולל מצלמת וידיאו זעירה וסיב אופטי – דרך הפה."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/helicobacter-pylori-breath-test",
+   "slug": "helicobacter-pylori-breath-test",
+   "section": "internal-medicine",
+   "title": "תבחין נשיפה להליקובקטר פילורי",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__eosinophilic-esophagitis-clinic",
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/holter-blood-pressure-test",
+   "slug": "holter-blood-pressure-test",
+   "section": "internal-medicine",
+   "title": "בדיקת הולטר לחץ דם",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/lactose-intolerance-breath-test-gastroenterology",
+   "slug": "lactose-intolerance-breath-test-gastroenterology",
+   "section": "internal-medicine",
+   "title": "תבחין לזיהוי אי סבילות ללקטוז (תבחין מימן בנשיפה)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__laboratories__gastroenterology-laboratory",
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/liver-ascites-puncture",
+   "slug": "liver-ascites-puncture",
+   "section": "internal-medicine",
+   "title": "ניקור מיימת",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__liver-diseases-excellence-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "התהליך מתבצע בשכיבה."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/liver-biopsy",
+   "slug": "liver-biopsy",
+   "section": "internal-medicine",
+   "title": "ביופסיית כבד",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__liver-diseases-excellence-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "נטילת הביופסיה אורכת כרבע שעה ומתבצעת בחדר האולטרסאונד במכון הרנטגן."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/dbe",
+   "slug": "dbe",
+   "section": "internal-medicine",
+   "title": "בדיקת אנטרוסקופיה ארוכה בטכניקת בלון כפול (DBE)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "במהלכה אנדוסקופ מוחדר דרך הפה או פי הטבעת בהתאם למיקום המטרה במעי הדק."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/motorized-spiral-enteroscopy",
+   "slug": "motorized-spiral-enteroscopy",
+   "section": "internal-medicine",
+   "title": "אנטרוסקופיה ספירלית ממונעת",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "לעתים האנטרוסקופ מוחדר דרך פי הטבעת ולעתים דרך הפה, כתלות במיקום הנגע החשוד במעי הדק."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/preparing-colonoscopy-anesthesia-meroken",
+   "slug": "preparing-colonoscopy-anesthesia-meroken",
+   "section": "internal-medicine",
+   "title": "הכנה לקולונוסקופיה בהרדמה עם תכשיר מרוקן",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/preparing-for-colonoscopy-with-meroken",
+   "slug": "preparing-for-colonoscopy-with-meroken",
+   "section": "internal-medicine",
+   "title": "הכנה לקולונסקופיה עם מרוקן",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/preparing-for-colonoscopy-with-picosalax",
+   "slug": "preparing-for-colonoscopy-with-picosalax",
+   "section": "internal-medicine",
+   "title": "הכנה לקולונסקופיה עם פיקוסלקס",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/transrectal-ultrasound",
+   "slug": "transrectal-ultrasound",
+   "section": "internal-medicine",
+   "title": "אולטרסאונד טרנסרקטלי (TRUS)",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/virtual-colonoscopy",
+   "slug": "virtual-colonoscopy",
+   "section": "internal-medicine",
+   "title": "קולונוסקופיה וירטואלית",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/endoflip",
+   "slug": "endoflip",
+   "section": "internal-medicine",
+   "title": "בדיקת אנדופליפ",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הכנה: ההכנה מתבצעת במתכונת של גסטרוסקופיה וכוללת הגעה עם מלווה וטופס 17, צום של שבע שעות (או 12 שעות לנוטלי תרופות מסוג GLP-1), והפסקה או התאמה מראש של נוגדי קרישה ותרופות לסוכרת/ השמנה."
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/sigmoidoscopy-endoscopic-test",
+   "slug": "sigmoidoscopy-endoscopic-test",
+   "section": "internal-medicine",
+   "title": "סיגמואידוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/internal-medicine/test/bravo-wireless-esophageal-ph-monitoring-test",
+   "slug": "bravo-wireless-esophageal-ph-monitoring-test",
+   "section": "internal-medicine",
+   "title": "ניטור חומציות הוושט בשיטת בראבו",
+   "heading": null,
+   "clinicLinks": [
+    "internal-medicine__clinics__gastroenterology-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מהלך: הבדיקה מתבצעת באמצעות הצמדת חיישן לדופן הוושט בגסטרוסקופיה קצרה (לרוב בטשטוש)."
+  },
+  {
+   "url": "https://www.sheba.co.il/neuroscience/tests/lumbar-puncture-test",
+   "slug": "lumbar-puncture-test",
+   "section": "neuroscience",
+   "title": "בדיקת ניקור מותני",
+   "heading": null,
+   "clinicLinks": [
+    "neuroscience__neuro-surgery__neurosurgery-spine-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בתנוחה עוברית לאחר הרדמה מקומית והחדרת מחט לתעלת השדרה"
+  },
+  {
+   "url": "https://www.sheba.co.il/neuroscience/tests/nfl-active-nerve-damage-test",
+   "slug": "nfl-active-nerve-damage-test",
+   "section": "neuroscience",
+   "title": "בדיקת דם לזיהוי נזק פעיל בעצבים",
+   "heading": null,
+   "clinicLinks": [
+    "neuroscience__neurology__clinic-for-neuromuscular-diseases",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "דגימת הדם מתבצעת במקום."
+  },
+  {
+   "url": "https://www.sheba.co.il/neuroscience/tests/early-diagnosis-in-multiple-sclerosis",
+   "slug": "early-diagnosis-in-multiple-sclerosis",
+   "section": "neuroscience",
+   "title": "אבחון מוקדם בטרשת נפוצה",
+   "heading": null,
+   "clinicLinks": [
+    "neuroscience__neurology__clinic-for-neuromuscular-diseases",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/neuroscience/tests/skin-biopsy-diagnosis-small-fiber-neuropathy",
+   "slug": "skin-biopsy-diagnosis-small-fiber-neuropathy",
+   "section": "neuroscience",
+   "title": "ביופסיית עור לאבחון נוירופתיה של סיבים דקים",
+   "heading": null,
+   "clinicLinks": [
+    "neuroscience__neurology__clinic-for-neuromuscular-diseases",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/asthma-diagnosis-young-children",
+   "slug": "asthma-diagnosis-young-children",
+   "section": "pediatrics",
+   "title": "אבחון אסתמה בגיל הרך",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נערכת בנוכחות אחד מבני המשפחה."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/bone-marrow-test-children",
+   "slug": "bone-marrow-test-children",
+   "section": "pediatrics",
+   "title": "בדיקת מח עצם בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נערכת בחדר ההרדמות (חדר צפרדעים) של המכון ההמטואונקולוגי בקומה 1."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/capsule-testing-children-hospital",
+   "slug": "capsule-testing-children-hospital",
+   "section": "pediatrics",
+   "title": "בדיקת קפסולה בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "כך היא מתבצעת בילדים"
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/children-colonoscopy-test",
+   "slug": "children-colonoscopy-test",
+   "section": "pediatrics",
+   "title": "בדיקת קולונוסקופיה בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת ביחידה לגסטרואנטרולוגיה, תזונה ומחלות כבד בילדים הנמצאת במרפאות ילדים, קומה 1 בבית החולים לילדים אדמונד ולילי ספרא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/children-sigmoidoscopy-test",
+   "slug": "children-sigmoidoscopy-test",
+   "section": "pediatrics",
+   "title": "סקירת חלל המעי הגס התחתון (סיגמואידוסקופיה) בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "קבלה: הבדיקה מתבצעת ביחידה לגסטרואנטרולוגיה, תזונה ומחלות כבד בילדים הנמצאת במרפאות ילדים, קומה 1 בבית החולים לילדים אדמונד ולילי ספרא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/eeg-testing-children",
+   "slug": "eeg-testing-children",
+   "section": "pediatrics",
+   "title": "בדיקת EEG בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__neurology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מדוע מתבצעת בדיקה זו?"
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/esophageal-expansion-test-children",
+   "slug": "esophageal-expansion-test-children",
+   "section": "pediatrics",
+   "title": "בדיקת הרחבת ושט בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת ביחידה לגסטרואנטרולוגיה, תזונה ומחלות כבד בילדים הנמצאת במרפאות ילדים, קומה 1 בבית החולים לילדים אדמונד ולילי ספרא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/gastroscopy-in-children-testing",
+   "slug": "gastroscopy-in-children-testing",
+   "section": "pediatrics",
+   "title": "בדיקת גסטרוסקופיה בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת ביחידה לגסטרואנטרולוגיה, תזונה ומחלות כבד בילדים הנמצאת במרפאות ילדים, קומה 1 בבית החולים לילדים אדמונד ולילי ספרא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/impedance-monitoring-children",
+   "slug": "impedance-monitoring-children",
+   "section": "pediatrics",
+   "title": "בדיקת אימפדנס (ניטור החזר קיבתי-ושטי) בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__gastroenterology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/children-cardio-pulmonary-exercise-test-cpet",
+   "slug": "children-cardio-pulmonary-exercise-test-cpet",
+   "section": "pediatrics",
+   "title": "בדיקת מאמץ משולב לב-ריאה CPET לילדים",
+   "heading": null,
+   "clinicLinks": [
+    "preventive-medicine__clinics__the-national-institute-of-sports-medicine",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת במעבדת המאמץ, הממוקמת במרכז הלב לילדים, קומה 8, בבית החולים אדמונד ולילי ספרא לילדים."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/liver-biopsy-in-children",
+   "slug": "liver-biopsy-in-children",
+   "section": "pediatrics",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/pediatric-heart-catheterization",
+   "slug": "pediatric-heart-catheterization",
+   "section": "pediatrics",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/pediatric-heart-echo-test",
+   "slug": "pediatric-heart-echo-test",
+   "section": "pediatrics",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/spinal-fluid-tap-test-children",
+   "slug": "spinal-fluid-tap-test-children",
+   "section": "pediatrics",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/sweat-test-children-health",
+   "slug": "sweat-test-children-health",
+   "section": "pediatrics",
+   "title": "תבחין זיעה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/ultrasound-tests-children",
+   "slug": "ultrasound-tests-children",
+   "section": "pediatrics",
+   "title": "בדיקת אולטרסאונד (US) בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נערכת באמצעות מחשב שאליו מחובר מתמר (מעין מקל קטן)."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/exome-accurate-genetic-test-safra",
+   "slug": "exome-accurate-genetic-test-safra",
+   "section": "pediatrics",
+   "title": "אבחון גנטי מדויק",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__endocrine-fragile-x-clinic",
+    "pediatrics__clinics__geffen-adolescent-girls-endocrinology-clinic",
+    "pediatrics__clinics__heart-center",
+    "pediatrics__clinics__vascular-anomalies-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/pediatric-bone-density-test",
+   "slug": "pediatric-bone-density-test",
+   "section": "pediatrics",
+   "title": "בדיקת צפיפות עצם בילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__metabolic-bone-clinic",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה נמשכת כ-25 דקות, מתבצעת בשיטת DXA ללא כאבים, עם מינון קרינה נמוך במכשיר מתקדם בשיבא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pediatrics/tests/dcmrl-test",
+   "slug": "dcmrl-test",
+   "section": "pediatrics",
+   "title": "בדיקת DCMRL בהרדמה לילדים",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__services__pediatric-imaging-radiology-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "כיצד נערכת בדיקת CT בילדים? איך מתכוננים אליה?"
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/nuchal-translucency-scan-pregnancy-test-week-11-13plus6",
+   "slug": "nuchal-translucency-scan-pregnancy-test-week-11-13plus6",
+   "section": "pregnancy",
+   "title": "בדיקת שקיפות עורפית, שבוע 13+6-11",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בין הבדיקות בסקר, המתבצע בשליש הראשון והשני: שקיפות עורפית וחלבון עוברי"
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/pregnancy-ultrasound-week-30-33",
+   "slug": "pregnancy-ultrasound-week-30-33",
+   "section": "pregnancy",
+   "title": "אולטרסאונד מעקב גדילה בשבועות 33-30 להריון",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מטרת הבדיקה היא להעריך את מצב העובר, התפתחותו ותנוחתו ולקבוע את מיקום השליה."
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/first-ultrasound-pulse-and-blood-test-weeks-6-12",
+   "slug": "first-ultrasound-pulse-and-blood-test-weeks-6-12",
+   "section": "pregnancy",
+   "title": "בדיקת אולטרסאונד (דופק) ובדיקות דם בשבועות 12-6 להריון",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/gbs-test-pregnancy-week-35",
+   "slug": "gbs-test-pregnancy-week-35",
+   "section": "pregnancy",
+   "title": "בדיקת תרבית ל- GBS בשבוע 35 להריון",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בין שבועות 35–37 להריון, באמצעות דגימה מהנרתיק ומהרקטום."
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/glucose-sugar-challenge-and-rh-test-pregnancy-week-24-28",
+   "slug": "glucose-sugar-challenge-and-rh-test-pregnancy-week-24-28",
+   "section": "pregnancy",
+   "title": "העמסת סוכר ובדיקת נוגדים בין השבועות 28-24 להריון",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/alpha-fetoprotein-pregnancy-test-afp-week-16-20",
+   "slug": "alpha-fetoprotein-pregnancy-test-afp-week-16-20",
+   "section": "pregnancy",
+   "title": "חלבון עוברי - תבחין משולש או מרובע בשבועות 20-16 להריון",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בין הבדיקות בסקר, המתבצע בשליש הראשון והשני: שקיפות עורפית וחלבון עוברי"
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/late-term-pregnancy-monitoring-week-40plus",
+   "slug": "late-term-pregnancy-monitoring-week-40plus",
+   "section": "pregnancy",
+   "title": "ניטור עוברי ומעקב הריון עודף החל משבוע 40",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/shebasome-next-generation-sequencing-genetics-pregnancy-test",
+   "slug": "shebasome-next-generation-sequencing-genetics-pregnancy-test",
+   "section": "pregnancy",
+   "title": "SHEBASOME: בדיקות ריצוף מתקדמות",
+   "heading": null,
+   "clinicLinks": [
+    "general__labs__genetics-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/fetal-heart-echo-test",
+   "slug": "fetal-heart-echo-test",
+   "section": "pregnancy",
+   "title": "אקו לב עובר",
+   "heading": null,
+   "clinicLinks": [
+    "pediatrics__clinics__heart-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/test/genetic-test-post-miscarriage",
+   "slug": "genetic-test-post-miscarriage",
+   "section": "pregnancy",
+   "title": "בדיקה גנטית לאחר אובדן היריון",
+   "heading": null,
+   "clinicLinks": [
+    "pregnancy__clinics__recurrent-miscarriages",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/amniocentesis",
+   "slug": "amniocentesis",
+   "section": "pregnancy",
+   "title": "דיקור מי שפיר",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "חלבון עוברי - רמת חלבון עוברי נמדדת כדרך שגרה בכל דיקור מי שפיר המתבצע בשבועות 24-22 להריון."
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/chorionic-villus-sampling-cvs",
+   "slug": "chorionic-villus-sampling-cvs",
+   "section": "pregnancy",
+   "title": "בדיקת סיסי שליה",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בשיבא מבצעים את הבדיקה בשתי השיטות, בהתאם למיקום השליה ושיקולים רפואיים נוספים."
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/pgd-step-by-step",
+   "slug": "pgd-step-by-step",
+   "section": "pregnancy",
+   "title": "התהליך הרפואי של PGD - שלב אחרי שלב",
+   "heading": null,
+   "clinicLinks": [
+    "pregnancy__clinics__genetic-diagnosis-pgd-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/which-genetic-screening-to-do",
+   "slug": "which-genetic-screening-to-do",
+   "section": "pregnancy",
+   "title": "סקר גנטי אחיד מורחב של משרד הבריאות",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/karyotype-test-adults",
+   "slug": "karyotype-test-adults",
+   "section": "pregnancy",
+   "title": "בדיקת קריוטיפ בדם",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בדיקת קריוטיפ בדם מתבצעת בתאי הלימפוציטים בדם בהמלצת רופא."
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/pregnancy-tests-guide-by-weeks",
+   "slug": "pregnancy-tests-guide-by-weeks",
+   "section": "pregnancy",
+   "title": "בדיקות הריון לפי שבועות",
+   "heading": null,
+   "clinicLinks": [
+    "pregnancy__clinics__fetal-medicine-unit",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בשבועות 17-13 אפשר לזהות את מין העובר ונבדקים המבנה האנטומי של העובר, איברים, מיקום השליה וכמות מי השפיר"
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/nipt-test",
+   "slug": "nipt-test",
+   "section": "pregnancy",
+   "title": "בדיקת NIPT לאיתור הפרעות כרומוזומליות בעובר",
+   "heading": null,
+   "clinicLinks": [
+    "general__labs__genetics-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/nips-clarity-test",
+   "slug": "nips-clarity-test",
+   "section": "pregnancy",
+   "title": "בדיקת NIPS בדם",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/pregnancy/tests/exome-test",
+   "slug": "exome-test",
+   "section": "pregnancy",
+   "title": "בדיקת אקסום שלב אחרי שלב",
+   "heading": null,
+   "clinicLinks": [
+    "pregnancy__clinics__genetic-diagnosis-pgd-center",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "פענוח הרצף מתבצע בטכנולוגיה מתקדמת ( Next Generation Sequencing-NGS) המשווה את הרצפים שהתקבלו למאגרי מידע גנטיים עולמיים, ומזהה שינויים שיכולה להיות להם משמעות בריאותית."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/engvng-functional-assessment-balance",
+   "slug": "engvng-functional-assessment-balance",
+   "section": "surgery",
+   "title": "בדיקות להערכה תפקודית של מערכת שיווי המשקל ENG/VNG",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__hearing-speech-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/corneal-topography-mapping",
+   "slug": "corneal-topography-mapping",
+   "section": "surgery",
+   "title": "מיפוי קרנית",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/corneal-pachymetry-measuring-thickness",
+   "slug": "corneal-pachymetry-measuring-thickness",
+   "section": "surgery",
+   "title": "מדידת עובי הקרנית (פכימטריה)",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/apd-central-auditory-processing-disorders",
+   "slug": "apd-central-auditory-processing-disorders",
+   "section": "surgery",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/oct-eye-coherence-tomography-test",
+   "slug": "oct-eye-coherence-tomography-test",
+   "section": "surgery",
+   "title": null,
+   "heading": null,
+   "clinicLinks": [],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/tympanometry-test-acoustic-admittance",
+   "slug": "tympanometry-test-acoustic-admittance",
+   "section": "surgery",
+   "title": "בדיקת טימפנומטריה (היענות אקוסטית)",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__hearing-speech-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת באמצעות מכשיר הנקרא טימפנומטר ומוחדר לקצה החיצוני של תעלת האוזן החיצונית למשך מספר שניות."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/visual-field-test",
+   "slug": "visual-field-test",
+   "section": "surgery",
+   "title": "בדיקת שדה ראייה",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בחדר חשוך; הנבדק מתבקש לשבת ולהניח את פניו על משענת סנטר, להביט במסך (עין אחת נבדקת והשנייה מכוסה) ולהתמקד בנקודה מרכזית אחת."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/ophthalmologic-eyes-ultrasound",
+   "slug": "ophthalmologic-eyes-ultrasound",
+   "section": "surgery",
+   "title": "אולטרסאונד עיניים",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "imaging__clinics__ultrasound-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/counting-endothelial-cells-cornea",
+   "slug": "counting-endothelial-cells-cornea",
+   "section": "surgery",
+   "title": "ספירת תאי אנדותל בקרנית",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/biometry-eye-test",
+   "slug": "biometry-eye-test",
+   "section": "surgery",
+   "title": "מדידות עדשה (ביומטריה)",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/fluorescein-angiography-fa-eye-test",
+   "slug": "fluorescein-angiography-fa-eye-test",
+   "section": "surgery",
+   "title": "אנגיוגרפיה עם פלורסאין (FA)",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/acoustic-reflex-test",
+   "slug": "acoustic-reflex-test",
+   "section": "surgery",
+   "title": "בדיקת רפלקס אקוסטי",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__hearing-speech-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "בחלק מהמקרים, הבדיקה מבוצעת במסגרת סוללת בדיקות שמטרתן אבחון מיקום הנזק במערכת השמע (למשל, בדיקות ABR ובדיקת TEOAE)."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/autofluorescence-faf-retina-eye-disease",
+   "slug": "autofluorescence-faf-retina-eye-disease",
+   "section": "surgery",
+   "title": "צילום אוטופלאורסנס",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הצילום מתבצע בישיבה."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/color-photography-eye-test",
+   "slug": "color-photography-eye-test",
+   "section": "surgery",
+   "title": "צילום צבע של העין",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הצילום מתבצע בישיבה."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/indocyanine-green-angiography-icg-eye-test",
+   "slug": "indocyanine-green-angiography-icg-eye-test",
+   "section": "surgery",
+   "title": "אנגיוגרפיה עם אינדוציאנין ירוק (ICG)",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__eye-imaging-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "היא מתבצעת בישיבה, כחצי שעה לאחר הזלפת טיפות להרחבת אישונים ומיד לאחר הזרקה של 5-2 סמ\"ק של חומר הניגוד אינדוציאנין (צבען) ירוק לווריד בזרוע."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/abr-test",
+   "slug": "abr-test",
+   "section": "surgery",
+   "title": "בדיקת ABR",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__hearing-speech-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בבית החולים אדמונד ולילי ספרא לילדים, אגף דרומי , קומה א', בחדר הרדמות שבמכון גסטרו - מרפאות ילדים."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/nasal-endoscopy-biopsy",
+   "slug": "nasal-endoscopy-biopsy",
+   "section": "surgery",
+   "title": "דגימת לוע האף באנדוסקופ",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__departments__otolaryngology-ent-head-neck-surgery",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת באמצעות החדרת אנדוסקופ – סיב אופטי קשיח שכולל מצלמה זעירה ולצדו ניתן להחדיר מכשירי אחיזה כגון מלקחיים – לתוך הנחיריים, עד לאזורים העמוקים של לוע האף."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/fine-needle-aspiration-fna-thyroid",
+   "slug": "fine-needle-aspiration-fna-thyroid",
+   "section": "surgery",
+   "title": "בדיקת ניקור של בלוטת התריס - FNA",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__thyroid-parathyroid-clinic",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "זאת תוך כדי ביצוע אולטרסאונד שבאמצעותו ניתן לוודא שהמחט מגיעה למיקום המדויק בבלוטה."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/high-resolution-anoscopy",
+   "slug": "high-resolution-anoscopy",
+   "section": "surgery",
+   "title": "בדיקת אנוסקופיה ברזולוציה גבוהה",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__clinic-for-colorectal-and-proctological-surgery",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בהרדמה כללית."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/video-rectoscopy-examination",
+   "slug": "video-rectoscopy-examination",
+   "section": "surgery",
+   "title": "בדיקת וידיאו-רקטוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__clinic-for-colorectal-and-proctological-surgery",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "מטרת הבדיקה היא לאתר פוליפים, גידולים, פיסטולות, כיבים ופתולוגיות אחרות במבנה הרקטלי, עד לגובה של כ-25 סנטימטרים מפי הטבעת, ולאפיין אותם מבחינת מיקום, גובה ומרקם."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/test/eustachian-tube-function-test-etf",
+   "slug": "eustachian-tube-function-test-etf",
+   "section": "surgery",
+   "title": "בדיקת תפקוד חצוצרת השמע ETF",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__clinics__hearing-speech-institute",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הבדיקה מתבצעת בדרך כלל לאחר הפניה מרופא א.א.ג, במקרים של תחושת אטימות, לחץ באוזניים (למשל בזמן טיסה או צלילה), או כחלק מהערכה לקראת ניתוח באוזן."
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/tests/endoscopic-nasal-exam-tel-hashomer",
+   "slug": "endoscopic-nasal-exam-tel-hashomer",
+   "section": "surgery",
+   "title": "בדיקת אנדוסקופית של האף",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__departments__otolaryngology-ent-head-neck-surgery",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/tests/advanced-mri-breasts",
+   "slug": "advanced-mri-breasts",
+   "section": "surgery",
+   "title": "מכשיר MRI מתקדם לאבחון מחלות שד ומעקב אחריהן",
+   "heading": null,
+   "clinicLinks": [
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/tests/cystoscopy-test",
+   "slug": "cystoscopy-test",
+   "section": "surgery",
+   "title": "בדיקת ציסטוסקופיה",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__departments__urological-surgery-department",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": "הסתכלות לתוך שלפוחית השתן ולשופכה שמתבצעת בציסטוסקופ – צינור דק, גמיש או קשיח"
+  },
+  {
+   "url": "https://www.sheba.co.il/surgery/tests/urodynamic-test",
+   "slug": "urodynamic-test",
+   "section": "surgery",
+   "title": "בדיקת אורודינמיקה",
+   "heading": null,
+   "clinicLinks": [
+    "surgery__departments__urological-surgery-department",
+    "geriatrics__departments__geriatrics-division"
+   ],
+   "unitText": null
+  }
+ ]
+}
