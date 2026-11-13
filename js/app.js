@@ -196,7 +196,7 @@ function syncControls() {
   }
   $$('#mode-row .mode').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
   $('#opt-safe').hidden = S.mode !== 'car';
-  const modeLbl = { car: '🚗 בנסיעה', bus: '🚌 באוטובוס', here: '📍 כבר בשיבא' };
+  const modeLbl = { car: '🚗 ברכב', bus: '🚌 באוטובוס', here: '📍 כבר בשיבא' };
   $('#chip-mode').textContent = `${modeLbl[S.mode]} ▾`;
   const nonDefault = S.timeParam !== 'now' || S.opts.accessible || S.opts.avoidRisky;
   $('#chip-opts').classList.toggle('on-dot', !!nonDefault);
@@ -337,8 +337,8 @@ function renderSheetBody() {
   const walk = `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span>${o.entrance ? ` · <span class="muted">🚪 ${esc(o.entrance.name)}</span>` : ''}</div>`;
   const title = o.kind === 'bus' ? `🚌 ${esc(placeLabel(o.stop.id))}` : o.kind === 'here' ? `📍 ${esc(S.startLabel || 'המיקום שלי')}` : `🅿️ ${esc(p.name || 'חניה')}`;
   let actions = '';
-  if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">🚗 נווט לחניה</a><button class="link-btn" id="btn-walk">🚶 התחל הליכה</button>`;
-  else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="link-btn" id="btn-walk">🚶 התחל הליכה</button>`;
+  if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">🚗 נווטו לחניה</a><button class="link-btn" id="btn-walk">🚶 התחילו הליכה</button>`;
+  else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="link-btn" id="btn-walk">🚶 התחילו הליכה</button>`;
   else actions = `<button class="btn btn-primary" id="btn-walk">${t('btnStartWalk')}</button><button class="link-btn" id="btn-change-here">${t('btnChangeHere')}</button>`;
   main.innerHTML = `<div class="sm-row">${walk}${statusBadge(o)}</div>
     <div class="sm-name">${title}</div>
