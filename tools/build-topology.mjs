@@ -37,6 +37,8 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
     if (e.m != null) edge.m = Math.round(e.m);
     if (e.name) edge.name = e.name;
     if (e.stairs) edge.stairs = true;
+    if (e.steps) edge.steps = e.steps;
+    if (e.wheelchair === false) edge.wheelchair = false;
     if (e.poly && e.poly.length > 2) edge.poly = e.poly;      // true geometry for drawing the route on the map
     edges.push(edge);
     return edge;
@@ -182,8 +184,14 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
     for (const [x, y] of [[e.from, e.to], [e.to, e.from]]) { if (!adj.has(x)) adj.set(x, []); adj.get(x).push({ to: y, e }); }
   }
   const isSpecial = id => id.startsWith('park:') || id.startsWith('door:') || id.startsWith('bld:') || id.startsWith('bus:');
-  const keep = new Set([...adj.keys()].filter(id => isSpecial(id) || adj.get(id).length >= 3 || adj.get(id).length === 1));
   const ROAD_RANK = { secondary: 5, secondary_link: 4, tertiary: 4, tertiary_link: 3, residential: 3, unclassified: 3, service: 2, footway: 1, pedestrian: 1, steps: 1, path: 1 };
+  // Never contract across a node where something a walker or the router cares about changes: steps, wheelchair access, road vs path, street name.
+  const sig = ed => `${ed.stairs ? 'S' : '-'}${ed.wheelchair === false ? 'W' : '-'}${(ROAD_RANK[ed.hw] || 1) >= 3 ? 'R' : 'P'}${ed.name || ''}`;
+  const keep = new Set([...adj.keys()].filter(id => {
+    if (isSpecial(id) || adj.get(id).length >= 3 || adj.get(id).length === 1) return true;
+    const [x, y] = adj.get(id);
+    return sig(x.e) !== sig(y.e);
+  }));
   const visited = new Set();
   let chains = [];
   const namesAt = new Map();
@@ -191,11 +199,11 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   for (const id of keep) {
     for (const first of adj.get(id) || []) {
       if (visited.has(first.e)) continue;
-      let cur = first.to, prevId = id, len = 0, rank = 0, steps = 0, count = 0;
+      let cur = first.to, prevId = id, len = 0, rank = 0, steps = 0, count = 0, noWheel = false;
       const names = new Set();
       const pts = [[tn.get(id).lat, tn.get(id).lon]];
       const absorb = (ed, fromId, toId) => {
-        len += ed.length; if (ed.name) names.add(ed.name); rank = Math.max(rank, ROAD_RANK[ed.hw] || 1); if (ed.stairs) steps++; count++; visited.add(ed);
+        len += ed.length; if (ed.name) names.add(ed.name); rank = Math.max(rank, ROAD_RANK[ed.hw] || 1); if (ed.stairs) steps++; if (ed.wheelchair === false) noWheel = true; count++; visited.add(ed);
         const A = tn.get(fromId), B = tn.get(toId);
         let seg = ed.polyline && ed.polyline.length >= 2 ? ed.polyline.slice() : [[A.lat, A.lon], [B.lat, B.lon]];
         if (ed.from !== fromId) seg.reverse();
@@ -213,14 +221,14 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
         for (const nm of names) namesAt.get(x).add(nm);
         rankAt.set(x, Math.max(rankAt.get(x) || 0, rank));
       }
-      chains.push({ a: id, b: cur, len, names: [...names], rank, stairs: steps === count && steps > 0, pts });
+      chains.push({ a: id, b: cur, len, names: [...names], rank, stairs: steps > 0, steps, noWheel, pts });
     }
   }
   // a human sees one crossing, not five OSM nodes: merge junctions closer than MERGE_M, drop dead-end stubs
   const MERGE_M = 25;
   const mp = new Map();
   const mfind = x => { if (!mp.has(x)) mp.set(x, x); while (mp.get(x) !== x) { mp.set(x, mp.get(mp.get(x))); x = mp.get(x); } return x; };
-  for (const c of chains) if (c.len <= MERGE_M && !isSpecial(c.a) && !isSpecial(c.b)) mp.set(mfind(c.a), mfind(c.b));
+  for (const c of chains) if (c.len <= MERGE_M && !c.stairs && !c.noWheel && !isSpecial(c.a) && !isSpecial(c.b)) mp.set(mfind(c.a), mfind(c.b));
   const members = new Map();
   for (const c of chains) for (const x of [c.a, c.b]) { const r = isSpecial(x) ? x : mfind(x); if (!members.has(r)) members.set(r, new Set()); members.get(r).add(x); }
   for (const [r, set] of members) {
@@ -235,7 +243,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   for (const c of chains) {
     const a = isSpecial(c.a) ? c.a : mfind(c.a), b = isSpecial(c.b) ? c.b : mfind(c.b);
     if (a === b) continue;
-    const k = [a, b].sort().join('|');
+    const k = [a, b].sort().join('|') + (c.stairs ? '|S' : '') + (c.noWheel ? '|W' : '');
     const prev = bestPair.get(k);
     if (!prev || c.len < prev.len) bestPair.set(k, { ...c, a, b });
   }
@@ -291,7 +299,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
     const endPt = id => { const n = nodes.get(idOf(id)); return n ? [n.lat, n.lon] : (tn.has(id) ? [tn.get(id).lat, tn.get(id).lon] : null); };
     const ptsA = endPt(c.a), ptsB = endPt(c.b);
     const poly = c.pts && ptsA && ptsB ? simplify([ptsA, ...c.pts.slice(1, -1), ptsB], 1.5).map(p => [+p[0].toFixed(5), +p[1].toFixed(5)]) : null;
-    addEdge({ a: idOf(c.a), b: idOf(c.b), poly, kind: c.rank >= 3 ? 'road' : 'path', sec: c.len / W.walk_mps, m: c.len, est: guessed, conf: guessed ? 'inferred' : 'osm', name: c.names.slice(0, 2).join(' / ') || undefined, stairs: c.stairs,
+    addEdge({ a: idOf(c.a), b: idOf(c.b), poly, kind: c.rank >= 3 ? 'road' : 'path', sec: c.len / W.walk_mps, m: c.len, est: guessed, conf: guessed ? 'inferred' : 'osm', name: c.names.slice(0, 2).join(' / ') || undefined, stairs: c.stairs, steps: c.steps || undefined, wheelchair: c.noWheel ? false : undefined,
       src: guessed ? 'כניסה לא ממופה ב-OSM – חיבור משוער לדרך הקרובה' : 'OSM (מסלול הליכה לאורך הדרך)' });
   }
   // official facts that tie parking to a building

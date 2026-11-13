@@ -20,6 +20,7 @@ export const HE = {
   hereOutside: 'בחוץ, ליד: {place}', hereInside: 'בתוך: {building}', hereNoBuilding: 'לא זוהה בניין קרוב',
   hereSearch: 'חיפוש מקום (לובי, מעלית, קומה, מרפאה…)', hereBuilding: 'או בחרו בניין', hereFloor: 'באיזו קומה?', hereWhere: 'ואיפה בקומה?',
   hereMaybe: 'אולי אתם כאן?', hereYesHere: 'כן, כאן', hereAccLow: 'הדיוק נמוך – אשרו או בחרו ידנית', hereAcc: 'דיוק ±{m} מ׳',
+  accessibleCaveat: 'מסלול נגיש משוער: מדרגות ושיפועים בקמפוס עדיין לא ממופים במלואם. בדקו בשטח.',
   hereOther: 'חיפוש או בניין אחר',
   hereFloorOnly: 'קומה {floor}, לא ברור איפה', hereCancel: 'ביטול', hereChosen: 'מתחילים מ: {place}', hereUnreachable: 'אין עדיין מסלול מהמקום הזה',
 

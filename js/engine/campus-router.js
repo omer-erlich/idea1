@@ -45,7 +45,7 @@ export class CampusRouter {
     return true;
   }
   edgeOpen(e, opts) {
-    if (opts.accessible && (e.stairs || e.kind === 'stairs')) return false;
+    if (opts.accessible && (e.stairs || e.kind === 'stairs' || e.wheelchair === false)) return false;   // steps and wheelchair-unfriendly segments
     if (opts.noInferred && e.conf === 'inferred') return false;
     return true;
   }
