@@ -1,17 +1,22 @@
 // Sheba Parking Guide – main app. Google-Maps-style flow:
-//   search list → full-screen map + draggable bottom sheet (route options as chips) → walking navigation
+//   search (28 main places + 500 clinics) → full-screen map + bottom sheet → walking navigation
+// How do you get there?  🚗 parking suggestions · 🚌 bus-stop suggestions · 📍 "I'm already here" (you tell us where).
 import { $, $$, esc, norm, toast, fmtDate, store, wazeUrl, gmapsUrl } from './util.js';
-import { loadStatic, loadApprovedTips, applyTips, voteMap } from './data.js';
-import { Engine } from './engine/recommend.js';
+import { loadStatic, loadApprovedTips, applyTips, applyTipsToTopology, voteMap } from './data.js';
+import { CampusRouter } from './engine/campus-router.js';
 import { parseWhen, whenFromDate, fmtHM, DAY_NAMES_HE, isOpenAt } from './engine/time.js';
-import { createMap, drawRoute } from './ui/map.js';
+import { createMap, drawLegs } from './ui/map.js';
 import { startWalk, stopWalk } from './ui/walk.js';
+import { chooseHere } from './ui/whereami.js';
+import { indoorHtml } from './ui/indoor.js';
+import { t } from './strings.js';
 import { backendEnabled } from './config.js';
 import { vote } from './backend.js';
 
 const S = {
-  base: null, data: null, engine: null, votes: new Map(),
+  base: null, topo: null, data: null, router: null, directory: null, dirReady: null, dests: new Map(), votes: new Map(),
   destId: null, timeParam: 'now', opts: { accessible: false, avoidRisky: false },
+  mode: 'car', startNodeId: null, startLabel: null,
   result: null, selected: 0, map: null, routeLayer: null,
   sheet: { state: 'peek', vis: 0, m: null },
 };
@@ -21,6 +26,7 @@ const STATUS_LABEL = { ok: 'אין מגבלה ידועה בשעה זו', paid: '
 const TYPE_LABEL = { garage: 'חניון מקורה', lot: 'מגרש חניה', street: 'חניה ברחוב' };
 const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const dayName = d => DAYS[d];
+const MAX_LIST = 60;
 
 // ---------------------------------------------------------------- boot
 async function boot() {
@@ -32,39 +38,66 @@ async function boot() {
     mod.start({ base: S.base, params: q });
     return;
   }
-  try { S.base = await loadStatic(); }
-  catch { $('#main').innerHTML = '<p class="notice">לא הצלחנו לטעון את הנתונים. בדקו חיבור ונסו שוב.</p>'; return; }
-  S.data = S.base; S.engine = new Engine(S.data);
+  try {
+    const [base, topo] = await Promise.all([loadStatic(), fetchJson('data/topology.json')]);
+    S.base = base; S.topo = topo; S.data = base;
+  } catch { $('#main').innerHTML = '<p class="notice">לא הצלחנו לטעון את הנתונים. בדקו חיבור ונסו שוב.</p>'; return; }
+  S.router = new CampusRouter(S.topo, S.data);
   S.opts = { ...S.opts, ...store.get('opts', {}) };
+  buildDestinations();
+  S.dirReady = fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; buildDestinations(); renderDestList(); }).catch(() => { S.directory = []; });
   initUi();
-  routeFromUrl();
+  await routeFromUrl();
   window.addEventListener('popstate', routeFromUrl);
-  // crowd tips arrive later (network) – re-render when they do
+  // crowd tips arrive later (network) – they add lots / doors / shortcuts to the campus graph
   loadApprovedTips().then(({ tips, votes, offline }) => {
-    if (tips.length) { S.data = applyTips(S.base, tips); S.engine = new Engine(S.data); }
+    if (tips.length) { S.data = applyTips(S.base, tips); S.router = new CampusRouter(applyTipsToTopology(S.topo, tips), S.data); }
     S.votes = voteMap(votes, tips);
     if (offline) showNet('מצב לא מקוון – מוצגים טיפים שנשמרו בביקור הקודם');
-    renderDestList();
+    buildDestinations(); renderDestList();
     if (S.destId && !$('#screen-result').hidden) renderResult({ keepSheet: true });
   });
   window.addEventListener('offline', () => showNet('אין חיבור לאינטרנט – האפליקציה ממשיכה לעבוד עם המידע השמור'));
   window.addEventListener('online', () => showNet(null));
 }
 
+async function fetchJson(url) { const r = await fetch(url); if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); }
 function showNet(msg) { const el = $('#net-status'); el.hidden = !msg; el.textContent = msg || ''; }
 function registerSW() {
   if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 
+// ---------------------------------------------------------------- destinations: 28 main places + every clinic we know about
+const bld = id => S.router.buildings.get(id)?.name?.split('(')[0].trim() || null;
+function buildDestinations() {
+  const m = new Map();
+  const osmKey = new Map((S.topo.buildings || []).filter(b => b.osm).map(b => [b.osm, b.id]));
+  for (const d of S.base.destinations) m.set(d.id, { id: d.id, name: d.name, aliases: d.aliases || [], buildingName: bld(osmKey.get(d.buildingId)), floor: d.floor, topoNode: d.topoNode || null, officialUrl: d.officialUrl, hint: d.hint, kind: 'dest' });
+  for (const c of S.directory || []) {
+    if (c.inApp) continue;
+    const nid = `clinic:${c.id}`, node = S.router.nodes.get(nid);
+    m.set('c:' + c.id, { id: 'c:' + c.id, name: c.name, aliases: [], buildingName: bld(node?.building || c.location?.building), floor: node?.floor ?? c.location?.floor ?? null, topoNode: node ? nid : null,
+      officialUrl: `https://www.sheba.co.il/${c.href.replace(/^\/+/, '')}`, hint: c.location?.text || null, kind: 'clinic', unlocated: !node });
+  }
+  S.dests = m;
+}
+
 // ---------------------------------------------------------------- URL ⇄ screen
-function routeFromUrl() {
+async function routeFromUrl() {
   const q = new URLSearchParams(location.search);
   S.timeParam = q.get('time') || 'now';
   if (q.has('acc')) S.opts.accessible = q.get('acc') === '1';
   if (q.has('safe')) S.opts.avoidRisky = q.get('safe') === '1';
+  S.mode = ['bus', 'here'].includes(q.get('mode')) ? q.get('mode') : 'car';
+  S.startNodeId = null; S.startLabel = null;
+  if (S.mode === 'here') {
+    const from = q.get('from');
+    if (from && S.router.nodes.has(from)) { S.startNodeId = from; S.startLabel = placeLabel(from); }
+  }
   syncControls();
   const dest = q.get('dest');
-  if (dest && S.engine.destinations.has(dest)) {
+  if (dest && dest.startsWith('c:') && !S.dests.has(dest)) await S.dirReady;
+  if (dest && S.dests.has(dest)) {
     S.destId = dest;
     S.selected = +(q.get('opt') || 0) || 0;
     renderResult({});
@@ -75,10 +108,11 @@ function routeFromUrl() {
 function pushUrl(params, replace = false) {
   const q = new URLSearchParams();
   for (const [k, v] of Object.entries(params)) if (v != null && v !== '' && v !== false) q.set(k, v === true ? '1' : v);
-  const url = location.pathname + (q.toString() ? '?' + q.toString().replace(/%3A/g, ':') : '');
+  const url = location.pathname + (q.toString() ? '?' + q.toString().replace(/%3A/g, ':').replace(/%2F/g, '/') : '');
   (replace ? history.replaceState : history.pushState).call(history, null, '', url);
 }
-const currentParams = (extra = {}) => ({ dest: S.destId, time: S.timeParam !== 'now' ? S.timeParam : null, acc: S.opts.accessible || null, safe: S.opts.avoidRisky || null, ...extra });
+const currentParams = (extra = {}) => ({ dest: S.destId, time: S.timeParam !== 'now' ? S.timeParam : null, acc: S.opts.accessible || null, safe: S.opts.avoidRisky || null,
+  mode: S.mode !== 'car' ? S.mode : null, from: S.mode === 'here' ? S.startNodeId : null, ...extra });
 
 function show(name) {
   if (name !== 'walk') stopWalk();
@@ -97,15 +131,16 @@ function initUi() {
   const today = new Date().getDay();
   days.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => { const d = (today + i) % 7; return `<option value="${d}">${i === 0 ? 'היום' : i === 1 ? 'מחר' : 'יום ' + DAY_NAMES_HE[d]}</option>`; }).join('');
   $('#search').addEventListener('input', renderDestList);
+  $('#search').placeholder = 'לאן? למשל MRI, מכון הלב, מרפאת כתף…';
   $$('#time-row [data-time]').forEach(b => b.addEventListener('click', () => {
-    const t = b.dataset.time;
-    if (t === 'custom') {
+    const tm = b.dataset.time;
+    if (tm === 'custom') {
       const open = $('#custom-time').hidden;
       $('#custom-time').hidden = !open;
       if (open) setCustomTime(); else syncControls();
     } else {
       $('#custom-time').hidden = true;
-      S.timeParam = t === 'now' ? 'now' : dayName(new Date().getDay()) + '-' + t;
+      S.timeParam = tm === 'now' ? 'now' : dayName(new Date().getDay()) + '-' + tm;
       onOptsChange();
     }
   }));
@@ -118,7 +153,10 @@ function initUi() {
   $('#res-opts').addEventListener('click', openOpts);
   $('#opts-close').addEventListener('click', closeOpts);
   $('#opts-modal').addEventListener('click', e => { if (e.target.id === 'opts-modal') closeOpts(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#opts-modal').hidden) closeOpts(); });
+  $('#indoor-close').addEventListener('click', () => { $('#indoor-overlay').hidden = true; });
+  $('#indoor-overlay').addEventListener('click', e => { if (e.target.id === 'indoor-overlay') e.currentTarget.hidden = true; });
+  $$('#mode-row .mode').forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#opts-modal').hidden) closeOpts(); $('#indoor-overlay').hidden = true; } });
   bindSheetDrag();
   window.addEventListener('resize', () => { if (!$('#screen-result').hidden) { setSheet(S.sheet.state, false); fitRoute(); } });
   renderDestList();
@@ -147,35 +185,41 @@ function syncControls() {
   if (!matchesPreset && m) $('#custom-time').hidden = false;       // a non-preset time (e.g. from a shared link)
   const customOpen = !$('#custom-time').hidden;
   $$('#time-row [data-time]').forEach(b => {
-    const t = b.dataset.time;
-    const on = t === 'now' ? S.timeParam === 'now' : t === 'custom' ? customOpen : (isToday && m && m[1] === t && !customOpen);
+    const tm = b.dataset.time;
+    const on = tm === 'now' ? S.timeParam === 'now' : tm === 'custom' ? customOpen : (isToday && m && m[1] === tm && !customOpen);
     b.setAttribute('aria-pressed', String(!!on));
   });
   if (m && S.timeParam !== 'now') {
     $('#time-input').value = m[1];
     if (prefix) $('#day-select').value = String(DAYS.indexOf(prefix));
   }
+  $$('#mode-row .mode').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === S.mode)));
+  $('#opt-safe').hidden = S.mode !== 'car';
 }
 
 function openOpts() { $('#opts-slot').append($('#opts-block')); $('#opts-modal').hidden = false; }
 function closeOpts() { $('#opts-modal').hidden = true; $('#picker-opts-slot').append($('#opts-block')); }
 
 function renderDestList() {
-  if (!S.engine) return;
+  if (!S.router) return;
   const q = norm($('#search').value);
   const last = store.get('lastDest');
-  const all = [...S.engine.destinations.values()];
-  const list = all.filter(d => !q || norm(d.name).includes(q) || (d.aliases || []).some(a => norm(a).includes(q)));
+  const all = [...S.dests.values()];
+  let list = q
+    ? all.filter(d => norm(d.name).includes(q) || d.aliases.some(a => norm(a).includes(q)))
+    : all.filter(d => d.kind === 'dest');
   if (!q && last) list.sort((a, b) => (b.id === last) - (a.id === last));
-  $('#list-label').textContent = q ? `${list.length} תוצאות` : 'יעדים';
+  if (q) list.sort((a, b) => (a.kind === 'dest' ? 0 : 1) - (b.kind === 'dest' ? 0 : 1) || (norm(a.name).startsWith(q) ? 0 : 1) - (norm(b.name).startsWith(q) ? 0 : 1));
+  const total = list.length;
+  list = list.slice(0, MAX_LIST);
+  $('#list-label').textContent = q ? `${total} תוצאות` : 'יעדים מרכזיים · ' + t('clinicsHint');
   $('#dest-list').innerHTML = list.map(d => {
-    const b = d.buildingId ? S.engine.buildings.get(d.buildingId) : null;
-    const sub = [b?.name, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null].filter(Boolean).join(' · ');
+    const sub = [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
     const isLast = d.id === last && !q;
-    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : '📍'}</span>
+    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : '📍'}</span>
       <span class="dest-txt"><b>${esc(d.name)}</b>${sub || isLast ? `<span class="sub">${isLast ? 'האחרון שבחרת' + (sub ? ' · ' : '') : ''}${esc(sub)}</span>` : ''}</span><span class="dest-chev" aria-hidden="true">‹</span></button></li>`;
-  }).join('');
-  $('#no-results').hidden = list.length > 0;
+  }).join('') + (total > MAX_LIST ? `<li class="muted small" style="padding:10px 4px">${esc(t('moreResults', { n: total - MAX_LIST }))}</li>` : '');
+  $('#no-results').hidden = total > 0;
   $$('#dest-list .dest-row').forEach(btn => btn.addEventListener('click', () => {
     S.destId = btn.dataset.id; S.selected = 0;
     store.set('lastDest', S.destId);
@@ -184,30 +228,59 @@ function renderDestList() {
   }));
 }
 
+// ---------------------------------------------------------------- start mode (car / bus / here)
+async function setMode(mode) {
+  if (mode === S.mode && !(mode === 'here' && !S.startNodeId)) return;
+  const prev = S.mode;
+  S.mode = mode; S.selected = 0;
+  if (mode === 'here' && !S.startNodeId) {
+    if (!(await pickStart({}))) { S.mode = prev; syncControls(); return; }
+  }
+  syncControls();
+  pushUrl(currentParams(), true);
+  renderResult({ keepSheet: true });
+}
+
+async function pickStart(preset) {
+  const r = await chooseHere({ router: S.router, preset });
+  if (!r) return false;
+  S.startNodeId = r.nodeId; S.startLabel = r.label;
+  return true;
+}
+const placeLabel = id => (S.router.nodes.get(id)?.label || '').split('·')[0].replace(/^תחנה:\s*/, '').trim();
+
 // ---------------------------------------------------------------- result: map + bottom sheet
 const whenNow = () => (S.timeParam === 'now' ? whenFromDate() : parseWhen(S.timeParam));
 
+function recommend() {
+  const d = S.dests.get(S.destId);
+  if (!d.topoNode) return { destination: d, options: [], excluded: [], noRoute: true };
+  return S.router.recommend(d.topoNode, d, whenNow(), { ...S.opts, mode: S.mode, startNodeId: S.startNodeId, votes: S.votes });
+}
+
 function renderResult({ keepSheet = false } = {}) {
   const when = whenNow();
-  const r = S.engine.recommend(S.destId, when, { ...S.opts, votes: S.votes });
+  const r = recommend();
   S.result = r;
   if (S.selected >= r.options.length) S.selected = 0;
   show('result');
+  syncControls();
   const d = r.destination;
   $('#result-title').textContent = d.name;
-  const b = d.buildingId ? S.engine.buildings.get(d.buildingId) : null;
-  $('#result-when').textContent = [b?.name, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null].filter(Boolean).join(' · ') +
+  $('#result-when').textContent = [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null].filter(Boolean).join(' · ') +
     ` · ${S.timeParam === 'now' ? 'עכשיו' : 'יום ' + DAY_NAMES_HE[when.day] + ' ' + fmtHM(when.minutes)}${S.opts.accessible ? ' · ♿' : ''}`;
-  const closedGates = (S.data.gates || []).filter(g => g.hours && !isOpenAt(g.hours, when).open);
+  const closedGates = S.mode === 'car' ? (S.data.gates || []).filter(g => g.hours && !isOpenAt(g.hours, when).open) : [];
   $('#gate-notice').hidden = !closedGates.length;
   if (closedGates.length) $('#gate-notice').textContent = `בשעה זו סגורים: ${closedGates.map(g => g.name).join(', ')}. היכנסו בשער הראשי.`;
 
   $('#route-chips').innerHTML = r.options.map((o, i) => {
-    const tag = o.fallback ? 'רשמי · גיבוי' : i === 0 ? 'מומלץ' : 'חלופה';
-    return `<button class="rchip" data-i="${i}" aria-pressed="${i === S.selected}"><span class="rc-tag">${tag}</span>
-      <span class="rc-min">${o.noRoute ? '—' : o.walkMinutes}<small>${o.noRoute ? '' : "דק'"}</small></span><span class="rc-name">${esc(o.parking.name || 'חניה')}</span></button>`;
-  }).join('');
-  $$('#route-chips .rchip').forEach(c => c.addEventListener('click', () => selectOption(+c.dataset.i, true)));
+    const tag = o.kind === 'bus' ? t('tagStop') : o.kind === 'here' ? t('tagHere') : o.fallback ? t('tagFallback') : i === 0 ? t('tagRec') : t('tagAlt');
+    const name = o.kind === 'bus' ? placeLabel(o.stop.id) : o.kind === 'here' ? (S.startLabel || 'המיקום שלי') : (o.parking.name || 'חניה');
+    return `<button class="rchip" data-i="${i}" aria-pressed="${i === S.selected}"><span class="rc-tag">${esc(tag)}</span>
+      <span class="rc-min">${o.walkMinutes}<small>דק'</small></span><span class="rc-name">${esc(name)}</span></button>`;
+  }).join('') || (S.mode === 'here' && r.needsStart ? `<button class="rchip" data-pick="1" aria-pressed="false"><span class="rc-tag">${esc(t('modeHere'))}</span><span class="rc-name">${esc(t('hereNeedStart'))}</span></button>` : '');
+  $$('#route-chips .rchip[data-i]').forEach(c => c.addEventListener('click', () => selectOption(+c.dataset.i, true)));
+  $$('#route-chips .rchip[data-pick]').forEach(c => c.addEventListener('click', async () => { if (await pickStart({})) { pushUrl(currentParams(), true); renderResult({ keepSheet: true }); } }));
 
   ensureMap().then(() => {
     selectOption(S.selected, false);
@@ -230,69 +303,77 @@ function selectOption(i, user) {
   renderSheetBody();
   if (S.map) {
     if (S.routeLayer) S.routeLayer.remove();
-    S.routeLayer = o ? drawRoute(S.map, o, { fit: false }) : null;
+    S.routeLayer = o ? drawLegs(S.map, o, { fit: false }) : null;
   }
   setSheet(S.sheet.state);
   fitRoute();
   if (user) pushUrl(currentParams({ opt: i || null }), true);
 }
 
-// "paid" is not shown: every lot costs the same flat rate, mentioned once in the sheet details.
-function statusBadge(o) { return o.status === 'paid' ? '' : `<span class="status ${esc(o.status)}">${esc(STATUS_LABEL[o.status] || o.status)}</span>`; }
+function statusBadge(o) { return !o.status || o.status === 'paid' ? '' : `<span class="status ${esc(o.status)}">${esc(STATUS_LABEL[o.status] || o.status)}</span>`; }
 
 function renderSheetBody() {
   const r = S.result, o = r?.options[S.selected];
   const main = $('#sheet-main'), more = $('#sheet-more');
-  const officialLink = r?.destination?.officialUrl ? `<p class="small"><a href="${esc(r.destination.officialUrl)}" target="_blank" rel="noopener">הוראות ההגעה הרשמיות באתר שיבא ↗</a></p>` : '';
+  const d = r?.destination;
+  const officialLink = d?.officialUrl ? `<p class="small"><a href="${esc(d.officialUrl)}" target="_blank" rel="noopener">${d.kind === 'clinic' ? 'עמוד המרפאה באתר שיבא' : 'הוראות ההגעה הרשמיות באתר שיבא'} ↗</a></p>` : '';
   const legal = `<p class="legal"><strong>לא רשמי.</strong> האתר אינו קשור למרכז הרפואי שיבא. המידע עשוי להיות שגוי – תמיד בדקו שילוט במקום. לעולם אל תחנו בנתיבי חירום, חניות נכים או דרכי גישה לכבאות.<br>מפה: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://github.com/omer-erlich/idea1/blob/main/SOURCES.md" target="_blank" rel="noopener">מקורות</a> · <a href="?edit=1">הוספת טיפ</a></p>`;
   if (!o) {
-    main.innerHTML = '<p>לא מצאנו כרגע חניה מתאימה עם מסלול הליכה ממופה. השתמשו בהוראות ההגעה הרשמיות.</p>';
+    const msg = r?.noRoute ? `<b>${t('noRouteTitle')}</b><br>${t('noRouteBody')}${d?.hint ? `<br><span class="muted small">באתר שיבא: ${esc(d.hint)}</span>` : ''}`
+      : r?.needsStart ? t('hereNeedStart') : S.mode === 'here' ? t('hereUnreachable') : 'לא מצאנו כרגע אפשרות מתאימה עם מסלול הליכה ממופה. השתמשו בהוראות ההגעה הרשמיות.';
+    main.innerHTML = `<p>${msg}</p>${r?.noRoute ? `<div class="sm-actions"><a class="btn btn-secondary" href="?edit=1&kind=destination&id=${encodeURIComponent(d.id)}">${t('noRouteHelp')}</a></div>` : ''}`;
     more.innerHTML = officialLink + legal;
     return;
   }
   const p = o.parking;
-  const walk = o.noRoute
-    ? '<div class="sm-time"><span class="warn">אין מסלול הליכה ממופה</span></div>'
-    : `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span> · <span class="muted">${o.entrance ? '🚪 ' + esc(o.entrance.name) : 'כניסה ראשית'}</span></div>`;
+  const walk = `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span>${o.entrance ? ` · <span class="muted">🚪 ${esc(o.entrance.name)}</span>` : ''}</div>`;
+  const title = o.kind === 'bus' ? `🚌 ${esc(placeLabel(o.stop.id))}` : o.kind === 'here' ? `📍 ${esc(S.startLabel || 'המיקום שלי')}` : `🅿️ ${esc(p.name || 'חניה')}`;
+  let actions = '';
+  if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">🚗 נווט לחניה</a><button class="btn btn-secondary" id="btn-walk">🚶 הליכה</button>`;
+  else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="btn btn-secondary" id="btn-walk">🚶 הליכה</button>`;
+  else actions = `<button class="btn btn-primary" id="btn-walk">${t('btnStartWalk')}</button><button class="btn btn-secondary" id="btn-change-here">${t('btnChangeHere')}</button>`;
   main.innerHTML = `<div class="sm-row">${walk}${statusBadge(o)}</div>
-    <div class="sm-name">🅿️ ${esc(p.name || 'חניה')}</div>
-    ${!p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
-    <div class="sm-actions">
-      ${p.lat != null ? `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">🚗 נווט לחניה</a>` : ''}
-      ${!o.noRoute ? '<button class="btn btn-secondary" id="btn-walk">🚶 הליכה</button>' : ''}
-    </div>`;
+    <div class="sm-name">${title}</div>
+    ${o.kind === 'parking' && !p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
+    <div class="sm-actions">${actions}</div>
+    ${o.indoor?.length ? `<div class="sm-actions2"><button class="btn btn-secondary btn-small" id="btn-indoor">${t('btnIndoor')}</button></div>` : ''}`;
 
-  const v = S.votes.get(p.id);
+  const v = p ? S.votes.get(p.id) : null;
   const facts = [];
-  facts.push(`<li>🅿️ <b>${esc(p.name || 'חניה')}</b> <span class="muted small">· ${esc(TYPE_LABEL[p.type] || '')}${p.official ? ' · חניון רשמי' : ''}</span></li>`);
-  if (o.rule?.note) facts.push(`<li>🕒 ${esc(o.rule.note)}</li>`);
+  if (o.kind === 'parking') {
+    facts.push(`<li>🅿️ <b>${esc(p.name || 'חניה')}</b> <span class="muted small">· ${esc(TYPE_LABEL[p.type] || '')}${p.official ? ' · חניון רשמי' : ''}</span></li>`);
+    if (o.rule?.note) facts.push(`<li>🕒 ${esc(o.rule.note)}</li>`);
+    if (p.note) facts.push(`<li>ℹ️ ${esc(p.note)}</li>`);
+  } else if (o.kind === 'bus') {
+    const lines = o.stop.lines;
+    facts.push(`<li>🚌 <b>${esc(placeLabel(o.stop.id))}</b></li>`);
+    facts.push(`<li>${lines?.length ? esc(t('busLines', { lines: lines.join(', ') })) : esc(t('busNoLines'))}</li>`);
+  } else facts.push(`<li>📍 ${esc(t('hereChosen', { place: S.startLabel || '' }))}</li>`);
   if (o.entrance) facts.push(`<li>🚪 כניסה: <b>${esc(o.entrance.name)}</b>${o.entrance.note ? ` – ${esc(o.entrance.note)}` : ''}</li>`);
-  else if (!o.noRoute) facts.push('<li>🚪 הכניסה לבניין לא ממופה – חפשו את הכניסה הראשית</li>');
-  if (p.note) facts.push(`<li>ℹ️ ${esc(p.note)}</li>`);
+  const price = S.data.meta?.parkingFlatRate?.text;
   const warns = [];
   if (o.warnings?.includes('risky')) warns.push('<p class="warn">בשעה זו יש סיכון לדו"ח. אם אפשר – העדיפו חלופה.</p>');
-  if (o.warnings?.includes('estimated-route')) warns.push('<p class="warn">חלק מהמסלול משוער לפי המפה ולא נבדק בשטח.</p>');
+  if (o.warnings?.includes('estimated-route')) warns.push('<p class="warn">חלק מהמסלול (בעיקר בפנים) משוער ולא נמדד בשטח.</p>');
+  if (o.warnings?.includes('inferred-link')) warns.push('<p class="warn">חלק מהמעברים בבניינים לא מאומתים – אם משהו לא תואם, השתמשו בשלט "לא בטוח איפה אני".</p>');
   if (o.warnings?.includes('entrance-hours-unknown')) warns.push('<p class="warn small">שעות הפתיחה של הכניסה לא ידועות.</p>');
-  if (o.noRoute) warns.push('<p class="warn">לא נמצא מסלול הליכה ממופה מהחניון הזה. השתמשו בהוראות הרשמיות.</p>');
   if (v?.flagged) warns.push(`<p class="flag">${v.stale ? 'הטיפ לא אושר כבר יותר מחצי שנה – ייתכן שאינו עדכני.' : 'כמה מבקרים דיווחו שזה לא עבד להם לאחרונה.'}</p>`);
-  const verified = o.lastVerified ? `נבדק בשטח לאחרונה: ${fmtDate(o.lastVerified)}` : p.official ? `לפי אתר שיבא (${fmtDate(p.prov?.retrieved) || ''}); לא נבדק בשטח` : 'טרם נבדק בשטח';
+  const verified = o.kind !== 'parking' ? 'מסלול חישובי – טרם נבדק בשטח' : o.lastVerified ? `נבדק בשטח לאחרונה: ${fmtDate(o.lastVerified)}` : p.official ? `לפי אתר שיבא (${fmtDate(p.prov?.retrieved) || ''}); לא נבדק בשטח` : 'טרם נבדק בשטח';
   const crowd = v?.up ? ` · אומת על ידי ${v.up} מבקרים` : '';
   const steps = (o.steps || []).length
     ? `<h4>הוראות הליכה</h4><ol class="steps-list">${o.steps.map((s, k) => `<li><span class="step-n">${k + 1}</span><span>${esc(s.text)}${s.indoor ? ' <span class="in-tag">בפנים</span>' : ''}</span></li>`).join('')}</ol>` : '';
-  const votes = backendEnabled() && !p.official ? `<div class="votes"><span>עבד לך?</span><button class="btn btn-secondary btn-small" data-vote="1" data-id="${esc(p.id)}">👍 עבד לי</button><button class="btn btn-secondary btn-small" data-vote="-1" data-id="${esc(p.id)}">👎 לא עבד לי</button></div>` : '';
-  const price = S.data.meta?.parkingFlatRate?.text;
-  more.innerHTML = `<ul class="facts">${facts.join('')}${price ? `<li>💳 ${esc(price)}</li>` : ''}</ul>${warns.join('')}
+  const votes = backendEnabled() && p && !p.official ? `<div class="votes"><span>עבד לך?</span><button class="btn btn-secondary btn-small" data-vote="1" data-id="${esc(p.id)}">👍 עבד לי</button><button class="btn btn-secondary btn-small" data-vote="-1" data-id="${esc(p.id)}">👎 לא עבד לי</button></div>` : '';
+  const gm = o.kind === 'parking' && p.lat != null ? `<a class="btn btn-secondary" href="${gmapsUrl(p.lat, p.lon)}" target="_blank" rel="noopener">Google Maps</a>` : '';
+  more.innerHTML = `<ul class="facts">${facts.join('')}${o.kind === 'parking' && price ? `<li>💳 ${esc(price)}</li>` : ''}</ul>${warns.join('')}
     <p class="verified">${esc(verified)}${esc(crowd)}</p>
-    <div class="more-actions">
-      ${p.lat != null ? `<a class="btn btn-secondary" href="${gmapsUrl(p.lat, p.lon)}" target="_blank" rel="noopener">Google Maps</a>` : ''}
-      <button class="btn btn-secondary" id="btn-share">🔗 שיתוף</button>
-    </div>
+    <div class="more-actions">${gm}<button class="btn btn-secondary" id="btn-share">🔗 שיתוף</button></div>
     ${steps}${votes}
-    <p class="small"><a href="?edit=1&kind=correction&target=${encodeURIComponent(p.id)}&dest=${encodeURIComponent(S.destId)}">דווחו על תיקון</a></p>
+    <p class="small"><a href="?edit=1&kind=correction&target=${encodeURIComponent(p ? p.id : d.id)}&dest=${encodeURIComponent(S.destId)}">דווחו על תיקון</a></p>
     ${officialLink}${legal}`;
 
   $('#btn-walk')?.addEventListener('click', () => openWalk(S.selected, true));
   $('#btn-share')?.addEventListener('click', share);
+  $('#btn-indoor')?.addEventListener('click', () => { $('#indoor-body').innerHTML = indoorHtml(o); $('#indoor-overlay').hidden = false; });
+  $('#btn-change-here')?.addEventListener('click', async () => { if (await pickStart({})) { pushUrl(currentParams(), true); renderResult({ keepSheet: true }); } });
   $$('#sheet-more [data-vote]').forEach(b => b.addEventListener('click', async () => {
     try { await vote(b.dataset.id, +b.dataset.vote); toast('תודה! ההצבעה נשמרה'); b.parentElement.querySelectorAll('button').forEach(x => { x.disabled = true; }); }
     catch (e) { toast(/rate|limit|already/i.test(e.message) ? 'כבר הצבעת על זה' : 'לא הצלחנו לשמור – נסו שוב מאוחר יותר'); }
@@ -300,7 +381,7 @@ function renderSheetBody() {
 }
 
 async function share() {
-  const data = { title: `${S.result.destination.name} – חניה בשיבא`, url: location.href };
+  const data = { title: `${S.result.destination.name} – שיבא`, url: location.href };
   try {
     if (navigator.share) await navigator.share(data);
     else { await navigator.clipboard.writeText(location.href); toast('הקישור הועתק'); }
@@ -331,7 +412,7 @@ function fitRoute() {
   const b = S.routeLayer?._bounds;
   if (!b || !S.map || !S.sheet.m) return;
   const vis = S.sheet.state === 'full' ? S.sheet.m.peek : S.sheet.vis;
-  S.map.fitBounds(b, { paddingTopLeft: [18, 130], paddingBottomRight: [18, vis + 18], maxZoom: 18, animate: true });
+  S.map.fitBounds(b, { paddingTopLeft: [18, 130], paddingBottomRight: [18, vis + 18], maxZoom: 19, animate: true });
 }
 
 function bindSheetDrag() {
@@ -360,7 +441,7 @@ function bindSheetDrag() {
     const s = st; st = null;
     sheet.classList.remove('dragging');
     if (!s.moved) {
-      if (e.target.closest('#sheet-grab')) setSheet(S.sheet.state === 'peek' ? 'full' : 'peek'), fitRoute();
+      if (e.target.closest('#sheet-grab')) { setSheet(S.sheet.state === 'peek' ? 'full' : 'peek'); fitRoute(); }
       return;
     }
     suppress = true; setTimeout(() => { suppress = false; }, 0);
@@ -376,12 +457,32 @@ function bindSheetDrag() {
 }
 
 // ---------------------------------------------------------------- walking mode
-function openWalk(i, push) {
+function openWalk(i, push, startIndex = 0) {
   const o = S.result?.options[i];
-  if (!o || o.noRoute) return;
+  if (!o) return;
   if (push) pushUrl(currentParams({ opt: i || null, walk: true }));
   show('walk');
-  startWalk(o, { data: S.data, onExit: () => { pushUrl(currentParams({ opt: i || null }), true); renderResult({ keepSheet: true }); } });
+  startWalk(o, { data: S.data, router: S.router, startIndex, onExit: () => { pushUrl(currentParams({ opt: i || null }), true); renderResult({ keepSheet: true }); }, onRelocate: ctx => relocate(i, ctx) });
+}
+
+/** The user is not where we expected (GPS is poor indoors): ask where they are, then route again from there. */
+async function relocate(i, ctx) {
+  const preset = ctx.building ? { building: ctx.building, floor: ctx.floor ?? null } : {};
+  const r = await chooseHere({ router: S.router, preset, title: ctx.reason === 'floor-mismatch' ? t('floorMismatch') : undefined });
+  if (!r) { show('walk'); startWalk(ctx.option, { data: S.data, router: S.router, startIndex: ctx.index, onExit: () => { pushUrl(currentParams({ opt: i || null }), true); renderResult({ keepSheet: true }); }, onRelocate: c => relocate(i, c) }); return; }
+  const prev = { mode: S.mode, startNodeId: S.startNodeId, startLabel: S.startLabel };
+  S.mode = 'here'; S.startNodeId = r.nodeId; S.startLabel = r.label;
+  const rec = recommend();
+  if (!rec.options.length) {
+    toast(t('hereUnreachable'));
+    Object.assign(S, { mode: prev.mode, startNodeId: prev.startNodeId, startLabel: prev.startLabel });
+    show('walk'); startWalk(ctx.option, { data: S.data, router: S.router, startIndex: ctx.index, onExit: () => { pushUrl(currentParams({ opt: i || null }), true); renderResult({ keepSheet: true }); }, onRelocate: c => relocate(i, c) });
+    return;
+  }
+  S.result = rec; S.selected = 0;
+  pushUrl(currentParams({ walk: true }), true);
+  toast(t('rerouted', { place: r.label }), 4000);
+  openWalk(0, false);
 }
 
 boot();

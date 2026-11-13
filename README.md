@@ -8,6 +8,20 @@ place to park, the best entrance and step-by-step walking directions – by time
 * Hebrew guide for adding tips: [`docs/GUIDE-he.md`](docs/GUIDE-he.md)
 * Where every fact comes from: [`SOURCES.md`](SOURCES.md) · what is still unknown: [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md)
 
+## Navigation model (new)
+
+The app never drives you: Waze / Google Maps deep links do that. For a chosen clinic it **starts the walk from wherever makes sense**:
+
+| Mode | Starts at | Notes |
+|---|---|---|
+| 🚗 בנסיעה | a suggested **parking lot** (time rules, safety exclusions, risk penalty) | the official main garage is always offered |
+| 🚌 באוטובוס | a suggested **bus stop** near the campus (OSM) | line numbers where OSM has them |
+| 📍 אני כבר בשיבא | **a place you pick** – GPS is unreliable inside, so a picker asks (building → floor → landmark, search, or "use GPS") | deep link `?mode=here&from=<graph node>` |
+
+One campus graph (`data/topology.json`) holds outdoor roads/paths (true OSM polylines), doors, lobbies, corridors, elevators, floors and clinics, so a route continues seamlessly from the street into the building: **outdoors drawn on the real path, indoors as a dashed path inside the building footprint + an "indoor view" timeline** (floor by floor). Indoor weights are estimates and labelled so.
+While walking, outdoor steps advance by GPS; **indoor steps ask for confirmation** ("do you see the coffee cart?", "which floor are you on?") and offer **"not sure where I am"** → pick a place → the route is recomputed from there.
+Every clinic in Sheba's lobby (≈500) is searchable; clinics with no known position say so instead of inventing a route.
+
 ## Flow (Google-Maps style)
 
 1. **Search** a destination ("MRI", "מכון הלב"…), optionally change the time / accessible route chips.

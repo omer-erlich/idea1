@@ -12,7 +12,7 @@ const KIND = {
   admin: { he: 'משרד / מודיעין', color: '#f97316' }, lobby: { he: 'לובי', color: '#0d9488' },
   hall: { he: 'מסדרון / אזור', color: '#94a3b8' }, floor: { he: 'קומה', color: '#475569', shape: 'sq' },
   entrance: { he: 'כניסה לבניין', color: '#16a34a' }, parking: { he: 'חניה', color: '#eab308', shape: 'sq' },
-  junction: { he: 'צומת / כביש', color: '#64748b' }, other: { he: 'ציון דרך / אחר', color: '#ec4899' },
+  junction: { he: 'צומת / כביש', color: '#64748b' }, busstop: { he: 'תחנת אוטובוס', color: '#0ea5e9', shape: 'sq' }, other: { he: 'ציון דרך / אחר', color: '#ec4899' },
 };
 const EKIND = {
   hallway: { he: 'מסדרון', color: '#94a3b8', w: 2 }, passage: { he: 'מעבר בין בניינים (מבפנים)', color: '#0d9488', w: 4 },

@@ -9,7 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { haversine, pointInPolygon, round6 } from '../js/engine/geo.js';
+import { haversine, pointInPolygon, round6, simplify } from '../js/engine/geo.js';
 import { attachPoint, mainNetwork } from '../js/engine/attach.js';
 import { parseLocation } from './lib/parse-location.mjs';
 
@@ -18,7 +18,7 @@ const read = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
 const INDOOR_KINDS = new Set(['hallway', 'passage', 'stairs', 'elevator', 'floor-exit', 'moving-walkway', 'link']);
 const CONF_FOR_GROUPS = new Set(['osm', 'text']);          // inferred links never merge buildings into one complex
 
-export function buildTopology({ sheba, seed, directory = [] }) {
+export function buildTopology({ sheba, seed, directory = [], busStops: busStopsIn = [] }) {
   const W = seed.weights;
   const nodes = new Map();
   const edges = [];
@@ -37,6 +37,7 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     if (e.m != null) edge.m = Math.round(e.m);
     if (e.name) edge.name = e.name;
     if (e.stairs) edge.stairs = true;
+    if (e.poly && e.poly.length > 2) edge.poly = e.poly;      // true geometry for drawing the route on the map
     edges.push(edge);
     return edge;
   };
@@ -141,7 +142,7 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     if (!ba && !bb) continue;                                                  // not part of the hospital buildings we model
     if (ba === bb && e.length < 25) continue;                                  // tiny stubs
     const a = topoIdOfGraphNode(e.from), b = topoIdOfGraphNode(e.to);
-    if (a && b) addEdge({ a, b, kind: ba && bb && ba !== bb ? 'passage' : 'hallway', sec: e.length / W.indoor_mps, m: e.length, est: false, conf: 'osm', src: `OSM ${e.prov?.osm || e.id} (${Math.round(e.length)} מ')`, note: 'מסדרון פנימי ממופה ב-OSM' });
+    if (a && b) addEdge({ a, b, poly: e.polyline, kind: ba && bb && ba !== bb ? 'passage' : 'hallway', sec: e.length / W.indoor_mps, m: e.length, est: false, conf: 'osm', src: `OSM ${e.prov?.osm || e.id} (${Math.round(e.length)} מ')`, note: 'מסדרון פנימי ממופה ב-OSM' });
   }
 
   // ------------------------------------------------------------------ outdoor network (simplified roads / paths)
@@ -155,6 +156,8 @@ export function buildTopology({ sheba, seed, directory = [] }) {
   const main = mainNetwork(tmp);
   const parkings = (sheba.parkings || []).filter(p => p.lat != null && !(p.id.startsWith('p-osm-') && p.access === 'private'));
   for (const p of parkings) attachPoint(tmp, { id: `park:${p.id}`, lat: p.lat, lon: p.lon, kind: 'parking', maxDist: 120, mainNetwork: main });
+  const busStops = (busStopsIn || []).filter(b => !b.nearDuplicateOf);
+  for (const b of busStops) attachPoint(tmp, { id: `bus:${b.osmId}`, lat: b.lat, lon: b.lon, kind: 'busstop', maxDist: 60, mainNetwork: main });
   const doorIds = [...nodes.values()].filter(n => n.kind === 'entrance').map(n => n.id);
   for (const id of doorIds) {
     const n = nodes.get(id);
@@ -177,7 +180,7 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     if (!tn.has(e.from) || !tn.has(e.to)) continue;
     for (const [x, y] of [[e.from, e.to], [e.to, e.from]]) { if (!adj.has(x)) adj.set(x, []); adj.get(x).push({ to: y, e }); }
   }
-  const isSpecial = id => id.startsWith('park:') || id.startsWith('door:') || id.startsWith('bld:');
+  const isSpecial = id => id.startsWith('park:') || id.startsWith('door:') || id.startsWith('bld:') || id.startsWith('bus:');
   const keep = new Set([...adj.keys()].filter(id => isSpecial(id) || adj.get(id).length >= 3 || adj.get(id).length === 1));
   const ROAD_RANK = { secondary: 5, secondary_link: 4, tertiary: 4, tertiary_link: 3, residential: 3, unclassified: 3, service: 2, footway: 1, pedestrian: 1, steps: 1, path: 1 };
   const visited = new Set();
@@ -187,14 +190,21 @@ export function buildTopology({ sheba, seed, directory = [] }) {
   for (const id of keep) {
     for (const first of adj.get(id) || []) {
       if (visited.has(first.e)) continue;
-      let cur = first.to, len = 0, rank = 0, steps = 0, count = 0;
+      let cur = first.to, prevId = id, len = 0, rank = 0, steps = 0, count = 0;
       const names = new Set();
-      const absorb = ed => { len += ed.length; if (ed.name) names.add(ed.name); rank = Math.max(rank, ROAD_RANK[ed.hw] || 1); if (ed.stairs) steps++; count++; visited.add(ed); };
-      absorb(first.e);
+      const pts = [[tn.get(id).lat, tn.get(id).lon]];
+      const absorb = (ed, fromId, toId) => {
+        len += ed.length; if (ed.name) names.add(ed.name); rank = Math.max(rank, ROAD_RANK[ed.hw] || 1); if (ed.stairs) steps++; count++; visited.add(ed);
+        const A = tn.get(fromId), B = tn.get(toId);
+        let seg = ed.polyline && ed.polyline.length >= 2 ? ed.polyline.slice() : [[A.lat, A.lon], [B.lat, B.lon]];
+        if (ed.from !== fromId) seg.reverse();
+        pts.push(...seg.slice(1));
+      };
+      absorb(first.e, id, cur);
       while (!keep.has(cur)) {
         const nxt = adj.get(cur).find(x => !visited.has(x.e));
         if (!nxt) break;
-        cur = nxt.to; absorb(nxt.e);
+        prevId = cur; absorb(nxt.e, cur, nxt.to); cur = nxt.to;
       }
       if (cur === id) continue;
       for (const x of [id, cur]) {
@@ -202,7 +212,7 @@ export function buildTopology({ sheba, seed, directory = [] }) {
         for (const nm of names) namesAt.get(x).add(nm);
         rankAt.set(x, Math.max(rankAt.get(x) || 0, rank));
       }
-      chains.push({ a: id, b: cur, len, names: [...names], rank, stairs: steps === count && steps > 0 });
+      chains.push({ a: id, b: cur, len, names: [...names], rank, stairs: steps === count && steps > 0, pts });
     }
   }
   // a human sees one crossing, not five OSM nodes: merge junctions closer than MERGE_M, drop dead-end stubs
@@ -260,6 +270,13 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     addNode({ id: pid, label: p.name || 'חניה (OSM, ללא מידע)', kind: 'parking', building: null, floor: null, lat: p.lat, lon: p.lon, geo: 'exact', conf: p.prov?.source === 'osm' ? 'osm' : 'text',
       src: p.prov?.osm ? `OSM ${p.prov.osm}` : p.prov?.url || p.prov?.source, official: !!p.official, mainOfficial: !!p.mainOfficial, note: p.note || null });
   }
+  for (const b of busStops) {
+    const id = `bus:${b.osmId}`;
+    if (!uf.has(id)) continue;
+    const refs = [...new Set((b.lines || []).map(l => l.ref).filter(Boolean))];
+    addNode({ id, label: `תחנה: ${b.name || 'אוטובוס'}`, kind: 'busstop', building: null, floor: null, lat: b.lat, lon: b.lon, geo: 'exact', conf: 'osm', src: b.src || `OSM node ${b.osmId}`,
+      lines: refs.length ? refs : undefined, note: refs.length ? `קווים ב-OSM: ${refs.join(', ')} (רשימת הקווים המלאה באתר שיבא)` : 'קווים לא ממופים ב-OSM – ראו אתר שיבא' });
+  }
   for (const c of chains) {
     if (!useful.has(find(c.a))) continue;
     for (const id of [c.a, c.b]) {
@@ -270,7 +287,10 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     }
     const idOf = id => (id.startsWith('bld:') ? buildings.get(id.slice(4)).lobby : nodes.has(id) ? id : `j:${id}`);
     const guessed = c.a.startsWith('bld:') || c.b.startsWith('bld:');
-    addEdge({ a: idOf(c.a), b: idOf(c.b), kind: c.rank >= 3 ? 'road' : 'path', sec: c.len / W.walk_mps, m: c.len, est: guessed, conf: guessed ? 'inferred' : 'osm', name: c.names.slice(0, 2).join(' / ') || undefined, stairs: c.stairs,
+    const endPt = id => { const n = nodes.get(idOf(id)); return n ? [n.lat, n.lon] : (tn.has(id) ? [tn.get(id).lat, tn.get(id).lon] : null); };
+    const ptsA = endPt(c.a), ptsB = endPt(c.b);
+    const poly = c.pts && ptsA && ptsB ? simplify([ptsA, ...c.pts.slice(1, -1), ptsB], 1.5).map(p => [+p[0].toFixed(5), +p[1].toFixed(5)]) : null;
+    addEdge({ a: idOf(c.a), b: idOf(c.b), poly, kind: c.rank >= 3 ? 'road' : 'path', sec: c.len / W.walk_mps, m: c.len, est: guessed, conf: guessed ? 'inferred' : 'osm', name: c.names.slice(0, 2).join(' / ') || undefined, stairs: c.stairs,
       src: guessed ? 'כניסה לא ממופה ב-OSM – חיבור משוער לדרך הקרובה' : 'OSM (מסלול הליכה לאורך הדרך)' });
   }
   // official facts that tie parking to a building
@@ -305,6 +325,60 @@ export function buildTopology({ sheba, seed, directory = [] }) {
       conf, src: `clinics-lobby/${c.href}`, note: loc.text ? `מיקום באתר: ${loc.text}` : `לפי דף ההגעה/Waze (${loc.via})`, dept: c.dept, wing: loc.wing || undefined });
     addEdge({ a: target, b: id, kind: 'hallway', sec: 20, conf, src: 'מיקום מדף המרפאה באתר שיבא; אורך המסדרון משוער' });
     clinicStats.placed++;
+  }
+
+
+  // ------------------------------------------------------------------ interior layout: put indoor nodes INSIDE their building footprint
+  // (no floor plans exist, so this is schematic – but routes drawn through these points stay inside the building
+  //  instead of one straight line from door to clinic). Doors keep their real position and act as anchors.
+  const INTERIOR_SKIP = new Set(['entrance', 'parking', 'junction', 'busstop']);
+  const rng = (() => { let a = 12345; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; })();
+  for (const b of buildings.values()) {
+    if (!b.center) continue;
+    const members = [...nodes.values()].filter(n => n.building === b.id);
+    const inner = members.filter(n => !INTERIOR_SKIP.has(n.kind));
+    if (!inner.length) continue;
+    const kx = 111320 * Math.cos(b.center[0] * Math.PI / 180), ky = 110540;
+    const toXY = ([la, lo]) => [(lo - b.center[1]) * kx, (la - b.center[0]) * ky];
+    const outline = b.outline ? b.outline.map(toXY) : null;
+    let area = 0;
+    if (outline) for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) area += outline[j][0] * outline[i][1] - outline[i][0] * outline[j][1];
+    const radius = outline ? Math.max(6, Math.sqrt(Math.abs(area) / 2 / Math.PI)) : 7 + Math.sqrt(inner.length) * 3;
+    const P = new Map();
+    for (const n of members) {
+      if (n.kind === 'entrance' && n.geo === 'exact') P.set(n.id, { x: toXY([n.lat, n.lon])[0], y: toXY([n.lat, n.lon])[1], fixed: true });
+      else if (!INTERIOR_SKIP.has(n.kind)) P.set(n.id, { x: (rng() - 0.5) * radius, y: (rng() - 0.5) * radius, fixed: false });
+    }
+    const links = edges.filter(e => P.has(e.a) && P.has(e.b));
+    for (let it = 0; it < 260; it++) {
+      const cool = 1 - it / 260;
+      const list = [...P.entries()];
+      for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) {          // repulsion
+        const [, A] = list[i], [, B] = list[j];
+        let dx = A.x - B.x, dy = A.y - B.y, d2 = dx * dx + dy * dy;
+        if (d2 > 144) continue;
+        if (d2 < 0.01) { dx = rng() - 0.5; dy = rng() - 0.5; d2 = 0.3; }
+        const d = Math.sqrt(d2), f = 3.2 / d2 * cool;
+        if (!A.fixed) { A.x += dx / d * f; A.y += dy / d * f; }
+        if (!B.fixed) { B.x -= dx / d * f; B.y -= dy / d * f; }
+      }
+      for (const e of links) {                                                                 // springs: 1 second ≈ 1 m, clamped to the footprint
+        const A = P.get(e.a), B = P.get(e.b);
+        const dx = B.x - A.x, dy = B.y - A.y, d = Math.hypot(dx, dy) || 0.01;
+        const rest = Math.min(Math.max(e.sec * 0.55, 2.5), radius * 0.9), k = 0.12 * cool + 0.02;
+        const f = (d - rest) / d * k;
+        if (!A.fixed) { A.x += dx * f; A.y += dy * f; }
+        if (!B.fixed) { B.x -= dx * f; B.y -= dy * f; }
+      }
+      for (const [, A] of list) if (!A.fixed) { A.x *= 0.995; A.y *= 0.995; }                   // gravity to the centre
+    }
+    for (const [id, A] of P) {
+      if (A.fixed) continue;
+      let { x, y } = A;
+      if (outline) for (let t = 0; t < 40 && !pointInPolygon([x, y], outline); t++) { x *= 0.88; y *= 0.88; }
+      const n = nodes.get(id);
+      n.lat = +(b.center[0] + y / ky).toFixed(6); n.lon = +(b.center[1] + x / kx).toFixed(6); n.geo = 'layout';
+    }
   }
 
   // ------------------------------------------------------------------ importance (weighted betweenness centrality)
@@ -347,7 +421,7 @@ export function buildTopology({ sheba, seed, directory = [] }) {
     for (const k of Object.keys(o)) if (o[k] === undefined || o[k] === null) delete o[k];
     return o;
   });
-  const outBuildings = [...buildings.values()].map(b => ({ id: b.id, name: b.name, center: b.center, outline: b.outline, group: groupOf.get(b.id), floors: b.floors, geoApprox: b.geoApprox || undefined, geoNote: b.geoNote }));
+  const outBuildings = [...buildings.values()].map(b => ({ id: b.id, name: b.name, osm: b.osm || undefined, lobby: b.lobby, center: b.center, outline: b.outline, group: groupOf.get(b.id), floors: b.floors, geoApprox: b.geoApprox || undefined, geoNote: b.geoNote }));
   const count = (arr, f) => arr.reduce((m, x) => { const k = f(x); m[k] = (m[k] || 0) + 1; return m; }, {});
   const topology = {
     meta: { generated: new Date().toISOString().slice(0, 10), nodes: outNodes.length, edges: edges.length, nodeKinds: count(outNodes, n => n.kind), edgeKinds: count(edges, e => e.kind), clinics: clinicStats,
@@ -400,7 +474,9 @@ function main() {
   const seed = read('data/topology-seed.json');
   const dirFile = path.join(ROOT, 'data/clinics-directory.json');
   const directory = fs.existsSync(dirFile) ? JSON.parse(fs.readFileSync(dirFile, 'utf8')).clinics : [];
-  const { topology, problems } = buildTopology({ sheba, seed, directory });
+  const busFile = path.join(ROOT, 'data/bus-stops.json');
+  const busStops = fs.existsSync(busFile) ? JSON.parse(fs.readFileSync(busFile, 'utf8')).stops : [];
+  const { topology, problems } = buildTopology({ sheba, seed, directory, busStops });
   fs.writeFileSync(path.join(ROOT, 'data/topology.json'), JSON.stringify(topology));
   fs.writeFileSync(path.join(ROOT, 'data/topology.graphml'), toGraphML(topology));
   const m = topology.meta;

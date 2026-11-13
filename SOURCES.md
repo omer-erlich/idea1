@@ -21,6 +21,8 @@ URL/OSM id and retrieval date. This file lists the sources themselves.
 | Sheba – "איך מגיעים" pages (re-read for indoor structure) | https://www.sheba.co.il/general/directions-clinics/ | © Sheba. Facts only (turns, landmarks, floors, elevators), re-expressed in `data/topology-seed.json` with the page named in each `src` | lobbies, elevators, floors, wings, indoor passages |
 | OSM indoor corridors (way 509092926 etc.) | https://www.openstreetmap.org/ | ODbL | the long ground-floor corridor ER → tower → cancer center and the central-building link (measured weights) |
 
+| OSM bus stops + bus route relations | https://www.openstreetmap.org/ | ODbL | `data/bus-stops.json` (40 stops, 26 near the campus graph) – extracted from the OSM extract by the `data-gatherer` agent and spot-checked against the raw file; only line 104 is mapped to stops |
+
 **Not used: Google Maps.** Its terms forbid automated extraction and storing its content, and this project only reuses material whose license allows it. Locations come from Sheba's own text instead; clinics left without a location carry a plain "search in Maps" link for manual lookup (`docs/CLINICS-COVERAGE.md`, node details in `graph.html`).
 
 Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a visitor, 2–5 at a time with pauses, once. `sheba.co.il/robots.txt` only disallows `/api/`, which the scripts never call directly.

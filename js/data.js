@@ -125,3 +125,65 @@ function applyPath(data, p, prov, photo) {
     if (n && n.prov?.source === 'crowd' && n.kind === 'junction') n.needsSnap = true;
   }
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Approved crowd tips → the campus graph (topology). A tip that adds a lot, a door or a shortcut path adds nodes/edges,
+// so every new shortcut improves all routes. Estimated geometry is flagged (est, conf "inferred" for the glue edges).
+const OUTDOOR_KINDS = new Set(['junction', 'entrance', 'parking', 'busstop']);
+
+function nearestNode(topo, lat, lon, maxM, filter = () => true) {
+  let best = null, bd = maxM;
+  for (const n of topo.nodes) {
+    if (n.lat == null || !filter(n)) continue;
+    const d = haversine([lat, lon], [n.lat, n.lon]);
+    if (d < bd) { bd = d; best = n; }
+  }
+  return best ? { node: best, dist: bd } : null;
+}
+
+export function applyTipsToTopology(topo, tips) {
+  const T = structuredClone(topo);
+  const byOsm = new Map((T.buildings || []).filter(b => b.osm).map(b => [b.osm, b]));
+  const upsertNode = n => { const i = T.nodes.findIndex(x => x.id === n.id); if (i >= 0) T.nodes[i] = { ...T.nodes[i], ...n }; else T.nodes.push(n); };
+  const edgeSeq = { n: 0 };
+  const addEdge = (a, b, kind, sec, extra = {}) => { if (a === b) return; T.edges.push({ id: `tip:e${++edgeSeq.n}`, a, b, kind, sec: Math.max(2, Math.round(sec)), est: true, conf: 'inferred', indoor: ['hallway', 'link', 'passage', 'stairs'].includes(kind), src: 'crowd tip (approved)', ...extra }); };
+  for (const t of tips || []) {
+    const p = t.payload || {};
+    try {
+      if (t.kind === 'parking' && p.lat != null) {
+        const id = `park:${p.id}`;
+        upsertNode({ id, label: p.name || 'חניה', kind: 'parking', lat: p.lat, lon: p.lon, geo: 'exact', conf: 'text', src: 'crowd tip', official: false });
+        const near = nearestNode(T, p.lat, p.lon, 150, n => OUTDOOR_KINDS.has(n.kind) && n.id !== id);
+        if (near && !T.edges.some(e => e.a === id || e.b === id)) addEdge(id, near.node.id, 'path', near.dist / 1.1, { m: near.dist, indoor: false, note: 'חיבור משוער לדרך הקרובה' });
+      } else if (t.kind === 'entrance' && p.lat != null) {
+        const id = `door:${p.id}`;
+        const bld = byOsm.get(p.buildingId) || (T.buildings || []).find(b => b.id === p.buildingId);
+        upsertNode({ id, label: `${p.name || 'כניסה'}${bld ? ' · ' + bld.name.split('(')[0].trim() : ''}`, kind: 'entrance', building: bld?.id, floor: p.floor ?? '0', lat: p.lat, lon: p.lon, geo: 'exact', conf: 'text', src: 'crowd tip',
+          publicAccess: p.publicAccess === 'yes' ? 'yes' : 'unknown', hours: p.hours || undefined });
+        const near = nearestNode(T, p.lat, p.lon, 60, n => OUTDOOR_KINDS.has(n.kind) && n.id !== id);
+        if (near && !T.edges.some(e => (e.a === id || e.b === id) && !e.indoor)) addEdge(id, near.node.id, 'path', near.dist / 1.1, { m: near.dist, indoor: false });
+        if (bld?.lobby && T.nodes.some(n => n.id === bld.lobby) && !T.edges.some(e => (e.a === id || e.b === id) && e.kind === 'link')) addEdge(id, bld.lobby, 'link', 6, { conf: 'text' });
+      } else if (t.kind === 'path' && Array.isArray(p.points) && p.points.length >= 2) {
+        const ids = p.points.map((pt, i) => {
+          const near = nearestNode(T, pt.lat, pt.lon, 6);
+          if (near) return near.node.id;
+          const id = `tip:${p.id}:${i}`;
+          upsertNode({ id, label: pt.note || 'נקודה במסלול', kind: pt.entranceId ? 'entrance' : 'hall', lat: pt.lat, lon: pt.lon, geo: 'exact', conf: 'text', src: 'crowd tip', building: undefined });
+          return id;
+        });
+        for (let i = 1; i < ids.length; i++) {
+          const a = p.points[i - 1], b = p.points[i], indoor = !!(a.indoor && b.indoor);
+          const d = haversine([a.lat, a.lon], [b.lat, b.lon]);
+          addEdge(ids[i - 1], ids[i], b.stairs ? 'stairs' : indoor ? 'hallway' : 'path', d / (indoor ? 1 : 1.1), { m: d, conf: 'text', stairs: !!b.stairs, hours: undefined });
+        }
+        for (const end of [ids[0], ids[ids.length - 1]]) {          // glue free ends to the existing network
+          if (!end.startsWith('tip:')) continue;
+          const n = T.nodes.find(x => x.id === end);
+          const near = nearestNode(T, n.lat, n.lon, 25, x => x.id !== end && !x.id.startsWith('tip:'));
+          if (near) addEdge(end, near.node.id, 'link', near.dist / 1.1 + 2, { m: near.dist });
+        }
+      }
+    } catch (err) { console.warn('tip skipped (topology)', t.id, err); }
+  }
+  return T;
+}

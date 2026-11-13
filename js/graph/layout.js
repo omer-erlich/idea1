@@ -17,7 +17,7 @@ export class Layout {
     this.nodes = topo.nodes.map(n => {
       const o = { ref: n, id: n.id, building: n.building || null, imp: n.imp ?? 0.1, vx: 0, vy: 0, pinned: false, ax: null, ay: null };
       o.r = 3 + 12 * o.imp;
-      if (n.lat != null) { const [x, y] = project(n.lat, n.lon); o.ax = x; o.ay = y; o.exact = n.geo === 'exact'; }
+      if (n.lat != null) { const [x, y] = project(n.lat, n.lon); o.ax = x; o.ay = y; o.exact = n.geo === 'exact'; o.inside = n.geo === 'layout'; }   // 'layout' = schematic position inside the building footprint
       if (n.building) { if (!byBuilding.has(n.building)) byBuilding.set(n.building, []); byBuilding.get(n.building).push(o); }
       return o;
     });
@@ -85,7 +85,7 @@ export class Layout {
     }
     // geographic anchors
     const ga = (0.004 + 0.1 * geo * geo) * a;
-    for (const n of N) { if (!vis(n)) continue; const k = n.docked ? 0.08 * a : n.exact ? ga * 1.6 : ga * 0.3; n.vx += (n.ax - n.x) * k; n.vy += (n.ay - n.y) * k; }
+    for (const n of N) { if (!vis(n)) continue; const k = n.docked ? 0.08 * a : n.exact ? ga * 1.6 : n.inside ? ga * 0.7 : ga * 0.3; n.vx += (n.ax - n.x) * k; n.vy += (n.ay - n.y) * k; }
     // building cohesion
     for (const list of this.buildings.values()) {
       let cx = 0, cy = 0, c = 0;

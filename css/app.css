@@ -210,3 +210,31 @@ body[data-screen="result"] main, body[data-screen="walk"] main { padding: 0; max
 .float-notice { font-size: 14px; padding: 6px 12px; margin: 0 auto; }
 .walk-text { font-size: 21px; }
 .wb-icon { flex-basis: 52px; height: 52px; font-size: 30px; }
+
+/* ---- how are you getting there? ---- */
+.mode-row { flex: 0 0 auto; display: flex; gap: 6px; padding: 0 14px 8px; }
+.mode { flex: 1 1 0; min-height: 40px; font: 700 14px/1.1 system-ui; border: 2px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); padding: 4px 6px; cursor: pointer; }
+.mode[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); }
+.sm-actions2 { margin-top: 6px; display: flex; gap: 8px; }
+.sm-actions2 .btn { flex: 1; }
+
+/* ---- "where are you?" + indoor view ---- */
+.here-card { max-height: 86dvh; overflow-y: auto; }
+.here-q { width: 100%; margin: 10px 0 4px; padding: 10px 14px; min-height: 48px; font: inherit; border: 2px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--text); }
+.here-list { display: grid; }
+.here-row { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 4px; background: none; border: 0; border-bottom: 1px solid var(--line); color: var(--text); font: inherit; text-align: start; cursor: pointer; }
+.here-row:active { background: var(--surface); }
+.grow { flex: 1; min-width: 0; }
+.in-building { margin: 14px 0 4px; font-size: 17px; }
+.in-line { list-style: none; margin: 0; padding: 0; border-inline-start: 3px solid var(--primary); padding-inline-start: 12px; }
+.in-floor { margin: 10px 0 2px; font-weight: 800; font-size: 14px; color: var(--primary); }
+.in-node { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 16px; }
+.in-ico { flex: 0 0 26px; text-align: center; }
+.in-est { font-size: 12px; color: var(--risky); white-space: nowrap; } .in-est.ok { color: var(--muted); }
+
+/* ---- walking: live-view style confirmation ---- */
+.walk-confirm { background: var(--primary-soft); border-radius: 14px; padding: 10px 12px; margin: 8px 0 2px; }
+.wc-q { margin: 0 0 6px; font-weight: 700; font-size: 17px; }
+.wc-btns { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
+.wc-floors { margin: 4px 0; } .wc-floors button { min-width: 48px; }
+.wc-foot { text-align: end; }

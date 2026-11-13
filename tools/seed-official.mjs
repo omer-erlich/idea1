@@ -72,6 +72,12 @@ const destinations = DESTS.map(([id, name, aliases, b, floor, hint, page]) => ({
   officialUrl: page ? D + page : null,
   prov: site(page ? D + page : 'https://www.openstreetmap.org/', 'low', { note: 'בניין וקומה מאתר שיבא; הנקודה היא מרכז הבניין, המיקום המדויק בפנים לא פורסם' }),
 }));
+// Each app destination is also a node of the campus graph (data/topology-seed.json) – that is where routing ends.
+const TOPO = { mri: 'tower/imaging', imaging: 'tower/imaging', 'nuclear-medicine': 'tower/nuclear', outpatient: 'tower/outpatient', gastro: 'tower/wing-9', 'neurology-clinics': 'tower/F1/L',
+  autoimmune: 'tower/F1/L', 'kidney-transplant': 'tower/F-1', er: 'er/lobby', 'heart-center': 'heart/lobby', vascular: 'heart/F2', 'cardiac-rehab': 'heart/F2', 'cancer-center': 'cancer/lobby',
+  radiotherapy: 'cancer/lobby', eyes: 'eyes/lobby', oral: 'oral/lobby', ent: 'ent/lobby', 'safra-children': 'safra/lobby', women: 'women/lobby', rehab: 'rehab/lobby', pade: 'pade/lobby',
+  labs: 'labs/lobby', 'blood-bank': 'bloodbank/lobby', shilev: 'shilev/lobby', sourasky: 'sourasky/lobby', psychiatry: 'psych/lobby', endocrine: 'endo/F2', 'child-development': 'childdev/lobby' };
+
 // Official sources mention these but OSM has no matching building — coordinates left for the owner.
 destinations.push(
   { id: 'psychiatry', name: 'האגף לרפואת הנפש (פסיכיאטריה)', aliases: ['פסיכיאטריה', 'רפואת הנפש', 'מרכז חוה'], buildingId: null, floor: '0', hint: 'בניין חד-קומתי סמוך לבניין השיקום (לפי אתר שיבא).', lat: null, lon: null, officialUrl: D + 'directions-psychiatry', prov: owner('אין בניין מתאים ב-OSM – לסמן מיקום בעורך') },
@@ -158,6 +164,7 @@ const upsert = (key, recs) => {
     } else data[key].push(r);
   }
 };
+for (const d of destinations) if (TOPO[d.id]) d.topoNode = TOPO[d.id];
 const centre = id => data.buildings.find(b => b.id === id)?.center;
 for (const d of destinations) if (d.lat == null && d.buildingId) { const c = centre(d.buildingId); if (c) [d.lat, d.lon] = c; }
 upsert('destinations', destinations);
