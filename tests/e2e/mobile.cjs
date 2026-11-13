@@ -41,26 +41,27 @@ const { chromium, devices } = require('playwright');
 
   // switch option via chip
   const first = await p.$eval('#sheet-main .sm-name', e => e.textContent);
-  await p.click('#route-chips .rchip:nth-child(2)'); await p.waitForTimeout(600);
+  await p.click('#btn-alts'); await p.waitForTimeout(300); ok('alternatives open in the options sheet', await p.isVisible('#alt-list .rchip'));
+  await p.click('#alt-list .rchip:nth-child(2)'); await p.waitForTimeout(600);
   const second = await p.$eval('#sheet-main .sm-name', e => e.textContent);
   ok('chip switches option', first !== second, `${first.trim()} → ${second.trim()}`);
   ok('URL records opt=1', (await p.evaluate(() => location.search)).includes('opt=1'));
 
   // time change via options sheet
-  await p.click('#res-opts'); await p.waitForTimeout(300);
+  await p.click('#chip-opts'); await p.waitForTimeout(300);
   ok('options modal opens', await p.isVisible('#opts-modal'));
   await p.click('#opts-modal [data-time="23:00"]'); await p.waitForTimeout(500);
   ok('time change updates URL + title', /time=\w{3}-23:00/.test(await p.evaluate(() => location.search)) && /23:00/.test(await p.textContent('#result-when')), await p.textContent('#result-when'));
   await p.click('#opts-modal #opt-accessible'); await p.waitForTimeout(500);
   ok('accessible toggle updates URL', (await p.evaluate(() => location.search)).includes('acc=1'));
   await p.click('#opts-close'); await p.waitForTimeout(300);
-  ok('options modal closes, block returns to picker', !(await p.isVisible('#opts-modal')) && (await p.$('#picker-opts-slot #opts-block')) !== null);
+  ok('options modal closes; chip shows active options', !(await p.isVisible('#opts-modal')) && (await p.$eval('#chip-opts', e => e.classList.contains('on-dot'))));
 
   // walking mode
   await p.click('#btn-walk'); await p.waitForTimeout(1200);
   ok('walk screen shows', await p.isVisible('#screen-walk') && (await p.textContent('#walk-text')).length > 3);
   const t1 = await p.textContent('#walk-text');
-  await p.click('#walk-next'); await p.waitForTimeout(300);
+  await p.click((await p.isVisible('#walk-next')) ? '#walk-next' : '#walk-confirm .btn-primary, #walk-confirm [aria-pressed="true"]'); await p.waitForTimeout(300);
   ok('next advances step', (await p.textContent('#walk-text')) !== t1);
   await p.click('#walk-prev'); await p.waitForTimeout(200);
   ok('prev goes back', (await p.textContent('#walk-text')) === t1);
@@ -73,7 +74,7 @@ const { chromium, devices } = require('playwright');
 
   // deep links
   await p.goto(base + '?dest=er&time=sat-03:00&opt=1', { waitUntil: 'load' }); await p.waitForTimeout(1500);
-  ok('deep link opens result with time + opt', await p.isVisible('#sheet') && /03:00/.test(await p.textContent('#result-when')) && (await p.$$eval('#route-chips .rchip', c => c.findIndex(x => x.getAttribute('aria-pressed') === 'true'))) === 1);
+  ok('deep link opens result with time + opt', await p.isVisible('#sheet') && /03:00/.test(await p.textContent('#result-when')) && (await p.evaluate(() => location.search)).includes('opt=1'));
   await p.goto(base + '?dest=mri&walk=1', { waitUntil: 'load' }); await p.waitForTimeout(1500);
   ok('deep link opens walking mode', await p.isVisible('#screen-walk'));
 

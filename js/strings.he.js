@@ -31,6 +31,7 @@ export const HE = {
 
   // ---- walking mode: live-view style confirmations
   seeQ: 'רואים: {landmark}?', seeYes: '✓ כן, רואים', seeNo: 'לא רואים',
+  altLink: 'חלופות ({n})',
   lostLink: 'לא ברור איפה אני',
   floorQ: 'באיזו קומה אתם עכשיו?', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',
   arriveQ: 'נכנסתם לבניין?', arriveYes: '✓ כן, נכנסנו',

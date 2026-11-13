@@ -1,4 +1,4 @@
-// Walking navigation (Google-Maps style): instruction banner on top, map, bottom bar with remaining time.
+// Walking navigation: thin progress bar, map, and ONE bottom card holding the instruction and its confirmation together.
 // Outdoors: steps advance automatically by GPS. Indoors GPS is unreliable, so each step asks the user to CONFIRM
 // ("do you see the coffee cart?", "which floor are you on?") and offers "I'm not sure where I am" → re-localise + re-route.
 import { $, esc } from '../util.js';
@@ -37,6 +37,8 @@ export function startWalk(option, { data, onExit, router, onRelocate, startIndex
   $('#walk-prev').onclick = () => go(W.i - 1, true);
   $('#walk-next').onclick = () => advance();
   $('#walk-exit').onclick = exit;
+  $('#walk-lost').textContent = t('lostLink');
+  $('#walk-lost').onclick = () => { const s = W.steps[W.i]; relocate({ building: s.building, floor: s.floor, reason: 'lost' }); };
   $('#walk-recenter').hidden = true;
   $('#walk-recenter').onclick = () => { W.follow = true; $('#walk-recenter').hidden = true; const tt = W.lastFix || stepPoint(); if (tt) W.map.panTo(tt); };
   document.addEventListener('keydown', onKey);
@@ -50,7 +52,7 @@ export function startWalk(option, { data, onExit, router, onRelocate, startIndex
 }
 
 const stepPoint = () => { const s = W.steps[W.i]; return s?.lat != null ? [s.lat, s.lon] : null; };
-function onKey(e) { if (e.key === 'ArrowLeft') $('#walk-next').click(); else if (e.key === 'ArrowRight') $('#walk-prev').click(); else if (e.key === 'Escape') exit(); }
+function onKey(e) { if (e.key === 'ArrowLeft') { if (!$('#walk-next').hidden) $('#walk-next').click(); } else if (e.key === 'ArrowRight') $('#walk-prev').click(); else if (e.key === 'Escape') exit(); }
 function advance() { if (!W) return; if (W.i >= W.steps.length - 1) exit(); else go(W.i + 1, true); }
 
 function go(i, manual) {
@@ -80,8 +82,8 @@ function go(i, manual) {
 function renderConfirm(s) {
   const box = $('#walk-confirm');
   if (!box) return;
-  if (s.arrival) { box.hidden = true; box.innerHTML = ''; return; }
-  const lost = `<button class="link-btn" data-wc="lost">${t('lostLink')}</button>`;
+  if (s.arrival) { box.hidden = true; box.innerHTML = ''; $('#walk-next').hidden = false; return; }
+  const lost = '';
   let html = '';
   if (s.ask === 'floor' && W.router && s.building) {
     const floors = W.router.floorsOf(s.building);
@@ -91,8 +93,9 @@ function renderConfirm(s) {
     html = `<p class="wc-q">${t('arriveQ')}</p><div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('arriveYes')}</button></div>${lost}`;
   } else if (s.ask === 'see') {
     html = `<p class="wc-q">${t('seeQ', { landmark: esc(s.landmark || '') })}</p><div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('seeYes')}</button><button class="btn btn-secondary" data-wc="no">${t('seeNo')}</button></div>${lost}`;
-  } else if (!s.indoor) html = `<div class="wc-foot">${lost}</div>`;
+  }
   box.hidden = !html;
+  $('#walk-next').hidden = !!(html && s.ask);   // a question's answer button IS the primary action
   box.innerHTML = html;
   box.onclick = ev => {
     const b = ev.target.closest('button'); if (!b) return;
