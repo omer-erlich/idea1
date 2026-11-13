@@ -133,6 +133,7 @@ export function transform(raw) {
             id: `osm:w${w.id}:${start}`, from: a, to: b,
             kind: indoor ? 'corridor' : ROADS.has(t.highway) ? 'road' : 'footway',
             name: t['name:he'] || t.name || undefined,
+            hw: t.highway, svc: t.service || undefined,   // OSM road class (used by the topology builder to drop parking aisles)
             indoor, stairs,
             wheelchair: stairs ? (t.ramp === 'yes' || t.wheelchair === 'yes') : t.wheelchair !== 'no',
             public: isPublic,

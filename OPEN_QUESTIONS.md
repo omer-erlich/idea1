@@ -34,3 +34,17 @@ The official list (sheba.co.il/locations) names these, but I could not match the
 
 ## Not available as open data
 - [ ] Floor plans / building plans: the planning archive (mavat) does not allow automated download of plan files and states no reuse license. Indoor corridors therefore come only from OSM and from your edits.
+
+## Campus graph (graph.html)
+- [ ] **Clinic count:** the lobby page header says "773 results" but paging stops after 52 pages / 518 clinics. Is the other part hidden by a filter, or does the counter include something else?
+- [ ] **Clinics with no location** (no "מיקום" field and no directions link) – see `docs/CLINICS-COVERAGE.md`, section "ללא מיקום ידוע". They have no node in the graph yet.
+- [ ] **All indoor weights are estimates** (dashed lines). Only the OSM corridors and roads are measured. Walk the main routes (lobby → MRI, lobby → outpatient wing 9, garage floor 4 → tower floor 1 with the two moving walkways, garage → Safra) and correct `sec` in `data/topology-seed.json`.
+- [ ] **Tower outpatient wing 9:** most pages put it on the ground floor (lung institute, gastro, movement disorders, pelvic floor), the urology page says "floor 1, wing 9, adjacent to the mall". Which is right?
+- [ ] **East / west elevators:** the pages for internal departments D and F say "turn right … east elevators", A, C and E say "turn right … west elevators". Only one side can be on the right – which is?
+- [ ] **Which floors do the tower elevators serve?** Only floors named in the pages (west: 0,2,4,5,6 · east: 0,1,2,4,5 · outpatient: −1,0,1) are assigned; other floors found in clinic texts are attached to both banks (`inferred`).
+- [ ] **Unconfirmed passages (drawn dotted orange, NOT counted as inside connections):** central building ↔ women's hospital ("the mall is at the junction" – is there an indoor corridor?), outpatient wing 9 ↔ mall floor 4 ("adjacent to the mall").
+- [ ] **Buildings with no known inside link** (grey dashed ⛔): heart center, eye institute, ENT, rehab, Pade, psychiatry, Shai-Lev, Sourasky, women's hospital, Child Development Institute, pavilions 16/17, Heller. "No known link" is not "no link" – e.g. does the heart center connect to the ER/tower underground?
+- [ ] **Buildings with no position at all** (no OSM polygon): Child Development Institute (new site), pavilions 16 and 17, Heller institute. They float in the "dock" below the map.
+- [ ] **Hospice / "בית פרידמן"** appears in clinic texts but is not a building we model.
+- [ ] **Floors above 6 in the tower** (the building has more) are only created if a clinic page mentions them.
+- [ ] **Tissue-typing lab:** its own page says "בניין וואהל (adjacent to the labs building), ground floor"; the official directions page says "tower, floor 1, east elevators". Which is current? (Kept unlocated until clarified.)

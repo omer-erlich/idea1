@@ -80,7 +80,8 @@ destinations.push(
 );
 
 // ---- official parking lots (names from sheba.co.il/locations, "איפה חונים?")
-const PAID = { days: ALL, from: '00:00', to: '24:00', status: 'paid', note: '30 ₪ ליממה לכניסה לשיבא; עד 30 דקות חינם אם יוצאים מאותו שער (לפי אתר שיבא)' };
+// Every lot on the campus costs the same (flat rate for the whole campus) → no per-lot price text; see meta.parkingFlatRate.
+const PAID = { days: ALL, from: '00:00', to: '24:00', status: 'paid' };
 const parkings = [
   { id: 'p-central', name: 'החניון המרכזי (חניון הצומת)', type: 'garage', official: true, mainOfficial: true, osmRef: 'way/414835764',
     lat: null, lon: null, rules: [PAID], note: 'מקומה 11 ומעלה – למטופלים בלבד. משרד החניה בקומה 4. יש עמדות טעינה בקומת הקרקע.', prov: site(LOC, 'high') },
@@ -175,6 +176,7 @@ if (!data.routeNotes.some(r => r.id === 'rn-mri-night')) data.routeNotes.push({
   steps: [{ text: 'TODO: תיאור הדרך מהחניה לדלת האחורית (לכתוב בעורך)', indoor: false }, { text: 'TODO: מהדלת לאורך המסדרון עד דלפק ה-MRI', indoor: true }],
   prov: owner('לכתוב את הצעדים במקום'),
 });
-data.meta = { ...(data.meta || {}), version: 1, officialSeeded: CHECKED, title: 'Sheba Parking Guide data (unofficial)' };
+data.meta = { ...(data.meta || {}), version: 1, officialSeeded: CHECKED, title: 'Sheba Parking Guide data (unofficial)',
+  parkingFlatRate: { text: 'כל החניות בשיבא: 30 ₪ ליממה. עד 30 דקות חינם אם נכנסים ויוצאים מאותו שער.', source: LOC, retrieved: CHECKED } };
 fs.writeFileSync(DATA, formatData(data));
 console.log('seeded', destinations.length, 'destinations,', parkings.length, 'parkings,', gates.length, 'gates');

@@ -237,7 +237,8 @@ function selectOption(i, user) {
   if (user) pushUrl(currentParams({ opt: i || null }), true);
 }
 
-function statusBadge(o) { return `<span class="status ${esc(o.status)}">${esc(STATUS_LABEL[o.status] || o.status)}</span>`; }
+// "paid" is not shown: every lot costs the same flat rate, mentioned once in the sheet details.
+function statusBadge(o) { return o.status === 'paid' ? '' : `<span class="status ${esc(o.status)}">${esc(STATUS_LABEL[o.status] || o.status)}</span>`; }
 
 function renderSheetBody() {
   const r = S.result, o = r?.options[S.selected];
@@ -279,7 +280,8 @@ function renderSheetBody() {
   const steps = (o.steps || []).length
     ? `<h4>הוראות הליכה</h4><ol class="steps-list">${o.steps.map((s, k) => `<li><span class="step-n">${k + 1}</span><span>${esc(s.text)}${s.indoor ? ' <span class="in-tag">בפנים</span>' : ''}</span></li>`).join('')}</ol>` : '';
   const votes = backendEnabled() && !p.official ? `<div class="votes"><span>עבד לך?</span><button class="btn btn-secondary btn-small" data-vote="1" data-id="${esc(p.id)}">👍 עבד לי</button><button class="btn btn-secondary btn-small" data-vote="-1" data-id="${esc(p.id)}">👎 לא עבד לי</button></div>` : '';
-  more.innerHTML = `<ul class="facts">${facts.join('')}</ul>${warns.join('')}
+  const price = S.data.meta?.parkingFlatRate?.text;
+  more.innerHTML = `<ul class="facts">${facts.join('')}${price ? `<li>💳 ${esc(price)}</li>` : ''}</ul>${warns.join('')}
     <p class="verified">${esc(verified)}${esc(crowd)}</p>
     <div class="more-actions">
       ${p.lat != null ? `<a class="btn btn-secondary" href="${gmapsUrl(p.lat, p.lon)}" target="_blank" rel="noopener">Google Maps</a>` : ''}

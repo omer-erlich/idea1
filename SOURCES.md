@@ -11,6 +11,20 @@ URL/OSM id and retrieval date. This file lists the sources themselves.
 | Sheba – "איך מגיעים" directions pages (85 pages under `/general/directions-clinics/`) | https://www.sheba.co.il/general/directions-clinics/ | © Sheba. Facts only (building, floor, which lobby/corridor), shortened paraphrase + link to the page | 2026-11-13 | destination list, building + floor, official indoor passages (garage → floor 4 → hospital tower; tower lobby → cancer center; floor 4 → Safra), gate hours (east gate closes 21:00 & weekends, south gate closes 17:30 & weekends) |
 | Sheba sitemap | https://www.sheba.co.il/sitemap | public | 2026-11-13 | list of directions pages |
 
+## Added with the campus graph (2026-11-13)
+
+| Source | URL | Terms | Used for |
+|---|---|---|---|
+| Sheba – clinics lobby ("חיפוש מרפאה") | https://www.sheba.co.il/lobbies/clinics-lobby | © Sheba. Clinic **names and page links only** | list of clinics (`data/clinics-directory.json`) |
+| Sheba – each clinic's public page, field "מיקום" and its "דרכי הגעה" link | https://www.sheba.co.il/ (paths in the directory file) | © Sheba. Only the short location sentence is kept, with a link to the page. **Phone numbers and e-mail addresses on those pages are deliberately not stored.** | building / floor / wing per clinic |
+| Sheba sitemap | https://www.sheba.co.il/sitemap | public | list of the 248 "tests" pages (`data/tests-directory.json`) |
+| Sheba – "איך מגיעים" pages (re-read for indoor structure) | https://www.sheba.co.il/general/directions-clinics/ | © Sheba. Facts only (turns, landmarks, floors, elevators), re-expressed in `data/topology-seed.json` with the page named in each `src` | lobbies, elevators, floors, wings, indoor passages |
+| OSM indoor corridors (way 509092926 etc.) | https://www.openstreetmap.org/ | ODbL | the long ground-floor corridor ER → tower → cancer center and the central-building link (measured weights) |
+
+**Not used: Google Maps.** Its terms forbid automated extraction and storing its content, and this project only reuses material whose license allows it. Locations come from Sheba's own text instead; clinics left without a location carry a plain "search in Maps" link for manual lookup (`docs/CLINICS-COVERAGE.md`, node details in `graph.html`).
+
+Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a visitor, 2–5 at a time with pauses, once. `sheba.co.il/robots.txt` only disallows `/api/`, which the scripts never call directly.
+
 ## How the data was collected (and what was *not* done)
 
 * `tools/import-osm.mjs` – re-runnable OSM import (see README). It replaces only records whose `prov.source`

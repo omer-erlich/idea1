@@ -8,6 +8,12 @@
     "import:osm": "NODE_USE_ENV_PROXY=1 node tools/import-osm.mjs",
     "validate": "node tools/validate-data.mjs",
     "data:rebuild": "node tools/seed-official.mjs && node tools/import-osm.mjs --from-file tools/.cache/osm-raw.json",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "crawl:lobby": "node tools/crawl/crawl-lobby.cjs",
+    "crawl:clinics": "node tools/crawl/crawl-details.cjs",
+    "crawl:sitemap": "NODE_USE_ENV_PROXY=1 node tools/crawl/fetch-sitemap.mjs",
+    "build:directory": "node tools/build-directory.mjs",
+    "build:topology": "node tools/build-topology.mjs",
+    "graph": "npm run build:topology && echo open http://localhost:8080/graph.html"
   }
 }

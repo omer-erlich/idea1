@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>גרף הקמפוס – כלי פנימי</title>
+  <link rel="stylesheet" href="css/graph.css">
+</head>
+<body>
+  <header class="gbar">
+    <b>גרף הקמפוס של שיבא</b><span class="muted">כלי פנימי – לא לציבור</span>
+    <span id="g-stats" class="muted"></span>
+    <span class="spacer"></span>
+    <button id="g-toggle-side" class="gbtn" aria-label="הצג/הסתר פאנל">☰</button>
+    <a class="gbtn" href="./">← לאתר</a>
+  </header>
+  <div class="gwrap">
+    <svg id="g-svg" role="img" aria-label="גרף הקמפוס"></svg>
+    <div id="g-tip" class="tip" hidden></div>
+    <div id="g-hint" class="hint">גרירה – הזזה · גלגלת/צביטה – זום · לחיצה על צומת – פרטים · גרירת צומת – נעילה</div>
+
+    <aside id="g-side" class="side">
+      <section>
+        <input id="g-search" type="search" placeholder="חיפוש צומת (מרפאה, מעלית, קומה…)" autocomplete="off">
+        <div id="g-results" class="results"></div>
+      </section>
+
+      <section>
+        <h3>פריסה</h3>
+        <label class="row">גיאוגרפיה <input id="g-geo" type="range" min="0" max="1" step="0.05" value="0.45"> גרף</label>
+        <div class="btns">
+          <button id="g-reheat" class="gbtn">ארגון מחדש</button>
+          <button id="g-freeze" class="gbtn">הקפא</button>
+          <button id="g-fit" class="gbtn">התאם לתצוגה</button>
+        </div>
+      </section>
+
+      <section>
+        <h3>תצוגה</h3>
+        <label class="chk"><input type="checkbox" id="o-labels" checked> תוויות</label>
+        <label class="chk"><input type="checkbox" id="o-weights" checked> משקלי קווים (שניות) בזום</label>
+        <label class="chk"><input type="checkbox" id="o-outline"> מתאר בניינים אמיתי (OSM)</label>
+        <label class="chk"><input type="checkbox" id="o-hulls" checked> בועות בניינים</label>
+        <label class="chk"><input type="checkbox" id="o-estonly"> הדגש רק קווים משוערים/לא מאומתים</label>
+      </section>
+
+      <section>
+        <h3>סוגי צמתים</h3>
+        <div id="g-kinds"></div>
+      </section>
+
+      <section>
+        <h3>סוגי קווים</h3>
+        <div id="g-ekinds"></div>
+        <p class="small muted">רציף = נמדד (OSM) · מקווקו = משקל משוער · מנוקד כתום = קישור לא מאומת</p>
+      </section>
+
+      <section>
+        <h3>בניינים ומעברים פנימיים</h3>
+        <p class="small muted">כל צבע = קבוצת בניינים שמחוברים ביניהם מבפנים (לפי OSM / טקסט רשמי). אפור מקווקו = אין מעבר פנימי ידוע.</p>
+        <div id="g-groups"></div>
+      </section>
+
+      <section>
+        <h3>מסלול הליכה בין שני צמתים</h3>
+        <p class="small muted">בחרו צומת ← "קבע כמוצא"/"קבע כיעד" בפרטים.</p>
+        <div id="g-path-ab" class="small"></div>
+        <label class="chk"><input type="checkbox" id="p-noinferred"> בלי קישורים לא מאומתים</label>
+        <label class="chk"><input type="checkbox" id="p-access"> נגיש (בלי מדרגות)</label>
+        <label class="chk"><input type="checkbox" id="p-noroad"> רק בפנים (בלי כבישים/שבילים)</label>
+        <div class="btns"><button id="p-go" class="gbtn">חשב</button><button id="p-clear" class="gbtn">נקה</button></div>
+        <div id="g-path-out" class="small"></div>
+      </section>
+    </aside>
+
+    <div id="g-detail" class="detail" hidden></div>
+  </div>
+  <script type="module" src="js/graph/main.js"></script>
+</body>
+</html>

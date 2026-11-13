@@ -65,6 +65,24 @@ unknown-hours unofficial lots → A\* from every remaining lot to the destinatio
 removed when "accessible") → score = walking minutes + penalty (`paid` +1, `risky` +8, unverified unofficial +3,
 flagged by votes +10) → top 3, plus the official main garage as a fallback.
 
+## Campus graph (internal tool)
+
+`graph.html` (not linked from the app, `noindex`) draws the campus as a weighted network – guide: [`docs/GRAPH-he.md`](docs/GRAPH-he.md).
+
+* **Nodes**: clinics (one node per clinic area, multi-area clinics are several nodes), rooms, lobbies (several nodes for a big lobby), admin desks, elevators / stairs, **floors**, doors, parking, big junctions.
+  Colour = kind, size = importance (betweenness centrality).
+* **Lines**: hallways, passages between buildings, floor exits / elevator rides, moving walkways, roads, paths – labelled with walking seconds
+  (solid = measured from OSM, dashed = estimate, dotted orange = unconfirmed).
+* **Buildings** are bubbles; buildings joined by a known *inside* passage share a colour, buildings with none are grey, dashed and marked ⛔.
+* Tools: search, filters, geography↔graph slider, shortest path (optionally without unconfirmed links / stairs), GraphML export (`data/topology.graphml`).
+
+```bash
+npm run build:topology    # data/sheba.json + data/topology-seed.json + data/clinics-directory.json → data/topology.json
+npm run crawl:lobby && npm run crawl:clinics && npm run build:directory   # refresh the clinics list + docs/CLINICS-COVERAGE.md (needs Playwright)
+node tests/e2e/graph.cjs  # browser test of the viewer
+```
+Clinic coverage / missing clinics and tests: [`docs/CLINICS-COVERAGE.md`](docs/CLINICS-COVERAGE.md). All parking on the campus costs the same flat fee, so the app mentions it once and not per lot.
+
 ## Crowd tips (optional backend)
 
 Without a backend the site works fully from `data/sheba.json`; `?edit=1` still lets you draft tips on your phone and
