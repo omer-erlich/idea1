@@ -1,0 +1,13 @@
+{
+  "name": "sheba-parking-guide",
+  "private": true,
+  "type": "module",
+  "description": "Unofficial walking/parking guide for Sheba Medical Center (static site, no build step)",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "import:osm": "NODE_USE_ENV_PROXY=1 node tools/import-osm.mjs",
+    "validate": "node tools/validate-data.mjs",
+    "data:rebuild": "node tools/seed-official.mjs && node tools/import-osm.mjs --from-file tools/.cache/osm-raw.json",
+    "serve": "python3 -m http.server 8080"
+  }
+}
