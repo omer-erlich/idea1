@@ -40,6 +40,9 @@ const { chromium, devices } = require('playwright');
   // --- "I'm already here": where-am-I picker
   await p.click('#mode-row [data-mode="here"]'); await wait(600);
   ok('"I\'m already here" opens the where-are-you picker', await p.isVisible('#here-modal'));
+  await wait(1500);
+  const guesses = await p.$$eval('#here-gps .here-guess', els => els.map(e => e.textContent));
+  ok('picker asks GPS by itself and proposes "are you here?" guesses', guesses.length >= 1 && /בתוך|ליד/.test(guesses.join(' ')), guesses.join(' | ').slice(0, 90));
   await p.fill('#here-q', 'מעליות מערביות'); await wait(300);
   ok('picker searches places', (await p.$$('#here-results .here-row')).length >= 1);
   await p.click('#here-results .here-row'); await wait(1000);

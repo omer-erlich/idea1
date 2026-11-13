@@ -220,6 +220,31 @@ export class CampusRouter {
     }
     return hits.sort((a, b) => (b.inside - a.inside) || a.dist - b.dist);
   }
+  /**
+   * "Are you here?" – mixes the GPS fix (position + accuracy) with what we KNOW about the campus (building footprints,
+   * doors, bus stops, parking lots). Returns ranked guesses; the user confirms or says no. GPS is trusted outdoors and
+   * only as a hint inside buildings, so a building guess leads to "which floor?" and never claims a room.
+   */
+  suggestHere(lat, lon, accuracyM = 30) {
+    const R = Math.min(120, Math.max(35, accuracyM * 1.5));
+    const poor = accuracyM > 80;
+    const out = [];
+    for (const b of this.buildingAt(lat, lon, Math.min(60, accuracyM)).slice(0, 3)) {
+      const conf = b.inside ? (accuracyM <= 25 ? 0.9 : 0.7) : Math.max(0.2, 0.6 - b.dist / 150);
+      out.push({ type: 'building', id: b.id, label: b.name.split('(')[0].trim(), dist: b.dist, inside: b.inside, confidence: poor ? conf * 0.6 : conf });
+    }
+    for (const n of this.nodes.values()) {
+      if (!['entrance', 'busstop', 'parking', 'junction'].includes(n.kind) || n.lat == null) continue;
+      if (n.kind === 'junction' && n.label === 'צומת') continue;                    // unnamed junctions are useless as a guess
+      const d = haversine([lat, lon], [n.lat, n.lon]);
+      if (d > R) continue;
+      const conf = Math.max(0.15, 0.85 - (d / R) * 0.6);
+      out.push({ type: 'node', node: n, label: n.label.split('·')[0].replace(/^תחנה:\s*/, '').trim(), dist: Math.round(d), confidence: poor ? conf * 0.6 : conf });
+    }
+    out.sort((a, b) => b.confidence - a.confidence || a.dist - b.dist);
+    return { suggestions: out.slice(0, 5), accuracy: Math.round(accuracyM), poor };
+  }
+
   /** Nearest outdoor node (junction / door / parking / bus stop). */
   snapOutdoor(lat, lon, maxM = 150) {
     let best = null, bd = maxM;

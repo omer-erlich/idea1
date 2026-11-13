@@ -147,3 +147,19 @@ test('approved crowd tips feed the campus graph (new lot, new door shortcut)', (
   assert.ok(r.options.some(o => o.parking.id === 'p_tip_x'), 'the new lot is a candidate');
   assert.equal(topo.nodes.some(n => n.id === 'park:p_tip_x'), false, 'original topology untouched');
 });
+
+test('suggestHere mixes GPS with known places: building footprint, nearby door, low accuracy', () => {
+  const tower = R.buildings.get('tower');
+  const g = R.suggestHere(tower.center[0], tower.center[1], 15);
+  assert.equal(g.suggestions[0].type, 'building');
+  assert.equal(g.suggestions[0].id, 'tower');
+  assert.ok(g.suggestions[0].confidence >= 0.85 && !g.poor);
+  const door = [...R.nodes.values()].find(n => n.kind === 'entrance' && n.building === 'tower' && n.publicAccess === 'yes');
+  const near = R.suggestHere(door.lat, door.lon, 12).suggestions;
+  assert.ok(near.some(s => s.type === 'node' && s.node.id === door.id), 'the door right here is suggested');
+  const sorted = near.every((s, i) => i === 0 || near[i - 1].confidence >= s.confidence);
+  assert.ok(sorted, 'ranked by confidence');
+  const poor = R.suggestHere(tower.center[0], tower.center[1], 200);
+  assert.ok(poor.poor && poor.suggestions[0].confidence < g.suggestions[0].confidence, 'poor accuracy lowers confidence');
+  assert.deepEqual(R.suggestHere(33.0, 35.5, 20).suggestions, [], 'nothing known far from the campus');
+});

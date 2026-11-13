@@ -5,7 +5,7 @@ import { t } from '../strings.js';
 
 const ICON = { lobby: '🏛', hall: '➡️', elevator: '🛗', stairs: '🪜', admin: '🛎', other: '📍', clinic: '🏥', room: '🚪', entrance: '🚪', busstop: '🚌', parking: '🅿️', junction: '📍' };
 
-export function chooseHere({ router, preset = {}, title } = {}) {
+export function chooseHere({ router, preset = {}, title, autoGps = true } = {}) {
   return new Promise(resolve => {
     const modal = document.createElement('div');
     modal.className = 'modal'; modal.id = 'here-modal';
@@ -73,15 +73,17 @@ export function chooseHere({ router, preset = {}, title } = {}) {
       if (!navigator.geolocation) { box.innerHTML = `<p class="warn">${t('hereGpsFail')}</p>`; return; }
       navigator.geolocation.getCurrentPosition(pos => {
         const { latitude: lat, longitude: lon, accuracy } = pos.coords;
-        const hits = router.buildingAt(lat, lon, Math.min(60, accuracy)).slice(0, 3);
-        const snap = router.snapOutdoor(lat, lon, 90);
-        let html = `<p class="muted small">±${Math.round(accuracy)} מ'</p>`;
-        for (const h of hits) html += `<button class="here-row" data-gpsb="${esc(h.id)}"><span>🏢</span><span class="grow">${esc(t('hereInside', { building: bname(h.id) }))}</span></button>`;
-        if (snap) html += `<button class="here-row" data-n="${esc(snap.node.id)}"><span>${ICON[snap.node.kind] || '📍'}</span><span class="grow">${esc(t('hereOutside', { place: snap.node.label.replace(/^תחנה:\s*/, '') }))}</span><span class="muted small">${snap.dist} מ'</span></button>`;
-        if (!hits.length && !snap) html += `<p class="warn">${t('hereNoBuilding')}</p>`;
+        const g = router.suggestHere(lat, lon, accuracy);
+        let html = `<p class="here-maybe"><b>${t('hereMaybe')}</b> <span class="muted small">${esc(t('hereAcc', { m: g.accuracy }))}${g.poor ? ' · ' + esc(t('hereAccLow')) : ''}</span></p>`;
+        for (const sg of g.suggestions) {
+          if (sg.type === 'building') html += `<button class="here-row here-guess" data-gpsb="${esc(sg.id)}"><span>🏢</span><span class="grow">${esc(t('hereInside', { building: sg.label }))}${sg.inside ? '' : ` <span class="muted small">${sg.dist} מ׳</span>`}</span><span class="here-yes">${t('hereYesHere')}</span></button>`;
+          else html += `<button class="here-row here-guess" data-n="${esc(sg.node.id)}"><span>${ICON[sg.node.kind] || '📍'}</span><span class="grow">${esc(t('hereOutside', { place: sg.label }))} <span class="muted small">${sg.dist} מ׳</span></span><span class="here-yes">${t('hereYesHere')}</span></button>`;
+        }
+        if (!g.suggestions.length) html += `<p class="warn">${t('hereNoBuilding')}</p>`;
         box.innerHTML = html;
       }, () => { box.innerHTML = `<p class="warn">${t('hereGpsFail')}</p>`; }, { enableHighAccuracy: true, timeout: 9000, maximumAge: 5000 });
     }
     render();
+    if (st.view === 'main' && !preset.building && autoGps && navigator.geolocation) useGps();
   });
 }

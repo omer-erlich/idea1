@@ -19,6 +19,7 @@ export const HE = {
   hereGps: '📍 איתור לפי GPS', hereGpsWait: 'מאתרים מיקום…', hereGpsFail: 'לא הצלחנו לקבל מיקום – בחרו ידנית',
   hereOutside: 'בחוץ, ליד: {place}', hereInside: 'בתוך: {building}', hereNoBuilding: 'לא זוהה בניין קרוב',
   hereSearch: 'חיפוש מקום (לובי, מעלית, קומה, מרפאה…)', hereBuilding: 'או בחרו בניין', hereFloor: 'באיזו קומה?', hereWhere: 'ואיפה בקומה?',
+  hereMaybe: 'אולי אתם כאן?', hereYesHere: 'כן, כאן', hereAccLow: 'הדיוק נמוך – אשרו או בחרו ידנית', hereAcc: 'דיוק ±{m} מ׳',
   hereOther: 'חיפוש או בניין אחר',
   hereFloorOnly: 'קומה {floor}, לא ברור איפה', hereCancel: 'ביטול', hereChosen: 'מתחילים מ: {place}', hereUnreachable: 'אין עדיין מסלול מהמקום הזה',
 

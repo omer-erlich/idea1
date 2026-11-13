@@ -238,3 +238,6 @@ body[data-screen="result"] main, body[data-screen="walk"] main { padding: 0; max
 .wc-btns { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
 .wc-floors { margin: 4px 0; } .wc-floors button { min-width: 48px; }
 .wc-foot { text-align: end; }
+.here-maybe { margin: 10px 0 2px; }
+.here-guess { background: var(--primary-soft); border-radius: 12px; border: 0; margin: 4px 0; padding: 6px 10px; }
+.here-yes { font-weight: 800; color: var(--primary); white-space: nowrap; }
