@@ -147,8 +147,9 @@ const upsert = (key, recs) => {
   for (const r of recs) {
     const i = data[key].findIndex(x => x.id === r.id);
     if (i >= 0) {
-      // keep anything the owner already filled in (coords, verification)
       const old = data[key][i];
+      if (old.prov?.edited) continue; // edited in the on-site editor – never overwrite
+      // keep anything the owner already filled in (coords, verification)
       const keep = {};
       for (const k of ['lat', 'lon', 'nodeId']) if (old[k] != null && r[k] == null) keep[k] = old[k];
       if (old.prov?.verified) keep.prov = old.prov;

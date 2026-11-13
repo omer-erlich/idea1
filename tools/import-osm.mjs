@@ -16,7 +16,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { haversine, polylineLength, centroid, round6, simplify, pointInPolygon } from '../js/engine/geo.js';
-import { attachPoint, attachDestination, attachHub, mainNetwork } from '../js/engine/attach.js';
+import { attachAll } from '../js/engine/attach.js';
+import { formatData } from '../js/engine/format.js';
+export { formatData };
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'data/sheba.json');
@@ -299,36 +301,6 @@ export function merge(existing, imported) {
   return out;
 }
 
-/** Attach all point records with coordinates to the graph (generated connectors). */
-export function attachAll(data) {
-  const g = data.graph;
-  const byId = new Map(g.nodes.map(n => [n.id, n]));
-  const main = mainNetwork(g);
-  for (const e of data.entrances || []) {
-    if (e.lat == null) continue;
-    e.nodeId = e.nodeId || `door:${e.id}`;
-    const node = byId.get(e.nodeId);
-    if (node && g.edges.some(x => x.from === node.id || x.to === node.id)) continue; // door on a mapped path
-    attachPoint(g, { id: e.nodeId, lat: e.lat, lon: e.lon, kind: 'door', extra: { entranceId: e.id, buildingId: e.buildingId, prov: e.prov?.source === 'osm' ? { ...e.prov } : { verified: false, source: 'generated', confidence: 'low' } }, maxDist: 60, mainNetwork: main });
-  }
-  for (const p of data.parkings || []) {
-    if (p.lat == null) continue;
-    p.nodeId = p.nodeId || `park:${p.id}`;
-    attachPoint(g, { id: p.nodeId, lat: p.lat, lon: p.lon, kind: 'parking', extra: { parkingId: p.id, prov: { verified: false, source: 'generated', confidence: 'low' } }, maxDist: 120, mainNetwork: main });
-  }
-  for (const b of data.buildings || []) if (b.publicInterior) attachHub(g, b, data.entrances || []);
-  for (const d of data.destinations || []) {
-    if (d.lat == null) continue;
-    d.nodeId = d.nodeId || `dest:${d.id}`;
-    attachDestination(g, d, data.entrances || []);
-    const n = g.nodes.find(n => n.id === d.nodeId);
-    if (n && !n.prov) n.prov = { verified: false, source: 'generated', confidence: 'low' };
-  }
-  // tag generated edges
-  for (const e of g.edges) if (!e.prov) e.prov = { verified: false, source: 'generated', confidence: 'low' };
-  return data;
-}
-
 /** Drop graph parts that are not connected to anything useful (keeps file small). */
 export function pruneGraph(data) {
   const g = data.graph;
@@ -347,18 +319,6 @@ export function pruneGraph(data) {
   const keep = new Set(g.nodes.map(n => n.id));
   g.edges = g.edges.filter(e => keep.has(e.from) && keep.has(e.to));
   return before - g.nodes.length;
-}
-
-/** One record per line: small file, readable git diffs. */
-export function formatData(d) {
-  const arr = a => '[\n' + a.map(r => '  ' + JSON.stringify(r)).join(',\n') + '\n ]';
-  const parts = [];
-  for (const [k, v] of Object.entries(d)) {
-    if (k === 'graph') parts.push(` "graph": {\n "nodes": ${arr(v.nodes)},\n "edges": ${arr(v.edges)}\n }`);
-    else if (Array.isArray(v)) parts.push(` ${JSON.stringify(k)}: ${arr(v)}`);
-    else parts.push(` ${JSON.stringify(k)}: ${JSON.stringify(v)}`);
-  }
-  return '{\n' + parts.join(',\n') + '\n}\n';
 }
 
 // ---------------------------------------------------------------------------

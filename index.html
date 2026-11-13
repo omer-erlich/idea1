@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>חניה חכמה בשיבא</title>
+  <meta name="description" content="מדריך לא רשמי: איפה הכי קרוב לחנות ומאיזו כניסה להיכנס לכל מכון ומרפאה בשיבא תל השומר, כולל הוראות הליכה.">
+  <meta name="theme-color" content="#0b5cab">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-screen="picker">
+  <a class="skip" href="#main">דלג לתוכן</a>
+  <header class="topbar">
+    <button class="icon-btn" id="btn-home" aria-label="חזרה לבחירת יעד" hidden>→</button>
+    <h1 id="title">חניה חכמה בשיבא</h1>
+    <span class="badge-unofficial" title="האתר אינו קשור למרכז הרפואי שיבא">לא רשמי</span>
+  </header>
+  <div id="net-status" class="net-status" hidden></div>
+  <main id="main" tabindex="-1">
+
+    <!-- 1. search -->
+    <section id="screen-picker" class="screen" aria-labelledby="picker-h">
+      <h2 id="picker-h" class="sr-only">בחירת יעד</h2>
+      <label class="search-wrap">
+        <span class="sr-only">חיפוש יעד</span>
+        <span class="search-ico" aria-hidden="true">🔍</span>
+        <input id="search" type="search" inputmode="search" autocomplete="off" placeholder="לאן? למשל MRI, מכון הלב, מיון…">
+      </label>
+      <div id="picker-opts-slot">
+        <div id="opts-block">
+          <div id="time-row" class="time-row" role="group" aria-label="מתי ואפשרויות">
+            <button class="chip" data-time="now" aria-pressed="true">🕒 עכשיו</button>
+            <button class="chip" data-time="08:00" aria-pressed="false">בוקר</button>
+            <button class="chip" data-time="20:00" aria-pressed="false">ערב</button>
+            <button class="chip" data-time="23:00" aria-pressed="false">לילה</button>
+            <button class="chip" data-time="custom" aria-pressed="false">זמן אחר…</button>
+            <button class="chip" id="opt-accessible" aria-pressed="false">♿ נגיש</button>
+            <button class="chip" id="opt-safe" aria-pressed="false">בלי סיכון לדו"ח</button>
+          </div>
+          <div id="custom-time" class="custom-time" hidden>
+            <label>יום <select id="day-select"></select></label>
+            <label>שעה <input id="time-input" type="time" step="900" value="09:00"></label>
+          </div>
+        </div>
+      </div>
+      <p id="list-label" class="list-label">יעדים</p>
+      <ul id="dest-list" class="dest-list" aria-label="יעדים"></ul>
+      <p id="no-results" class="muted" hidden>לא נמצא יעד. נסו מילה אחרת, או <a href="?edit=1&amp;kind=destination">הציעו יעד חדש</a>.</p>
+    </section>
+
+    <!-- 2. map + bottom sheet (Google-Maps style) -->
+    <section id="screen-result" class="result" hidden aria-live="polite">
+      <div id="result-map" class="fullmap" role="img" aria-label="מפת המסלול"></div>
+      <div class="float-top">
+        <button id="res-back" class="fab" aria-label="חזרה לחיפוש">→</button>
+        <div class="dest-pill"><div id="result-title" class="pill-title"></div><div id="result-when" class="pill-sub"></div></div>
+        <button id="res-opts" class="fab" aria-label="שינוי שעה ואפשרויות">🕒</button>
+      </div>
+      <p id="gate-notice" class="notice float-notice" hidden></p>
+      <div id="sheet" class="sheet" data-state="peek">
+        <div id="sheet-grab" class="sheet-grab" role="button" tabindex="0" aria-label="הרחבה / כיווץ של הפרטים"><span class="grab-bar"></span></div>
+        <div id="route-chips" class="route-chips" role="group" aria-label="אפשרויות חניה"></div>
+        <div id="sheet-main" class="sheet-main"></div>
+        <div id="sheet-more" class="sheet-more"></div>
+      </div>
+    </section>
+
+    <!-- 3. walking navigation -->
+    <section id="screen-walk" class="walk" hidden>
+      <div class="walk-banner">
+        <div id="walk-icon" class="wb-icon" aria-hidden="true">⬆️</div>
+        <div class="wb-body">
+          <p id="walk-text" class="walk-text" aria-live="assertive"></p>
+          <span id="walk-mode" class="pill"></span>
+        </div>
+      </div>
+      <img id="walk-photo" class="walk-photo" alt="" hidden>
+      <div class="walk-mapwrap">
+        <div id="walk-map" class="fullmap"></div>
+        <button id="walk-recenter" class="fab walk-fab" aria-label="מרכז למיקום שלי" hidden>📍</button>
+      </div>
+      <div class="walk-bottom">
+        <div class="wb-meta"><b id="walk-remaining"></b><span id="walk-progress" class="muted"></span></div>
+        <p id="walk-gps" class="muted small"></p>
+        <div class="walk-nav">
+          <button id="walk-prev" class="btn btn-secondary btn-big">‹ הקודם</button>
+          <button id="walk-next" class="btn btn-primary btn-big">הבא ›</button>
+        </div>
+        <div class="wb-foot"><span class="small muted">מידע לא רשמי – בדקו שילוט במקום</span><button id="walk-exit" class="link-btn">סיום</button></div>
+      </div>
+    </section>
+
+    <section id="screen-editor" class="screen" hidden></section>
+    <section id="screen-admin" class="screen" hidden></section>
+  </main>
+
+  <div id="opts-modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="שעה ואפשרויות">
+      <div class="modal-head"><b>מתי מגיעים?</b><button id="opts-close" class="btn btn-primary btn-small">סיום</button></div>
+      <div id="opts-slot"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p><strong>לא רשמי.</strong> האתר אינו קשור למרכז הרפואי שיבא ואינו מטעמו. המידע עשוי להיות שגוי – תמיד בדקו שילוט במקום. לעולם אל תחנו בנתיבי חירום, חניות נכים או דרכי גישה לכבאות.</p>
+    <p class="small">מפה ונתוני מבנים: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL). מידע על חניונים ומחירים לפי אתר שיבא. <a href="https://github.com/omer-erlich/idea1/blob/main/SOURCES.md" target="_blank" rel="noopener">מקורות</a> · <a href="?edit=1">הוספת טיפ</a></p>
+  </footer>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="vendor/leaflet/leaflet.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
