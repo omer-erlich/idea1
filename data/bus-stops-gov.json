@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "https://open-bus-stride-api.hasadna.org.il/gtfs_stops/list (date=2026-11-13) + https://open-bus-stride-api.hasadna.org.il/gtfs_ride_stops/list (arrival 2026-11-13 +02:00); underlying data: Israel Ministry of Transport GTFS via Open Bus Stride",
-    "license": "Israeli government open data – verify terms (not verified on source; see report)",
+    "license": "Israeli government open data – verify terms (MOT terms are Hebrew, revisable without notice; no open licence confirmed)",
     "retrieved": "2026-11-13",
     "bbox": [
       32.035,

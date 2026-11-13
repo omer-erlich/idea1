@@ -157,7 +157,8 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   const parkings = (sheba.parkings || []).filter(p => p.lat != null && !(p.id.startsWith('p-osm-') && p.access === 'private'));
   for (const p of parkings) attachPoint(tmp, { id: `park:${p.id}`, lat: p.lat, lon: p.lon, kind: 'parking', maxDist: 120, mainNetwork: main });
   const busStops = (busStopsIn || []).filter(b => !b.nearDuplicateOf);
-  for (const b of busStops) attachPoint(tmp, { id: `bus:${b.osmId}`, lat: b.lat, lon: b.lon, kind: 'busstop', maxDist: 60, mainNetwork: main });
+  const busKey = b => (String(b.id ?? b.osmId).startsWith('bus:') ? String(b.id) : `bus:${b.id ?? b.osmId}`);
+  for (const b of busStops) attachPoint(tmp, { id: busKey(b), lat: b.lat, lon: b.lon, kind: 'busstop', maxDist: 60, mainNetwork: main });
   const doorIds = [...nodes.values()].filter(n => n.kind === 'entrance').map(n => n.id);
   for (const id of doorIds) {
     const n = nodes.get(id);
@@ -271,11 +272,11 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
       src: p.prov?.osm ? `OSM ${p.prov.osm}` : p.prov?.url || p.prov?.source, official: !!p.official, mainOfficial: !!p.mainOfficial, note: p.note || null });
   }
   for (const b of busStops) {
-    const id = `bus:${b.osmId}`;
+    const id = busKey(b);
     if (!uf.has(id)) continue;
     const refs = [...new Set((b.lines || []).map(l => l.ref).filter(Boolean))];
-    addNode({ id, label: `תחנה: ${b.name || 'אוטובוס'}`, kind: 'busstop', building: null, floor: null, lat: b.lat, lon: b.lon, geo: 'exact', conf: 'osm', src: b.src || `OSM node ${b.osmId}`,
-      lines: refs.length ? refs : undefined, note: refs.length ? `קווים ב-OSM: ${refs.join(', ')} (רשימת הקווים המלאה באתר שיבא)` : 'קווים לא ממופים ב-OSM – ראו אתר שיבא' });
+    addNode({ id, label: `תחנה: ${b.name || 'אוטובוס'}`, kind: 'busstop', building: null, floor: null, lat: b.lat, lon: b.lon, geo: 'exact', conf: String(b.id).startsWith('gov:') ? 'text' : 'osm', src: b.src || `OSM node ${b.osmId}`,
+      lines: refs.length ? refs : undefined, note: refs.length ? `קווים (${String(b.id).startsWith('gov:') ? 'משרד התחבורה' : 'OSM'}): ${refs.join(', ')}` : 'אין מידע על קווים בתחנה' });
   }
   for (const c of chains) {
     if (!useful.has(find(c.a))) continue;
@@ -474,8 +475,9 @@ function main() {
   const seed = read('data/topology-seed.json');
   const dirFile = path.join(ROOT, 'data/clinics-directory.json');
   const directory = fs.existsSync(dirFile) ? JSON.parse(fs.readFileSync(dirFile, 'utf8')).clinics : [];
-  const busFile = path.join(ROOT, 'data/bus-stops.json');
-  const busStops = fs.existsSync(busFile) ? JSON.parse(fs.readFileSync(busFile, 'utf8')).stops : [];
+  // official Ministry of Transport stops + lines win; OSM stops are only a fallback when that file is missing
+  const govFile = path.join(ROOT, 'data/bus-stops-gov.json'), busFile = path.join(ROOT, 'data/bus-stops.json');
+  const busStops = fs.existsSync(govFile) ? JSON.parse(fs.readFileSync(govFile, 'utf8')).stops : fs.existsSync(busFile) ? JSON.parse(fs.readFileSync(busFile, 'utf8')).stops : [];
   const { topology, problems } = buildTopology({ sheba, seed, directory, busStops });
   fs.writeFileSync(path.join(ROOT, 'data/topology.json'), JSON.stringify(topology));
   fs.writeFileSync(path.join(ROOT, 'data/topology.graphml'), toGraphML(topology));

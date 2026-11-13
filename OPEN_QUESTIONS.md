@@ -50,7 +50,7 @@ The official list (sheba.co.il/locations) names these, but I could not match the
 - [ ] **Tissue-typing lab:** its own page says "בניין וואהל (adjacent to the labs building), ground floor"; the official directions page says "tower, floor 1, east elevators". Which is current? (Kept unlocated until clarified.)
 
 ## Navigation (parking / bus / "I'm already here")
-- [ ] **Bus lines per stop:** OSM only maps line 104 to stops. Sheba's page lists ~30 lines (and which enter the campus) but not which stop each uses. Stops show `קווים ב-OSM` only; the full list stays on sheba.co.il.
+- [x] **Bus lines per stop:** now from the Ministry of Transport GTFS (21 stops near the campus, lines 1 3 7 8 8א 48 65 104 inside; more on Derech Sheba). Still open: the data has no label for the east-gate terminal, line direction is not verified, and **the data licence must be checked** before the site goes public.
 - [ ] **Indoor geometry is schematic.** There are no floor plans: nodes are placed *inside the building footprint* by a small force layout (`geo: "layout"`), so routes stay inside buildings, but lengths and directions are approximate. Only OSM corridors (ER ↔ tower ↔ cancer center) are true geometry.
 - [ ] **Which doors really open to the public?** Only entrances marked `yes` are routed; 17 are `unknown`. Buildings with no mapped door (rehab, Pade, psychiatry…) are entered through an estimated link from the nearest path – flagged "לא מאומת".
 - [ ] **Clinics with no location** (191) still open a screen, but only with the official page link and a "add a location" button – no route is invented.

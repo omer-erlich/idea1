@@ -23,6 +23,8 @@ URL/OSM id and retrieval date. This file lists the sources themselves.
 
 | OSM bus stops + bus route relations | https://www.openstreetmap.org/ | ODbL | `data/bus-stops.json` (40 stops, 26 near the campus graph) – extracted from the OSM extract by the `data-gatherer` agent and spot-checked against the raw file; only line 104 is mapped to stops |
 
+| **Israel Ministry of Transport GTFS** via the Open Bus Stride API (https://open-bus-stride-api.hasadna.org.il) | state-run public-transport data | **Licence not confirmed**: no explicit open licence found; the file says "verify terms" (MOT terms are Hebrew and revisable) – used for bus stops and line numbers (`data/bus-stops-gov.json`, 25 stops, retrieved 2026-11-13). Replaces the thin OSM bus data (kept as a fallback). Please check the terms before the site goes public. |
+
 **Not used: Google Maps.** Its terms forbid automated extraction and storing its content, and this project only reuses material whose license allows it. Locations come from Sheba's own text instead; clinics left without a location carry a plain "search in Maps" link for manual lookup (`docs/CLINICS-COVERAGE.md`, node details in `graph.html`).
 
 Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a visitor, 2–5 at a time with pauses, once. `sheba.co.il/robots.txt` only disallows `/api/`, which the scripts never call directly.
