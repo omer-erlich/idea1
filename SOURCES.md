@@ -48,3 +48,6 @@ Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a v
 | Leaflet | 1.9.4 | BSD-2-Clause (`vendor/leaflet/LICENSE`) |
 | ngraph.graph | 20.1.2 | BSD-3-Clause (`vendor/ngraph/LICENSE.ngraph.graph`) |
 | ngraph.path | 1.6.1 | MIT (`vendor/ngraph/LICENSE.ngraph.path`) |
+
+## OSM accessibility tags (2026-11-14)
+`tools/import-osm.mjs` now keeps optional `tags` on graph edges, nodes and entrances (crossing, kerb, surface, wheelchair, access, level, indoor, door, covered, lit, incline, handrail). Fetched via the OSM API (Overpass mirrors timed out). Counts on edges: surface 353, crossing 66, access 39, entrance 26, wheelchair 9, indoor 9, level 8, lit 5, kerb 3, covered 3, incline 1, handrail 1 (most inside 300 m of the hospital). **No `step_count`, `ramp`, `tactile_paving` or `automatic_door` tags exist in this area** – unknown stays unknown. Note: Node's `fetch` ignores the proxy unless run with `NODE_USE_ENV_PROXY=1`.
