@@ -116,9 +116,12 @@ const parkings = [
 ];
 
 const entrances = [
-  { id: 'ent-mri-rear', name: 'כניסה אחורית למסדרון ה-MRI', buildingId: B.tower, nodeId: null, lat: null, lon: null,
-    publicAccess: 'yes', hours: null, wheelchair: null, floor: '0',
-    note: 'לפי הבעלים: פתוחה לקהל. לאמת שעות ושילוט.', prov: owner('לסמן מיקום, שעות ותמונה בעורך') },
+  // Owner tip, best guess (2026-11-14): "back entrance of the MRI building" = OSM node/6925716764 (entrance=service, east wall of the tower,
+  // 1 m from the outline, ~197 m from the ER door). The owner says it is public; hours unknown (null). Not confirmed on site.
+  { id: 'ent-mri-rear', name: 'כניסה אחורית (קיר מזרחי) – ניחוש לפי טיפ', buildingId: B.tower, nodeId: null, lat: 32.0457421, lon: 34.8438692,
+    publicAccess: 'yes', hours: null, wheelchair: true, floor: '0', noLobbyLink: true,
+    note: 'ניחוש: צומת OSM 6925716764 (כניסת שירות בקיר המזרחי). לפי הבעלים פתוחה לקהל. לאמת שעות, שילוט והאם מובילה למסדרון הדימות.',
+    prov: { verified: false, lastVerified: null, source: 'owner', osm: 'node/6925716764', retrieved: '2026-11-14', confidence: 'low', todo: 'לאמת בשטח שזו הדלת האחורית, שעות ושילוט' } },
 ];
 
 const gates = [
@@ -178,10 +181,26 @@ for (const [k, label] of Object.entries(PUBLIC_INTERIOR)) {
 }
 data.graph.edges = data.graph.edges.filter(e => !passages.some(p => p.id === e.id)).concat(passages);
 data.routeNotes = data.routeNotes || [];
-if (!data.routeNotes.some(r => r.id === 'rn-mri-night')) data.routeNotes.push({
-  id: 'rn-mri-night', parkingId: 'p-mri-night', entranceId: 'ent-mri-rear', destinationId: 'mri',
-  steps: [{ text: 'TODO: תיאור הדרך מהחניה לדלת האחורית (לכתוב בעורך)', indoor: false }, { text: 'TODO: מהדלת לאורך המסדרון עד דלפק ה-MRI', indoor: true }],
-  prov: owner('לכתוב את הצעדים במקום'),
+// best guess for the owner's night-MRI tip: the small OSM lot east/north-east of the tower (way/295751880), not part of the central garage.
+{
+  const lot = data.parkings.find(p => p.id === 'p-osm-295751880');
+  if (lot && !lot.prov?.edited && !lot.prov?.verified) {
+    lot.name = 'חניה קטנה צפונית-מזרחית למגדל (טיפ מהשטח)';
+    lot.rules = [{ days: ALL, from: '19:00', to: '06:00', status: 'ok', note: 'טיפ מהשטח (לא מאומת)' }];
+    lot.note = 'טיפ לא רשמי';
+    lot.prov = { ...lot.prov, source: 'owner', osm: 'way/295751880', confidence: 'low', todo: 'לאמת בשטח שזו החניה הקטנה שהבעלים התכוון אליה, שערים ושעות' };
+  }
+}
+data.routeNotes = data.routeNotes.filter(r => r.id !== 'rn-mri-night');
+data.routeNotes.push({
+  id: 'rn-mri-night', parkingId: 'p-osm-295751880', entranceId: 'ent-mri-rear', destinationId: 'mri',
+  steps: [
+    { text: 'חנו בחניה הקטנה (טיפ מהשטח, לא רשמי – בדקו שילוט במקום), לא בחניון המרכזי הגדול.', indoor: false },
+    { text: 'לכו ברגל לכיוון מגדל האשפוז, לקיר המזרחי של הבניין (כ-250 מטר, הערכה).', indoor: false },
+    { text: 'היכנסו בדלת האחורית/הצדדית (ניחוש – אם היא נעולה או לא מתאימה, עברו לכניסה הראשית בצד צפון-מזרח).', indoor: false },
+    { text: 'מהדלת המשיכו במסדרון לאגף הדימות / MRI (כחצי דקה, הערכה).', indoor: true },
+  ],
+  prov: owner('לאמת את הצעדים בשטח', { confidence: 'low' }),
 });
 data.meta = { ...(data.meta || {}), version: 1, officialSeeded: CHECKED, title: 'Sheba Parking Guide data (unofficial)',
   parkingFlatRate: { text: 'כל החניות בשיבא: 30 ₪ ליממה. עד 30 דקות חינם אם נכנסים ויוצאים מאותו שער.', source: LOC, retrieved: CHECKED } };

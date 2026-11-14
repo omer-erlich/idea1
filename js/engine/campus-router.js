@@ -106,8 +106,15 @@ export class CampusRouter {
   }
 
   // ---------------------------------------------------------------- options
+  /** Path that must pass through `viaId` (used by local tips: "park here, then use THAT door"). Every leg still obeys the normal door/edge rules. */
+  findPathVia(fromId, viaId, toId, when, opts = {}) {
+    const a = this.findPath(fromId, viaId, when, opts), b = this.findPath(viaId, toId, when, opts);
+    if (!a || !b) return null;
+    return { nodeIds: [...a.nodeIds, ...b.nodeIds.slice(1)], hops: [...a.hops, ...b.hops], seconds: a.seconds + b.seconds, cost: a.cost + b.cost, meters: a.meters + b.meters };
+  }
+
   _option(kind, startId, destId, dest, when, opts, extra = {}) {
-    const path = this.findPath(startId, destId, when, opts);
+    const path = (extra.via && this.findPathVia(startId, extra.via, destId, when, opts)) || this.findPath(startId, destId, when, opts);
     if (!path) return null;
     const legs = this.legsOf(path);
     const inferred = path.hops.filter(h => h.edge.conf === 'inferred');
@@ -195,7 +202,10 @@ export class CampusRouter {
       if (ex) { excluded.push({ parking: p, ...ex }); continue; }
       const st = parkingStatusAt(p, when);
       const status = st.status === 'unknown' ? 'paid' : st.status;
-      const o = this._option('parking', `park:${p.id}`, destId, dest, when, opts, { parking: p, from: this.nodes.get(`park:${p.id}`), status, rule: st.rule });
+      // a matching local tip names a door: route through it when that door is public and not known closed now (the tip then only re-ranks, see _applyLocalTip)
+      const tipDoor = (opts.tips || []).find(t => t.parking === p.id && t.entrance && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
+      const via = tipDoor && this.nodeOpen(this.nodes.get(tipDoor.entrance), when) ? tipDoor.entrance : null;
+      const o = this._option('parking', `park:${p.id}`, destId, dest, when, opts, { parking: p, from: this.nodes.get(`park:${p.id}`), status, rule: st.rule, via });
       if (!o) { excluded.push({ parking: p, code: 'no-route', reason: 'אין מסלול הליכה ידוע בשעה זו' }); continue; }
       const flagged = !!opts.votes?.get(p.id)?.flagged;
       o.flagged = flagged;

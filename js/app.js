@@ -28,6 +28,7 @@ const TYPE_LABEL = { garage: 'חניון מקורה', lot: 'מגרש חניה', 
 const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const dayName = d => DAYS[d];
 const MAX_LIST = 60;
+const DAY_SHORT = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
 const UNIT_TAG = { clinic: 'מרפאה', ward: 'מחלקה (אשפוז)', array: 'מערך', institute: 'מכון', unit: 'יחידה' };
 
 // ---------------------------------------------------------------- boot
@@ -223,7 +224,7 @@ function syncControls() {
   $('#chip-mode').classList.toggle('on-dot', !!(S.opts.accessible || S.opts.avoidRisky));
   const PRESET = { '08:00': 'בוקר', '13:00': 'צהריים', '19:00': 'ערב', '23:00': 'לילה' };
   $('#chip-time').textContent = S.timeParam === 'now' || !m ? '🕒 עכשיו ▾'
-    : `🕒 ${isToday ? '' : 'יום ' + DAY_NAMES_HE[DAYS.indexOf(prefix)] + ' '}${PRESET[m[1]] && isToday ? PRESET[m[1]] + ' ' : ''}${m[1]} ▾`;
+    : `🕒 ${isToday ? '' : DAY_SHORT[DAYS.indexOf(prefix)] + ' '}${PRESET[m[1]] && isToday ? PRESET[m[1]] + ' ' : ''}${m[1]} ▾`;
   const n = S.result?.options?.length || 0;
   $('#chip-routes').hidden = n < 2;
   $('#routes-n').textContent = n;
@@ -388,14 +389,15 @@ function renderSheetBody() {
     return;
   }
   const p = o.parking;
-  const walk = `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span>${o.entrance ? ` · <span class="muted">🚪 ${esc(o.entrance.name)}</span>` : ''}</div>`;
+  const walk = `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span></div>`;
+  const entLine = o.entrance ? `<div class="sm-ent">🚪 ${esc(o.entrance.name)}</div>` : '';
   const title = o.kind === 'bus' ? `🚌 ${esc(placeLabel(o.stop.id))}` : o.kind === 'here' ? `📍 ${esc(S.startLabel || 'המיקום שלי')}` : `🅿️ ${esc(p.name || 'חניה')}`;
   let actions = '';
   if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">${t('btnNavPark')}</a><button class="btn btn-secondary" id="btn-walk">${t('btnWalkParked')}</button>`;
   else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="btn btn-secondary" id="btn-walk">${t('btnWalkBus')}</button>`;
   else actions = `<button class="btn btn-primary" id="btn-walk">${t('btnStartWalk')}</button><button class="btn btn-secondary" id="btn-change-here">${t('btnChangeHere')}</button>`;
   main.innerHTML = `<div class="sm-row">${walk}${statusBadge(o)}</div>
-    <div class="sm-name">${title}</div>
+    <div class="sm-name">${title}</div>${entLine}
     ${o.kind === 'parking' && !p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
     ${o.tip ? `<div class="tip-line"><span class="tip-badge">${esc(t(o.tip.status === 'confirmed' ? 'tipConfirmed' : 'tipUnverified'))}</span> ${esc(o.tip.noteHe)}</div>` : ''}
     ${o.tip && !(o.kind === 'parking' && !p.official) ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
@@ -461,7 +463,7 @@ function sheetMetrics() {
   const full = Math.round(H * 0.9);
   sheet.style.height = full + 'px';
   const main = $('#sheet-main');
-  const peek = Math.max(150, Math.min(full - 140, main.offsetTop + main.offsetHeight + 4));
+  const peek = Math.max(150, Math.min(Math.round(H * 0.8), main.offsetTop + main.offsetHeight + 4));
   return { H, full, peek, half: Math.round((peek + full) / 2) };
 }
 

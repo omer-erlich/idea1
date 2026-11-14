@@ -117,6 +117,8 @@
     { "a": "tower/lobby", "b": "tower/corridor", "kind": "hallway", "sec": 15, "conf": "text", "src": "how-to-reach-mri-test" },
     { "a": "tower/gan", "b": "tower/corridor", "kind": "hallway", "sec": 10, "conf": "text", "src": "locations ('בין לובי הכניסה למעליות')" },
     { "a": "tower/corridor", "b": "tower/imaging", "kind": "hallway", "sec": 25, "conf": "text", "src": "directions-imaging-division" },
+    { "a": "j:osm:n2995053055", "b": "door:ent-mri-rear", "kind": "path", "sec": 165, "m": 181, "est": true, "conf": "inferred", "src": "owner: 2026-11-14 (הערכה: אותה גישה כמו לכניסה הראשית + כ-35 מ' לאורך הקיר המזרחי; לא ממופה ב-OSM)", "note": "ניחוש – לא מאומת" },
+    { "a": "door:ent-mri-rear", "b": "tower/imaging", "kind": "link", "sec": 40, "est": true, "conf": "inferred", "src": "owner: 2026-11-14 (טיפ: כניסה אחורית למסדרון ה-MRI; המיקום והמסלול הפנימי ניחוש)", "note": "ניחוש – לא מאומת" },
     { "a": "tower/corridor", "b": "tower/nuclear", "kind": "hallway", "sec": 35, "conf": "text", "src": "directions-nuclear-medicine" },
     { "a": "tower/corridor", "b": "tower/elev-west", "kind": "hallway", "sec": 25, "conf": "text", "src": "directions-internal-department-a" },
     { "a": "tower/corridor", "b": "tower/elev-east", "kind": "hallway", "sec": 30, "conf": "text", "src": "directions-internal-department-d" },

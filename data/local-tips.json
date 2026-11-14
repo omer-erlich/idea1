@@ -1,4 +1,33 @@
 {
   "_readme": "Hand-maintained owner/local tips. A tip only re-ranks options that are already safe and open (see CampusRouter._applyLocalTip). Never put names, phones or e-mails here. Unverified tips are always labelled in the app. 'when' uses the same windows as parking rules (days 0=Sunday, from/to HH:MM, may cross midnight). The bonus needs the route to use 'entrance' and that door to be public with known open hours.",
-  "tips": []
+  "tips": [
+    {
+      "id": "tip-mri-night",
+      "destinations": [
+        "mri"
+      ],
+      "parking": "p-osm-295751880",
+      "entrance": "door:ent-mri-rear",
+      "when": [
+        {
+          "days": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "from": "19:00",
+          "to": "06:00"
+        }
+      ],
+      "bonusMin": 6,
+      "provenance": "owner",
+      "confidence": "low",
+      "status": "unverified",
+      "noteHe": "לבדיקות ערב ולילה: חניה קטנה בקומת קרקע מחוץ לחניון הצומת, וכניסה דרך הדלת האחורית של המגדל (ניחוש, לא מאומת)."
+    }
+  ]
 }

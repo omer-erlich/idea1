@@ -106,7 +106,8 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   }
 
   // ------------------------------------------------------------------ seed edges
-  for (const e of seed.edges) {
+  const isDoorEdge = e => String(e.a).startsWith('door:') || String(e.b).startsWith('door:');   // door nodes are created later (from sheba.json entrances)
+  for (const e of seed.edges.filter(e => !isDoorEdge(e))) {
     const needFloor = id => { const m = /^([a-z0-9]+)\/F(-?\d+)$/.exec(id); if (m && buildings.has(m[1])) ensureFloor(m[1], m[2]); };
     needFloor(e.a); needFloor(e.b);
     addEdge({ a: e.a, b: e.b, kind: e.kind, sec: e.sec, est: e.est, conf: e.conf, src: e.src, note: e.note });
@@ -119,7 +120,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
     const id = `door:${en.id}`;
     addNode({ id, label: `${en.name || 'כניסה'} · ${bld.name.split('(')[0].trim()}`, kind: 'entrance', building: bk, floor: en.floor ?? '0', lat: en.lat, lon: en.lon, geo: 'exact',
       conf: en.prov?.source === 'osm' ? 'osm' : 'text', src: en.prov?.osm ? `OSM ${en.prov.osm}` : en.prov?.source, publicAccess: en.publicAccess, hours: en.hours || null, note: en.note || null });
-    if (bld.lobby && nodes.has(bld.lobby)) addEdge({ a: id, b: bld.lobby, kind: 'link', sec: 6, conf: 'osm', src: 'door → building lobby (estimated)' });
+    if (!en.noLobbyLink && bld.lobby && nodes.has(bld.lobby)) addEdge({ a: id, b: bld.lobby, kind: 'link', sec: 6, conf: 'osm', src: 'door → building lobby (estimated)' });
   }
 
   // ------------------------------------------------------------------ OSM indoor corridors (cross-building evidence)
@@ -305,6 +306,8 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   // official facts that tie parking to a building
   if (nodes.has('park:p-central') && nodes.has('central/lobby')) addEdge({ a: 'park:p-central', b: 'central/lobby', kind: 'link', sec: 8, conf: 'text', src: 'sheba.co.il/locations – "החניון המרכזי – מרכז הצומת"' });
   if (nodes.has('park:p-cancer') && nodes.has('cancer/elev')) addEdge({ a: 'park:p-cancer', b: 'cancer/elev', kind: 'link', sec: 20, conf: 'inferred', src: 'locations – חניון מרכז הסרטן הוא חלק מהמרכז (מקומה 3)', note: 'לא ידוע היכן יוצאים מהחניון להולכי רגל' });
+  // seed edges that touch door nodes (created from sheba.json entrances) – added once the road network exists, so they may also reference junctions
+  for (const e of seed.edges.filter(isDoorEdge)) addEdge({ a: e.a, b: e.b, kind: e.kind, sec: e.sec, m: e.m, est: e.est, conf: e.conf, src: e.src, note: e.note });
   const unplacedParkings = (sheba.parkings || []).filter(p => p.lat == null).map(p => ({ id: p.id, name: p.name }));
 
   // ------------------------------------------------------------------ clinics (from Sheba's clinics lobby + their location text)

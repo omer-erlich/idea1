@@ -5,10 +5,10 @@ Nothing below was guessed into the app as fact. Where a placeholder exists it is
 `node tools/validate-data.mjs` prints the current TODO list.
 
 ## Your first tip – MRI at night
-- [ ] **Coordinates** of the small lot next to the rear MRI corridor (`p-mri-night`) and of the rear door (`ent-mri-rear`).
+- [ ] **Coordinates** of the small lot next to the rear MRI corridor: best guess now wired = OSM way/295751880 (lot) and `ent-mri-rear` = OSM node/6925716764 (east wall of the tower). Confirm or replace (the old placeholder `p-mri-night` stays unrouted).
 - [ ] **Hours**: I used *night 20:00–06:00 = ok, day = risky* as a placeholder. What are the real hours / signs?
 - [ ] Is the rear door open to the public all night? Any intercom / card reader?
-- [ ] Step texts + a photo for the route note `rn-mri-night`.
+- [ ] Check the 4 draft step texts of `rn-mri-night` (best guess, estimated parts marked) and add a photo.
 
 ## Official parking lots without a confident location
 The official list (sheba.co.il/locations) names these, but I could not match them to an OSM area with confidence:
@@ -73,3 +73,10 @@ Candidates are in `data/local-route-candidates.json`. Nothing is verified. Pleas
 - [ ] Are the women's-hospital side doors node/2994422647 and node/2994422668 open to the public?
 - [ ] Is lot OSM way/295694762 the right lot for the women's hospital (low-confidence match)?
 - [ ] Should a permanent rule exclude lots inside disabled-designated zones (way/509023462) from all recommendations?
+
+## Night MRI tip wired as a best guess (2026-11-14, tip `tip-mri-night`)
+Lot = way/295751880 (rule: ok 19:00-06:00 "טיפ מהשטח", unknown by day, unofficial). Door = node/6925716764, `publicAccess:"yes"` (owner), hours unknown. Please confirm on site:
+- [ ] Is that door really the back door, is it unlocked and signed at night (card/intercom)? If not, the tip must be removed or moved (`data/local-tips.json`, `ent-mri-rear` in `tools/seed-official.mjs`).
+- [ ] Does the door lead into the imaging/MRI corridor? The link door → `tower/imaging` (40 s) is an inferred estimate.
+- [ ] Walk from the lot to the east wall: the approach (main-door approach + ~35 m along the wall, 181 m, 165 s) is an inferred estimate; is there a real path, or fences/steps?
+- [ ] Garage zone split (central garage floors): skipped – no per-level data in the seed/OSM; need floor list + exits per level from the owner.

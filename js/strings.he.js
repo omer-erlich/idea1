@@ -33,7 +33,7 @@ export const HE = {
   seeQ: 'רואים {landmark}?', seeYes: '✓ אני רואה: {landmark}', seeNo: 'לא מוצאים',
   testBadge: 'בדיקה', testManyUnits: 'במספר יחידות ({n})', testPickTitle: 'איפה מבצעים: {name}?',
   testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
-  estimatedNotice: 'חלק מהמסלול (בעיקר בפנים) משוער ולא נמדד בשטח.',
+  estimatedNotice: 'חלק מהמסלול משוער, לא נמדד בשטח',
   tipUnverified: 'טיפ מהשטח · עזרו לנו לתקן', tipConfirmed: 'טיפ מקומי · אומת',
   altLink: 'חלופות ({n})',
   lostLink: 'לא בטוח איפה אני',

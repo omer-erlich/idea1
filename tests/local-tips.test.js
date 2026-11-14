@@ -30,7 +30,8 @@ test('the shipped tips file parses and has no personal data', () => {
   assert.ok(Array.isArray(tipsFile.tips));
   for (const t of tipsFile.tips) {
     assert.ok(t.id && t.parking && Array.isArray(t.destinations) && Array.isArray(t.when) && t.when.length, `${t.id} is incomplete`);
-    assert.ok(!/@|\d{2,3}[-\s]?\d{7}/.test(JSON.stringify(t)), `${t.id} looks like it holds contact details`);
+    const { parking, entrance, ...text } = t;   // ids (e.g. OSM way numbers) are references, not phone numbers
+    assert.ok(!/@|\d{2,3}[-\s]?\d{7}/.test(JSON.stringify(text)), `${t.id} looks like it holds contact details`);
     assert.ok(!/חוקי|מותר/.test(t.noteHe || ''), 'a tip never says a spot is legal/allowed');
   }
 });
