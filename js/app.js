@@ -155,6 +155,7 @@ function initUi() {
     } else {
       $('#custom-time').hidden = true;
       S.timeParam = tm === 'now' ? 'now' : dayName(new Date().getDay()) + '-' + tm;
+      closeOpts();
       onOptsChange();
     }
   }));
@@ -164,8 +165,9 @@ function initUi() {
   $('#opt-safe').addEventListener('click', () => { S.opts.avoidRisky = !S.opts.avoidRisky; onOptsChange(); });
   $('#btn-home').addEventListener('click', goHome);
   $('#res-back').addEventListener('click', goHome);
-  $('#chip-mode').addEventListener('click', openOpts);
-  $('#chip-opts').addEventListener('click', openOpts);
+  $('#chip-mode').addEventListener('click', () => openOpts('mode'));
+  $('#chip-routes').addEventListener('click', () => openOpts('routes'));
+  $('#chip-time').addEventListener('click', () => openOpts('time'));
   $('#opts-close').addEventListener('click', closeOpts);
   $('#test-close').addEventListener('click', () => { $('#test-modal').hidden = true; });
   $('#test-modal').addEventListener('click', e => { if (e.target.id === 'test-modal') e.currentTarget.hidden = true; });
@@ -214,14 +216,18 @@ function syncControls() {
   $('#opt-safe').hidden = S.mode !== 'car';
   const modeLbl = { car: '🚗 ברכב', bus: '🚌 באוטובוס', here: '📍 כבר בשיבא' };
   $('#chip-mode').textContent = `${modeLbl[S.mode]} ▾`;
-  const nonDefault = S.timeParam !== 'now' || S.opts.accessible || S.opts.avoidRisky;
-  $('#chip-opts').classList.toggle('on-dot', !!nonDefault);
+  $('#chip-mode').classList.toggle('on-dot', !!(S.opts.accessible || S.opts.avoidRisky));
+  const PRESET = { '08:00': 'בוקר', '13:00': 'צהריים', '19:00': 'ערב', '23:00': 'לילה' };
+  $('#chip-time').textContent = S.timeParam === 'now' || !m ? '🕒 עכשיו ▾'
+    : `🕒 ${isToday ? '' : 'יום ' + DAY_NAMES_HE[DAYS.indexOf(prefix)] + ' '}${PRESET[m[1]] && isToday ? PRESET[m[1]] + ' ' : ''}${m[1]} ▾`;
+  const n = S.result?.options?.length || 0;
+  $('#chip-routes').hidden = n < 2;
+  $('#routes-n').textContent = n;
 }
 
 /** Alternatives live in the options sheet (like Waze): the main screen shows only the best option. */
 function renderAlts() {
   const r = S.result, opts = r?.options || [];
-  $('#alt-block').hidden = opts.length < 2;
   $('#alt-list').innerHTML = opts.map((o, i) => {
     const tag = o.kind === 'bus' ? t('tagStop') : o.kind === 'here' ? t('tagHere') : o.fallback ? t('tagFallback') : i === 0 ? t('tagRec') : t('tagAlt');
     const name = o.kind === 'bus' ? placeLabel(o.stop.id) : o.kind === 'here' ? (S.startLabel || 'המיקום שלי') : (o.parking.name || 'חניה');
@@ -230,7 +236,13 @@ function renderAlts() {
   $$('#alt-list .rchip').forEach(c => c.addEventListener('click', () => { closeOpts(); selectOption(+c.dataset.i, true); }));
 }
 
-function openOpts() { renderAlts(); $('#opts-modal').hidden = false; }
+const OPTS_TITLE = { mode: 'איך מגיעים?', time: 'מתי?', routes: 'חלופות מסלול' };
+function openOpts(sec = 'mode') {
+  renderAlts();
+  $$('#opts-modal .opts-sec').forEach(x => { x.hidden = x.dataset.sec !== sec; });
+  $('#opts-title').textContent = OPTS_TITLE[sec];
+  $('#opts-modal').hidden = false;
+}
 function closeOpts() { $('#opts-modal').hidden = true; }
 
 function renderDestList() {
@@ -387,7 +399,7 @@ function renderSheetBody() {
     ${o.kind === 'parking' && !p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
     ${o.warnings?.includes('estimated-route') ? `<p class="notice peek-notice">⚠️ ${esc(t('estimatedNotice'))}</p>` : ''}
     <div class="sm-actions">${actions}</div>
-    ${r.options.length > 1 ? `<button class="link-btn alt-link" id="btn-alts">${esc(t('altLink', { n: r.options.length - 1 }))}</button>` : ''}`;
+`;
 
   const v = p ? S.votes.get(p.id) : null;
   const facts = [];
@@ -425,7 +437,6 @@ function renderSheetBody() {
 
   $('#btn-walk')?.addEventListener('click', () => openWalk(S.selected, true));
   $('#btn-share')?.addEventListener('click', share);
-  $('#btn-alts')?.addEventListener('click', openOpts);
   $('#btn-indoor')?.addEventListener('click', () => { $('#indoor-body').innerHTML = indoorHtml(o); $('#indoor-overlay').hidden = false; });
   $('#btn-change-here')?.addEventListener('click', async () => { if (await pickStart({})) { pushUrl(currentParams(), true); renderResult({ keepSheet: true }); } });
   $$('#sheet-more [data-vote]').forEach(b => b.addEventListener('click', async () => {

@@ -258,3 +258,9 @@ body[data-screen="result"] main, body[data-screen="walk"] main { padding: 0; max
 .pill-title-row .pill-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pill-tag { flex: 0 0 auto; font-size: 15px; font-weight: 700; padding: 0 8px; border-radius: 99px; border: 2px solid var(--unofficial); color: var(--unofficial); background: var(--unofficial-soft); }
 .peek-notice { margin: 6px 0 0; font-size: 15px; padding: 6px 10px; }
+
+/* ---- chips row: mode / routes / time ---- */
+.sheet-chips .chip { min-height: 48px; padding: 0 14px; font-size: 17px; }
+.opts-sec + .opts-sec { margin-top: 8px; }
+#pref-row { margin-top: 4px; flex-wrap: wrap; }
+.modal-card .time-row { flex-wrap: wrap; }

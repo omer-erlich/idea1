@@ -51,3 +51,6 @@ Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a v
 
 ## OSM accessibility tags (2026-11-14)
 `tools/import-osm.mjs` now keeps optional `tags` on graph edges, nodes and entrances (crossing, kerb, surface, wheelchair, access, level, indoor, door, covered, lit, incline, handrail). Fetched via the OSM API (Overpass mirrors timed out). Counts on edges: surface 353, crossing 66, access 39, entrance 26, wheelchair 9, indoor 9, level 8, lit 5, kerb 3, covered 3, incline 1, handrail 1 (most inside 300 m of the hospital). **No `step_count`, `ramp`, `tactile_paving` or `automatic_door` tags exist in this area** – unknown stays unknown. Note: Node's `fetch` ignores the proxy unless run with `NODE_USE_ENV_PROXY=1`.
+
+## Search aliases (2026-11-14)
+`data/search-aliases.json` (Latin abbreviations and Hebrew typed spellings, intent words): derived from the repo's own names in `data/sheba.json`, `data/clinics-directory.json` and `data/tests-directory.json`, plus common Hebrew spellings typed by users; no web source, language aid only, no facts about Sheba.

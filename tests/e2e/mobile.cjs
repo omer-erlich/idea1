@@ -41,21 +41,23 @@ const { chromium, devices } = require('playwright');
 
   // switch option via chip
   const first = await p.$eval('#sheet-main .sm-name', e => e.textContent);
-  await p.click('#btn-alts'); await p.waitForTimeout(300); ok('alternatives open in the options sheet', await p.isVisible('#alt-list .rchip'));
+  await p.click('#chip-routes'); await p.waitForTimeout(300); ok('alternatives open in the options sheet', await p.isVisible('#alt-list .rchip'));
   await p.click('#alt-list .rchip:nth-child(2)'); await p.waitForTimeout(600);
   const second = await p.$eval('#sheet-main .sm-name', e => e.textContent);
   ok('chip switches option', first !== second, `${first.trim()} → ${second.trim()}`);
   ok('URL records opt=1', (await p.evaluate(() => location.search)).includes('opt=1'));
 
   // time change via options sheet
-  await p.click('#chip-opts'); await p.waitForTimeout(300);
-  ok('options modal opens', await p.isVisible('#opts-modal'));
+  await p.click('#chip-time'); await p.waitForTimeout(300);
+  ok('time sheet opens', await p.isVisible('#opts-modal') && await p.isVisible('#opts-modal [data-time="13:00"]'));
   await p.click('#opts-modal [data-time="23:00"]'); await p.waitForTimeout(500);
+  ok('picking a time closes the sheet and the chip shows it', !(await p.isVisible('#opts-modal')) && /23:00/.test(await p.textContent('#chip-time')));
+  await p.click('#chip-mode'); await p.waitForTimeout(300);
   ok('time change updates URL + title', /time=\w{3}-23:00/.test(await p.evaluate(() => location.search)) && /23:00/.test(await p.textContent('#result-when')), await p.textContent('#result-when'));
   await p.click('#opts-modal #opt-accessible'); await p.waitForTimeout(500);
   ok('accessible toggle updates URL', (await p.evaluate(() => location.search)).includes('acc=1'));
   await p.click('#opts-close'); await p.waitForTimeout(300);
-  ok('options modal closes; chip shows active options', !(await p.isVisible('#opts-modal')) && (await p.$eval('#chip-opts', e => e.classList.contains('on-dot'))));
+  ok('options modal closes; chip shows active options', !(await p.isVisible('#opts-modal')) && (await p.$eval('#chip-mode', e => e.classList.contains('on-dot'))));
 
   // walking mode
   await p.click('#btn-walk'); await p.waitForTimeout(1200);

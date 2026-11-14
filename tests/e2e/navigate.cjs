@@ -20,7 +20,7 @@ const { chromium, devices } = require('playwright');
   ok('search finds clinics beyond the 28 main places', rows.some(r => /כתף/.test(r)), rows.slice(0, 2).join(' | '));
   await p.click('.dest-row'); await wait(1500);
   const url1 = await p.evaluate(() => location.search);
-  ok('clinic destination opens a route with real options', /dest=c:/.test(url1) && (await p.isVisible('#btn-alts')), url1);
+  ok('clinic destination opens a route with real options', /dest=c:/.test(url1) && (await p.isVisible('#chip-routes')), url1);
   const steps = await p.$$eval('#sheet-more .steps-list li', els => els.map(e => e.textContent));
   ok('steps end with the arrival at the clinic', /הגעתם/.test(steps[steps.length - 1] || ''), (steps[steps.length - 1] || '').slice(0, 60));
 
@@ -44,7 +44,7 @@ const { chromium, devices } = require('playwright');
   // --- bus mode
   await p.goto(base + '?dest=mri&time=sun-10:00', { waitUntil: 'load' }); await wait(1500);
   await p.click('#chip-mode'); await wait(300); await p.click('#mode-row [data-mode="bus"]'); await wait(800);
-  await p.click('#btn-alts'); await wait(300);
+  await p.click('#chip-routes'); await wait(300);
   const busTags = await p.$$eval('#alt-list .rc-tag', els => els.map(e => e.textContent));
   await p.click('#opts-close'); await wait(200);
   ok('bus mode lists bus stops', busTags.length >= 2 && busTags.every(t => t === 'תחנה'), busTags.join(','));
