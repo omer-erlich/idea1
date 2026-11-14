@@ -177,3 +177,9 @@ test('accessible routes avoid steps for EVERY destination; no hospital-area step
     }
   }
 });
+
+test('owner garage links 2026-11-14: steps mention the floor change', () => {
+  const run = (node, name, park) => R.recommend(node, { name, floor: '1' }, day, {}).options.find(o => (o.parking?.id ?? o.parkingId) === park).steps.map(s => s.text);
+  assert.ok(run('cancer/F1', 'מרכז הסרטן – קומה 1', 'p-cancer').some(t => /קומה 2/.test(t) && /לקומה 1 במרכז הסרטן/.test(t)));
+  assert.ok(run('tower/F1', 'בניין האשפוז – קומה 1', 'p-central').some(t => /קומה 3/.test(t) && /לקומה 1 במגדל האשפוז/.test(t)));
+});

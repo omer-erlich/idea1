@@ -85,6 +85,9 @@ Lot = way/295751880 (rule: ok 19:00-06:00 "טיפ מהשטח", unknown by day, u
 - [ ] Lot OSM way/510271132 (small, east of the children's hospital, ~65 m from a lot OSM marks `access=private`): can visitors park there day/evening/night? Barrier or "staff only" sign? (auto tip `gen-ent-*`, ENT 1.6′ instead of 4.1′ from the women's lot)
 - [ ] Lot OSM way/295809986 (near the simulation centre): can visitors park there? (auto tip `gen-sourasky-*`, Sourasky 2.1′ instead of 5.8′ from the Shi-Lev lot)
 - [ ] ENT side door node/4940704291: public? hours?
-- [ ] ER door node/4983837917 (`emergency=emergency_ward_entrance`, `publicAccess:"yes"` in data): walk-in patient door or ambulance ramp? Today the app's 2nd/3rd ER options (from p-south-west and the heart-centre bus stop) walk through it; the scout refuses it.
+- [x] ER door node/4983837917: **answered by the owner 2026-11-14** – public entrance, open to everyone (`publicAccess:"yes"`, verified, source owner; hours stay 24/7 from OSM). The route scout still refuses it because of the OSM `emergency=emergency_ward_entrance` tag (safety rule in `tools/scout-routes.mjs`) – decide whether to lift that for this one door.
 - [ ] Child Development Institute: no location in the graph at all (no route in any band) – pin of the entrance, please.
 - [ ] Garage levels (p-central, p-cancer, p-heart, p-rehab): which floors have a pedestrian exit, and where does each lead?
+  - Owner 2026-11-14: **p-cancer** floor 2 has a pedestrian link to floor 1 of the cancer building (in the graph, conf text). **p-central** floor 3 (owner: "I think 3, check it") links to floor 1 of the tower (in the graph, conf inferred). No information on p-heart / p-rehab.
+- [ ] **Verify the central-garage connection floor**: owner thinks floor 3 → tower floor 1 (`central/F3` → `tower/F1`, inferred, drawn dotted, does not merge building groups). Confirm the floor, where the exit is, and whether it is open at night.
+- [ ] Cancer garage floor 2 → cancer building floor 1: where exactly is the door, hours, wheelchair-accessible? (walking seconds are an estimate)

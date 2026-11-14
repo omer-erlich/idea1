@@ -69,3 +69,6 @@ Used for `data/local-route-candidates.json` and `docs/LOCAL-ROUTES-CANDIDATES.md
 
 ## Route scout (2026-11-14, `tools/scout-routes.mjs`)
 No new external source. The scout only recombines OSM (cache `tools/.cache/osm-raw.json`, retrieved 2026-11-14; optional `--fresh` Overpass re-read of door/parking tags – the 2026-11-14 attempt got no JSON from either mirror, so the cache was used), `data/sheba.json` and `data/topology.json` through the app's own `CampusRouter`. Outputs: `data/route-scout.json`, `data/local-tips.generated.json` (provenance `osm-scout`, unverified). mavat.iplan.gov.il / data.gov.il were not used in this pass.
+
+## Owner knowledge (2026-11-14)
+Three facts from the owner (source string `owner: 2026-11-14`): (1) the ER entrance (OSM node/4983837917, `door:ent-osm-4983837917`) is a public entrance, open to everyone (`tools/seed-official.mjs`, verified); (2) oncology garage (p-cancer) floor 2 has a pedestrian link to floor 1 of the cancer building (`data/topology-seed.json`, conf text, estimated seconds); (3) central garage (p-central) floor 3 (owner unsure, to check) connects to floor 1 of the tower (conf inferred). Nothing known about other garages.

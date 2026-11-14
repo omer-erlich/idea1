@@ -50,7 +50,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   const buildings = new Map();
   for (const sb of seed.buildings) {
     const ob = sb.osm ? shebaB.get(sb.osm) : null;
-    buildings.set(sb.id, { id: sb.id, name: sb.name, osm: sb.osm, center: ob?.center || null, outline: ob?.outline || null, anchor: sb.anchor, lobby: sb.lobby, floors: [...sb.floors], geoApprox: !ob });
+    buildings.set(sb.id, { id: sb.id, name: sb.name, osm: sb.osm, center: ob?.center || null, outline: ob?.outline || null, anchor: sb.anchor, lobby: sb.lobby, floors: [...sb.floors], geoApprox: !ob, noDoorGuess: !!sb.noDoorGuess });
     if (sb.osm) osmToKey.set(sb.osm, sb.id);
   }
   for (const sb of seed.buildings) {
@@ -106,7 +106,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
   }
 
   // ------------------------------------------------------------------ seed edges
-  const isDoorEdge = e => String(e.a).startsWith('door:') || String(e.b).startsWith('door:');   // door nodes are created later (from sheba.json entrances)
+  const isDoorEdge = e => /^(door|park):/.test(String(e.a)) || /^(door|park):/.test(String(e.b));   // door + parking nodes are created later (from sheba.json entrances)
   for (const e of seed.edges.filter(e => !isDoorEdge(e))) {
     const needFloor = id => { const m = /^([a-z0-9]+)\/F(-?\d+)$/.exec(id); if (m && buildings.has(m[1])) ensureFloor(m[1], m[2]); };
     needFloor(e.a); needFloor(e.b);
@@ -172,7 +172,7 @@ export function buildTopology({ sheba, seed, directory = [], busStops: busStopsI
 
   // buildings with no mapped door: link the lobby to the nearest path (estimate – flagged "inferred")
   for (const b of buildings.values()) {
-    if (!b.center || !nodes.has(b.lobby)) continue;
+    if (!b.center || !nodes.has(b.lobby) || b.noDoorGuess) continue;   // noDoorGuess: parking structures reached through their parking node
     if ([...nodes.values()].some(n => n.kind === 'entrance' && n.building === b.id)) continue;
     attachPoint(tmp, { id: `bld:${b.id}`, lat: b.center[0], lon: b.center[1], kind: 'door', maxDist: 90, mainNetwork: main });
   }

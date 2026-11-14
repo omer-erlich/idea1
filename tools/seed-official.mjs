@@ -179,6 +179,15 @@ for (const [k, label] of Object.entries(PUBLIC_INTERIOR)) {
   const b = data.buildings.find(b => b.id === B[k]);
   if (b) { b.publicInterior = true; b.publicInteriorNote = label + ' – מעבר ציבורי לפי הוראות ההגעה הרשמיות'; }
 }
+// Owner fact (2026-11-14): the ER entrance (OSM node/4983837917) is a public entrance, open to everyone. Hours stay as in the data (24/7 from OSM).
+{
+  const er = data.entrances.find(e => e.id === 'ent-osm-4983837917');
+  if (er && !er.prov?.edited) {
+    er.publicAccess = 'yes';
+    er.note = 'כניסת מיון – לפי הבעלים (2026-11-14) כניסה ציבורית, פתוחה לכולם';
+    er.prov = { ...er.prov, verified: true, lastVerified: '2026-11-14', source: 'owner', osm: 'node/4983837917', confidence: 'high', note: 'owner: 2026-11-14' };
+  }
+}
 data.graph.edges = data.graph.edges.filter(e => !passages.some(p => p.id === e.id)).concat(passages);
 data.routeNotes = data.routeNotes || [];
 // best guess for the owner's night-MRI tip: the small OSM lot east/north-east of the tower (way/295751880), not part of the central garage.

@@ -79,3 +79,27 @@ test('clinics attach to the right area (when the directory exists)', { skip: !di
   const w6 = clinics.filter(c => c.building === 'tower' && c.floor === '6' && c.wing === 'W');
   for (const c of w6) assert.ok(T.edges.some(e => (e.a === c.id || e.b === c.id) && (e.a === 'tower/F6/W' || e.b === 'tower/F6/W')));
 });
+
+test('owner facts 2026-11-14: ER door public+verified; cancer garage F2 → cancer F1 (text); central garage F3 → tower F1 (inferred, no group merge)', () => {
+  const er = sheba.entrances.find(e => e.id === 'ent-osm-4983837917');
+  assert.equal(er.publicAccess, 'yes');
+  assert.equal(er.prov.verified, true);
+  assert.equal(er.prov.source, 'owner');
+  assert.equal(node('door:ent-osm-4983837917').publicAccess, 'yes');
+  const edge = (a, b) => T.edges.find(e => (e.a === a && e.b === b) || (e.a === b && e.b === a));
+  const c = edge('cancer-garage/F2', 'cancer/F1');
+  assert.ok(c, 'cancer garage F2 ↔ cancer F1 exists');
+  assert.equal(c.conf, 'text'); assert.equal(c.src, 'owner: 2026-11-14'); assert.equal(c.est, true); assert.ok(c.indoor);
+  assert.ok(edge('park:p-cancer', 'cancer-garage/F2'), 'parking node reaches the garage floor 2');
+  const m = edge('central/F3', 'tower/F1');
+  assert.ok(m, 'central garage F3 ↔ tower F1 exists');
+  assert.equal(m.conf, 'inferred'); assert.equal(m.est, true); assert.match(m.src, /^owner: 2026-11-14/);
+  assert.ok(edge('central/F4', 'central/stairs-tower') && edge('central/stairs-tower', 'tower/lobby'), 'existing floor-4 route kept');
+  // an inferred link never merges groups: rebuilding without the inferred owner edges gives the same groups
+  const seed2 = { ...seed, edges: seed.edges.filter(e => !(e.conf === 'inferred' && /^owner: 2026-11-14/.test(e.src || ''))), nodes: seed.nodes };
+  const { topology: T2 } = buildTopology({ sheba, seed: seed2, directory, busStops });
+  const g = t => JSON.stringify(t.buildings.map(b => [b.id, t.groups.find(x => x.id === b.group).buildings.slice().sort()]).sort());
+  assert.equal(g(T), g(T2));
+  assert.ok(T.possibleLinks.some(l => [l.from, l.to].includes('central') && [l.from, l.to].includes('tower')), 'listed as unconfirmed possible link');
+  assert.equal(groupOf('cancer-garage'), groupOf('cancer'), 'text link puts the cancer garage in the cancer group');
+});
