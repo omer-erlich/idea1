@@ -162,7 +162,8 @@ export class CampusRouter {
     if (!this.nodes.has(`park:${p.id}`)) return { code: 'no-coords', reason: 'אין עדיין מיקום מדויק' };
     const { status, rule } = parkingStatusAt(p, when);
     if (status === 'forbidden') return { code: 'forbidden', reason: rule?.note || 'לא מומלץ בשעה זו', status };
-    if (status === 'unknown' && !p.official) return { code: 'unknown', reason: 'אין מידע על השעה הזו', status };
+    // an unofficial lot with no hour rules is skipped – unless a local tip names it for this destination and time (open, informal field tips; safety checks above still apply)
+    if (status === 'unknown' && !p.official && !opts.tipNamesLot) return { code: 'unknown', reason: 'אין מידע על השעה הזו', status };
     if (status === 'risky' && opts.avoidRisky) return { code: 'risky', reason: 'מסומן כמסוכן בשעה זו', status };
     return null;
   }
@@ -197,8 +198,9 @@ export class CampusRouter {
       return { mode, destination: dest, options: top, excluded };
     }
     // car
+    const tipNames = p => (opts.tips || []).some(t => t.parking === p.id && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
     for (const p of this.sheba.parkings || []) {
-      const ex = this.parkingExclusion(p, when, opts);
+      const ex = this.parkingExclusion(p, when, { ...opts, tipNamesLot: tipNames(p) });
       if (ex) { excluded.push({ parking: p, ...ex }); continue; }
       const st = parkingStatusAt(p, when);
       const status = st.status === 'unknown' ? 'paid' : st.status;
@@ -213,6 +215,7 @@ export class CampusRouter {
       this._applyLocalTip(o, p, dest, when, opts);
       if (status === 'risky') o.warnings.push('risky');
       if (!p.official) o.warnings.push('unofficial');
+      if (st.status === 'unknown' && !p.official) o.warnings.push('parking-hours-unknown');
       if (flagged) o.warnings.push('flagged');
       o.lastVerified = oldest([p.prov?.lastVerified, o.entrance?.prov?.lastVerified]);
       options.push(o);

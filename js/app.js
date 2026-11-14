@@ -423,6 +423,7 @@ function renderSheetBody() {
   const warns = [];
   if (o.warnings?.includes('risky')) warns.push('<p class="warn">בשעה זו יש סיכון לדו"ח. אם אפשר – העדיפו חלופה.</p>');
   if (o.warnings?.includes('inferred-link')) warns.push('<p class="warn">חלק מהמעברים בבניינים לא מאומתים – אם משהו לא תואם, השתמשו בשלט "לא בטוח איפה אני".</p>');
+  if (o.warnings?.includes('parking-hours-unknown')) warns.push(`<p class="warn">${esc(t('parkingHoursUnknown'))}</p>`);
   if (S.opts.accessible) warns.push(`<p class="warn">♿ ${esc(t('accessibleCaveat'))}</p>`);
   if (o.warnings?.includes('entrance-hours-unknown')) warns.push('<p class="warn small">שעות הפתיחה של הכניסה לא ידועות.</p>');
   if (v?.flagged) warns.push(`<p class="flag">${v.stale ? 'הטיפ לא אושר כבר יותר מחצי שנה – ייתכן שאינו עדכני.' : 'כמה מבקרים דיווחו שזה לא עבד להם לאחרונה.'}</p>`);

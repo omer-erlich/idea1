@@ -3,7 +3,7 @@
 import fs from 'node:fs'; import path from 'node:path'; import crypto from 'node:crypto'; import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // data/ is NOT precached wholesale: only the file the public app needs (the graph/directory files are for the internal viewer)
-const INCLUDE = ['index.html', 'manifest.webmanifest', 'css/app.css', 'js', 'vendor', 'data/sheba.json', 'data/topology.json', 'data/clinics-directory.json', 'data/tests-directory.json', 'data/search-aliases.json', 'data/local-tips.json', 'icons', 'photos'];
+const INCLUDE = ['index.html', 'manifest.webmanifest', 'css/app.css', 'js', 'vendor', 'data/sheba.json', 'data/topology.json', 'data/clinics-directory.json', 'data/tests-directory.json', 'data/search-aliases.json', 'data/local-tips.json', 'data/local-tips.generated.json', 'icons', 'photos'];
 const SKIP = /js\/graph\//;
 const files = [];
 const walk = rel => {

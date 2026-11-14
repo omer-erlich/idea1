@@ -35,6 +35,7 @@ export const HE = {
   testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
   estimatedNotice: 'חלק מהמסלול משוער, לא נמדד בשטח',
   tipUnverified: 'טיפ מהשטח · עזרו לנו לתקן', tipConfirmed: 'טיפ מקומי · אומת',
+  parkingHoursUnknown: 'אין לנו מידע על שעות החניה הזו. בדקו שילוט במקום.',
   altLink: 'חלופות ({n})',
   lostLink: 'לא בטוח איפה אני',
   floorQ: 'באיזו קומה אתם?', floorArriveQ: 'בדקו את השלט: הגעתם לקומה {floor}?', floorYes: '✓ אני בקומה {floor}', floorOther: 'אני בקומה אחרת', walkExitAsk: 'לצאת? לחצו שוב', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',

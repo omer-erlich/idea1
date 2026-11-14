@@ -80,3 +80,11 @@ Lot = way/295751880 (rule: ok 19:00-06:00 "טיפ מהשטח", unknown by day, u
 - [ ] Does the door lead into the imaging/MRI corridor? The link door → `tower/imaging` (40 s) is an inferred estimate.
 - [ ] Walk from the lot to the east wall: the approach (main-door approach + ~35 m along the wall, 181 m, 165 s) is an inferred estimate; is there a real path, or fences/steps?
 - [ ] Garage zone split (central garage floors): skipped – no per-level data in the seed/OSM; need floor list + exits per level from the owner.
+
+## Route scout, first campus-wide pass (2026-11-14) – details in `docs/LOCAL-ROUTES-CANDIDATES.md` (scout section)
+- [ ] Lot OSM way/510271132 (small, east of the children's hospital, ~65 m from a lot OSM marks `access=private`): can visitors park there day/evening/night? Barrier or "staff only" sign? (auto tip `gen-ent-*`, ENT 1.6′ instead of 4.1′ from the women's lot)
+- [ ] Lot OSM way/295809986 (near the simulation centre): can visitors park there? (auto tip `gen-sourasky-*`, Sourasky 2.1′ instead of 5.8′ from the Shi-Lev lot)
+- [ ] ENT side door node/4940704291: public? hours?
+- [ ] ER door node/4983837917 (`emergency=emergency_ward_entrance`, `publicAccess:"yes"` in data): walk-in patient door or ambulance ramp? Today the app's 2nd/3rd ER options (from p-south-west and the heart-centre bus stop) walk through it; the scout refuses it.
+- [ ] Child Development Institute: no location in the graph at all (no route in any band) – pin of the entrance, please.
+- [ ] Garage levels (p-central, p-cancer, p-heart, p-rehab): which floors have a pedestrian exit, and where does each lead?
