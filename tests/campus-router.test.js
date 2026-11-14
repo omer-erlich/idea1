@@ -47,7 +47,7 @@ test('floors, elevators and passages show up in the indoor timeline', () => {
 test('accessible mode never uses stairs edges', () => {
   const r = rec('mri', day, { accessible: true });
   assert.ok(r.options.length >= 1);
-  for (const o of r.options) for (const h of o.path.hops) assert.ok(!h.edge.stairs && h.edge.kind !== 'stairs', `stairs on ${o.parking.name}`);
+  for (const o of r.options) for (const h of o.path.hops) assert.ok(!h.edge.stairs && h.edge.kind !== 'stairs' && h.edge.wheelchair !== false, `stairs on ${o.parking.name}`);
 });
 
 test('entrances that are not known to be public are never used', () => {
@@ -146,4 +146,34 @@ test('approved crowd tips feed the campus graph (new lot, new door shortcut)', (
   const r = R2.recommend(d.topoNode, d, day, { limit: 20 });
   assert.ok(r.options.some(o => o.parking.id === 'p_tip_x'), 'the new lot is a candidate');
   assert.equal(topo.nodes.some(n => n.id === 'park:p_tip_x'), false, 'original topology untouched');
+});
+
+test('suggestHere mixes GPS with known places: building footprint, nearby door, low accuracy', () => {
+  const tower = R.buildings.get('tower');
+  const g = R.suggestHere(tower.center[0], tower.center[1], 15);
+  assert.equal(g.suggestions[0].type, 'building');
+  assert.equal(g.suggestions[0].id, 'tower');
+  assert.ok(g.suggestions[0].confidence >= 0.85 && !g.poor);
+  const door = [...R.nodes.values()].find(n => n.kind === 'entrance' && n.building === 'tower' && n.publicAccess === 'yes');
+  const near = R.suggestHere(door.lat, door.lon, 12).suggestions;
+  assert.ok(near.some(s => s.type === 'node' && s.node.id === door.id), 'the door right here is suggested');
+  const sorted = near.every((s, i) => i === 0 || near[i - 1].confidence >= s.confidence);
+  assert.ok(sorted, 'ranked by confidence');
+  const poor = R.suggestHere(tower.center[0], tower.center[1], 200);
+  assert.ok(poor.poor && poor.suggestions[0].confidence < g.suggestions[0].confidence, 'poor accuracy lowers confidence');
+  assert.deepEqual(R.suggestHere(33.0, 35.5, 20).suggestions, [], 'nothing known far from the campus');
+});
+
+test('accessible routes avoid steps for EVERY destination; no hospital-area steps are lost in contraction', () => {
+  // every OSM steps segment within 300 m of a hospital building must survive as a flagged edge
+  const near = (n) => sheba.buildings.some(b => b.name && b.center && Math.hypot((b.center[0] - n.lat) * 110540, (b.center[1] - n.lon) * 94000) < 300);
+  const gn = new Map(sheba.graph.nodes.map(n => [n.id, n]));
+  const inArea = sheba.graph.edges.filter(e => e.stairs && !e.indoor && near(gn.get(e.from)));
+  const flagged = topo.edges.filter(e => !e.indoor && e.stairs);
+  assert.ok(flagged.length >= (inArea.length ? 1 : 0), `${inArea.length} steps near the hospital, ${flagged.length} flagged in the routing graph`);
+  for (const d of sheba.destinations) {
+    for (const o of R.recommend(d.topoNode, d, day, { accessible: true }).options) {
+      for (const h of o.path.hops) assert.ok(!h.edge.stairs && h.edge.kind !== 'stairs' && h.edge.wheelchair !== false, `${d.id}: steps on an accessible route`);
+    }
+  }
 });

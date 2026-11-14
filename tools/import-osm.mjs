@@ -57,6 +57,28 @@ const WALKABLE = new Set(['footway', 'path', 'pedestrian', 'steps', 'corridor', 
 const ROADS = new Set(['service', 'residential', 'unclassified', 'tertiary', 'tertiary_link', 'secondary', 'secondary_link', 'living_street', 'track']);
 const FOOT_OK = new Set(['yes', 'designated', 'permissive']);
 const NOT_PUBLIC = new Set(['private', 'no']);
+// accessibility-relevant OSM keys. Stored as OPTIONAL `tags` on graph edges/nodes/entrances, only when present.
+// Way-level values come from the way; node-level values come from the nodes that lie on the segment.
+// highway=* is only taken from crossing nodes (highway=crossing), never from ways.
+export const A11Y_KEYS = ['crossing', 'kerb', 'tactile_paving', 'step_count', 'incline', 'ramp', 'ramp:wheelchair', 'covered',
+  'handrail', 'lit', 'surface', 'wheelchair', 'indoor', 'level', 'door', 'automatic_door', 'entrance', 'access'];
+export const pickA11y = (t = {}) => {
+  const o = {};
+  for (const k of A11Y_KEYS) if (t[k] != null && t[k] !== '') o[k] = t[k];
+  if (t.highway === 'crossing') o.highway = 'crossing';
+  return o;
+};
+/** Adds src tags into `into`; a second distinct value turns the field into a sorted array of distinct values. */
+export function addTags(into, src) {
+  for (const k of Object.keys(src)) {
+    const v = src[k];
+    if (!(k in into)) { into[k] = v; continue; }
+    const cur = Array.isArray(into[k]) ? into[k] : [into[k]];
+    if (cur.includes(v)) continue;
+    into[k] = [...cur, v].sort();
+  }
+  return into;
+}
 
 const osmProv = (ref, confidence = 'medium', extra = {}) => ({ verified: false, lastVerified: null, source: 'osm', osm: ref, retrieved: TODAY, confidence, ...extra });
 
@@ -71,6 +93,15 @@ export function transform(raw) {
   const grounds = [...W.values()].find(w => w.tags?.amenity === 'hospital' && /תל השומר|Sheba|שיבא/.test((w.tags.name || '') + (w.tags.alt_name || '')));
   const groundsPoly = grounds ? wayCoords(grounds) : null;
   const nearGrounds = p => !groundsPoly || pointInPolygon(p, groundsPoly) || groundsPoly.some(q => haversine(p, q) < 60);
+  // "inside the hospital area" for statistics: inside the grounds polygon or within 300 m of its outline vertices
+  const inHospital300 = p => !groundsPoly || pointInPolygon(p, groundsPoly) || groundsPoly.some(q => haversine(p, q) < 300);
+  const a11yStats = { edges: {}, edgesInside300: {}, nodes: {}, nodesInside300: {}, entrances: {}, entrancesInside300: {} };
+  const countKeys = (bucket, inside, obj, isIn) => {
+    for (const k of Object.keys(obj || {})) {
+      bucket[k] = (bucket[k] || 0) + 1;
+      if (isIn) inside[k] = (inside[k] || 0) + 1;
+    }
+  };
 
   // ---- buildings
   const buildings = [];
@@ -112,6 +143,8 @@ export function transform(raw) {
     const node = { id: key, lat: n.lat, lon: n.lon, kind: 'junction', prov: osmProv(`node/${id}`) };
     if (t.barrier && NOT_PUBLIC.has(t.access) && !FOOT_OK.has(t.foot)) { node.public = false; node.kind = 'barrier'; node.name = t.name || 'שער'; }
     if (t.highway === 'elevator') node.kind = 'lift';
+    const a11y = pickA11y(t);
+    if (Object.keys(a11y).length) node.tags = a11y;
     gNodes.set(key, node);
     return key;
   };
@@ -129,6 +162,9 @@ export function transform(raw) {
         const coords = seg.map(ll).filter(Boolean);
         if (coords.length >= 2) {
           const a = addNode(seg[0]), b = addNode(seg[seg.length - 1]);
+          const etags = addTags({}, pickA11y(t));
+          for (const nid of seg) addTags(etags, pickA11y(N.get(nid)?.tags));
+          const eInside = coords.some(inHospital300);
           if (a !== b) gEdges.push({
             id: `osm:w${w.id}:${start}`, from: a, to: b,
             kind: indoor ? 'corridor' : ROADS.has(t.highway) ? 'road' : 'footway',
@@ -140,8 +176,10 @@ export function transform(raw) {
             oneway: false, // one-way applies to cars, not to people
             length: Math.round(polylineLength(coords) * 10) / 10,
             polyline: coords.length > 2 ? coords.map(round6) : undefined,
+            ...(Object.keys(etags).length ? { tags: etags } : {}),
             prov: osmProv(`way/${w.id}`, 'medium', ring && t.area === 'yes' ? { note: 'outline of a pedestrian area' } : {}),
           });
+          if (a !== b) countKeys(a11yStats.edges, a11yStats.edgesInside300, etags, eInside);
         }
         start = i;
       }
@@ -175,8 +213,10 @@ export function transform(raw) {
       hours: hours === undefined ? null : hours,
       wheelchair: t.wheelchair === 'yes' ? true : t.wheelchair === 'no' ? false : null,
       note: notes.join(' · ') || null,
+      ...(Object.keys(pickA11y(t)).length ? { tags: pickA11y(t) } : {}),
       prov: osmProv(`node/${n.id}`, publicAccess === 'yes' ? 'medium' : 'low'),
     });
+    countKeys(a11yStats.entrances, a11yStats.entrancesInside300, pickA11y(t), inHospital300([n.lat, n.lon]));
     // if the door lies on a walkable way it is already a graph node: convert it
     const key = `osm:n${n.id}`;
     if (gNodes.has(key)) {
@@ -226,7 +266,9 @@ export function transform(raw) {
     if (t.emergency === 'fire_hydrant') safetyZones.push({ id: `sz-osm-n${n.id}`, kind: 'fire_access', center: round6([n.lat, n.lon]), radius: 3, prov: osmProv(`node/${n.id}`) });
   }
 
-  return { buildings, entrances, parkings, safetyZones, graph: { nodes: [...gNodes.values()], edges: gEdges } };
+  // node-level counts (graph endpoints only, after the edge pass so door conversion is final)
+  for (const nd of gNodes.values()) countKeys(a11yStats.nodes, a11yStats.nodesInside300, nd.tags, inHospital300([nd.lat, nd.lon]));
+  return { buildings, entrances, parkings, safetyZones, graph: { nodes: [...gNodes.values()], edges: gEdges }, a11yStats };
 }
 
 function classifyAccess(t) {
@@ -332,6 +374,7 @@ async function main() {
     fs.writeFileSync(CACHE, JSON.stringify(raw));
   }
   const imported = transform(raw);
+  const a11yStats = imported.a11yStats;
   const existing = fs.existsSync(DATA) ? JSON.parse(fs.readFileSync(DATA, 'utf8')) : { meta: {}, sources: [], buildings: [], destinations: [], parkings: [], entrances: [], safetyZones: [], graph: { nodes: [], edges: [] }, routeNotes: [] };
   // official/owner parkings that point at an OSM area: drop the duplicate OSM-only record
   const merged = merge(existing, imported);
@@ -343,9 +386,11 @@ async function main() {
   merged.parkings = merged.parkings.filter(p => !claimed.has(p.id));
   attachAll(merged);
   const pruned = pruneGraph(merged);
-  merged.meta = { ...(merged.meta || {}), osmImported: TODAY, bbox: BBOX, osmAttribution: '© OpenStreetMap contributors, ODbL 1.0' };
+  merged.meta = { ...(merged.meta || {}), osmImported: TODAY, bbox: BBOX, osmAttribution: '© OpenStreetMap contributors, ODbL 1.0',
+    osmA11yTagCounts: a11yStats };
   fs.writeFileSync(DATA, formatData(merged));
   const c = k => merged[k].length;
+  for (const part of ['edges', 'nodes', 'entrances']) console.log(`a11y ${part}:`, JSON.stringify(a11yStats[part]), 'inside 300 m:', JSON.stringify(a11yStats[part + 'Inside300']));
   console.log(`buildings ${c('buildings')}, entrances ${c('entrances')} (public: ${merged.entrances.filter(e => e.publicAccess === 'yes').length}), parkings ${c('parkings')}, safety zones ${c('safetyZones')}, graph ${merged.graph.nodes.length} nodes / ${merged.graph.edges.length} edges (pruned ${pruned})`);
 }
 

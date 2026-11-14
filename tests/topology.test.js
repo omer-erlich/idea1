@@ -7,7 +7,8 @@ const read = f => JSON.parse(fs.readFileSync(new URL('../' + f, import.meta.url)
 const sheba = read('data/sheba.json');
 const seed = read('data/topology-seed.json');
 const directory = fs.existsSync(new URL('../data/clinics-directory.json', import.meta.url)) ? read('data/clinics-directory.json').clinics : [];
-const busStops = fs.existsSync(new URL('../data/bus-stops.json', import.meta.url)) ? read('data/bus-stops.json').stops : [];
+const busFile = fs.existsSync(new URL('../data/bus-stops-gov.json', import.meta.url)) ? 'data/bus-stops-gov.json' : 'data/bus-stops.json';
+const busStops = fs.existsSync(new URL('../' + busFile, import.meta.url)) ? read(busFile).stops : [];
 const { topology: T, problems } = buildTopology({ sheba, seed, directory, busStops });
 const node = id => T.nodes.find(n => n.id === id);
 const groupOf = b => T.buildings.find(x => x.id === b).group;

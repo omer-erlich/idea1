@@ -23,6 +23,8 @@ URL/OSM id and retrieval date. This file lists the sources themselves.
 
 | OSM bus stops + bus route relations | https://www.openstreetmap.org/ | ODbL | `data/bus-stops.json` (40 stops, 26 near the campus graph) – extracted from the OSM extract by the `data-gatherer` agent and spot-checked against the raw file; only line 104 is mapped to stops |
 
+| **Israel Ministry of Transport GTFS** via the Open Bus Stride API (https://open-bus-stride-api.hasadna.org.il) | state-run public-transport data | **Licence not confirmed**: no explicit open licence found; the file says "verify terms" (MOT terms are Hebrew and revisable) – used for bus stops and line numbers (`data/bus-stops-gov.json`, 25 stops, retrieved 2026-11-13). Replaces the thin OSM bus data (kept as a fallback). Please check the terms before the site goes public. |
+
 **Not used: Google Maps.** Its terms forbid automated extraction and storing its content, and this project only reuses material whose license allows it. Locations come from Sheba's own text instead; clinics left without a location carry a plain "search in Maps" link for manual lookup (`docs/CLINICS-COVERAGE.md`, node details in `graph.html`).
 
 Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a visitor, 2–5 at a time with pauses, once. `sheba.co.il/robots.txt` only disallows `/api/`, which the scripts never call directly.
@@ -46,3 +48,6 @@ Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a v
 | Leaflet | 1.9.4 | BSD-2-Clause (`vendor/leaflet/LICENSE`) |
 | ngraph.graph | 20.1.2 | BSD-3-Clause (`vendor/ngraph/LICENSE.ngraph.graph`) |
 | ngraph.path | 1.6.1 | MIT (`vendor/ngraph/LICENSE.ngraph.path`) |
+
+## OSM accessibility tags (2026-11-14)
+`tools/import-osm.mjs` now keeps optional `tags` on graph edges, nodes and entrances (crossing, kerb, surface, wheelchair, access, level, indoor, door, covered, lit, incline, handrail). Fetched via the OSM API (Overpass mirrors timed out). Counts on edges: surface 353, crossing 66, access 39, entrance 26, wheelchair 9, indoor 9, level 8, lit 5, kerb 3, covered 3, incline 1, handrail 1 (most inside 300 m of the hospital). **No `step_count`, `ramp`, `tactile_paving` or `automatic_door` tags exist in this area** – unknown stays unknown. Note: Node's `fetch` ignores the proxy unless run with `NODE_USE_ENV_PROXY=1`.

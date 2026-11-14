@@ -19,6 +19,8 @@ export const HE = {
   hereGps: '📍 איתור לפי GPS', hereGpsWait: 'מאתרים מיקום…', hereGpsFail: 'לא הצלחנו לקבל מיקום – בחרו ידנית',
   hereOutside: 'בחוץ, ליד: {place}', hereInside: 'בתוך: {building}', hereNoBuilding: 'לא זוהה בניין קרוב',
   hereSearch: 'חיפוש מקום (לובי, מעלית, קומה, מרפאה…)', hereBuilding: 'או בחרו בניין', hereFloor: 'באיזו קומה?', hereWhere: 'ואיפה בקומה?',
+  hereMaybe: 'אולי אתם כאן?', hereYesHere: 'כן, כאן', hereAccLow: 'הדיוק נמוך – אשרו או בחרו ידנית', hereAcc: 'דיוק ±{m} מ׳',
+  accessibleCaveat: 'מסלול נגיש משוער: מדרגות ושיפועים בקמפוס עדיין לא ממופים במלואם. בדקו בשטח.',
   hereOther: 'חיפוש או בניין אחר',
   hereFloorOnly: 'קומה {floor}, לא ברור איפה', hereCancel: 'ביטול', hereChosen: 'מתחילים מ: {place}', hereUnreachable: 'אין עדיין מסלול מהמקום הזה',
 
@@ -28,10 +30,13 @@ export const HE = {
   indoorFloor: 'קומה {floor}', indoorClose: 'סגירה', indoorEst: 'משוער', indoorAllOutside: 'כל המסלול בחוץ',
 
   // ---- walking mode: live-view style confirmations
-  seeQ: 'רואים: {landmark}?', seeYes: '✓ כן, רואים', seeNo: 'לא רואים',
-  lostLink: 'לא ברור איפה אני',
-  floorQ: 'באיזו קומה אתם עכשיו?', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',
-  arriveQ: 'נכנסתם לבניין?', arriveYes: '✓ כן, נכנסנו',
+  seeQ: 'רואים {landmark}?', seeYes: '✓ רואים', seeNo: 'לא רואים',
+  testBadge: 'בדיקה', testManyUnits: 'במספר יחידות ({n})', testPickTitle: 'איפה מבצעים: {name}?',
+  testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
+  altLink: 'חלופות ({n})',
+  lostLink: 'לא בטוח איפה אני',
+  floorQ: 'באיזו קומה אתם?', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',
+  arriveQ: 'נכנסתם לבניין?', arriveYes: '✓ נכנסנו',
   rerouting: 'מחשבים מסלול חדש…', rerouted: 'חישבנו מחדש מ: {place}', floorMismatch: 'זו לא הקומה הצפויה – מחשבים מסלול חדש',
   gpsIndoorHint: 'בתוך בניינים ה-GPS לא מדויק – אשרו כל שלב',
 };
