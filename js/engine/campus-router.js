@@ -6,7 +6,7 @@
 import createGraph from '../../vendor/ngraph/ngraph.graph.es.js';
 import { aStar } from '../../vendor/ngraph/ngraph.path.es.js';
 import { haversine, pointInPolygon } from './geo.js';
-import { isOpenAt, parkingStatusAt } from './time.js';
+import { isOpenAt, parkingStatusAt, windowMatches } from './time.js';
 import { parkingSafetyProblems } from './safety.js';
 import { generateTopoSteps } from './topo-steps.js';
 
@@ -14,6 +14,7 @@ export const INFERRED_PENALTY_SEC = 25;      // prefer confirmed links, but stil
 export const DOOR_SEC = 4;
 export const STATUS_PENALTY_MIN = { ok: 0, paid: 1, risky: 8 };
 export const UNVERIFIED_TIP_PENALTY_MIN = 3;
+export const TIP_BONUS_CAP_MIN = 6;   // a local tip can re-rank safe, open options by at most this many minutes
 export const FLAGGED_PENALTY_MIN = 10;
 const WALK_MPS = 1.1;
 
@@ -105,8 +106,15 @@ export class CampusRouter {
   }
 
   // ---------------------------------------------------------------- options
+  /** Path that must pass through `viaId` (used by local tips: "park here, then use THAT door"). Every leg still obeys the normal door/edge rules. */
+  findPathVia(fromId, viaId, toId, when, opts = {}) {
+    const a = this.findPath(fromId, viaId, when, opts), b = this.findPath(viaId, toId, when, opts);
+    if (!a || !b) return null;
+    return { nodeIds: [...a.nodeIds, ...b.nodeIds.slice(1)], hops: [...a.hops, ...b.hops], seconds: a.seconds + b.seconds, cost: a.cost + b.cost, meters: a.meters + b.meters };
+  }
+
   _option(kind, startId, destId, dest, when, opts, extra = {}) {
-    const path = this.findPath(startId, destId, when, opts);
+    const path = (extra.via && this.findPathVia(startId, extra.via, destId, when, opts)) || this.findPath(startId, destId, when, opts);
     if (!path) return null;
     const legs = this.legsOf(path);
     const inferred = path.hops.filter(h => h.edge.conf === 'inferred');
@@ -128,13 +136,34 @@ export class CampusRouter {
     return o;
   }
 
+  /**
+   * Owner / local tips (data/local-tips.json): "for this destination in these hours, park HERE and use THAT door".
+   * A tip only re-ranks an option that already passed safety, rules and door-hours checks; it never opens a closed door,
+   * never overrides an exclusion and never removes the official main garage. Unverified tips are always labelled.
+   * The bonus needs the route to really use the tip's entrance, and that entrance to be public and not KNOWN to be closed now (unknown hours just show a warning; feedback from users corrects mistakes).
+   */
+  _applyLocalTip(o, p, dest, when, opts) {
+    const tip = (opts.tips || []).find(t => t.parking === p.id && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
+    if (!tip) return;
+    const door = tip.entrance ? this.nodes.get(tip.entrance) : null;
+    const usesDoor = !!door && o.path.nodeIds.includes(door.id);
+    const open = !!door && door.publicAccess === 'yes' && (door.hours == null || isOpenAt(door.hours, when).open);   // unknown hours are fine (shown as a warning); KNOWN closed is not
+    o.tip = { id: tip.id, noteHe: tip.noteHe || '', status: tip.status || 'unverified', provenance: tip.provenance || 'owner', confidence: tip.confidence || 'low', doorName: door?.label || null };
+    if (!usesDoor) { o.tip.noBonusReason = 'route-skips-door'; return; }
+    if (!open) { o.tip.noBonusReason = door?.publicAccess !== 'yes' ? 'door-not-public' : 'door-closed'; return; }
+    o.tip.bonusMin = Math.min(tip.bonusMin ?? 0, TIP_BONUS_CAP_MIN);
+    o.score -= o.tip.bonusMin;
+    o.tipOption = true;
+  }
+
   parkingExclusion(p, when, opts = {}) {
     const safety = parkingSafetyProblems(p, this.sheba.safetyZones);
     if (safety.length) return { code: 'safety', reason: safety.join('; ') };
     if (!this.nodes.has(`park:${p.id}`)) return { code: 'no-coords', reason: 'אין עדיין מיקום מדויק' };
     const { status, rule } = parkingStatusAt(p, when);
     if (status === 'forbidden') return { code: 'forbidden', reason: rule?.note || 'לא מומלץ בשעה זו', status };
-    if (status === 'unknown' && !p.official) return { code: 'unknown', reason: 'אין מידע על השעה הזו', status };
+    // an unofficial lot with no hour rules is skipped – unless a local tip names it for this destination and time (open, informal field tips; safety checks above still apply)
+    if (status === 'unknown' && !p.official && !opts.tipNamesLot) return { code: 'unknown', reason: 'אין מידע על השעה הזו', status };
     if (status === 'risky' && opts.avoidRisky) return { code: 'risky', reason: 'מסומן כמסוכן בשעה זו', status };
     return null;
   }
@@ -169,18 +198,24 @@ export class CampusRouter {
       return { mode, destination: dest, options: top, excluded };
     }
     // car
+    const tipNames = p => (opts.tips || []).some(t => t.parking === p.id && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
     for (const p of this.sheba.parkings || []) {
-      const ex = this.parkingExclusion(p, when, opts);
+      const ex = this.parkingExclusion(p, when, { ...opts, tipNamesLot: tipNames(p) });
       if (ex) { excluded.push({ parking: p, ...ex }); continue; }
       const st = parkingStatusAt(p, when);
       const status = st.status === 'unknown' ? 'paid' : st.status;
-      const o = this._option('parking', `park:${p.id}`, destId, dest, when, opts, { parking: p, from: this.nodes.get(`park:${p.id}`), status, rule: st.rule });
+      // a matching local tip names a door: route through it when that door is public and not known closed now (the tip then only re-ranks, see _applyLocalTip)
+      const tipDoor = (opts.tips || []).find(t => t.parking === p.id && t.entrance && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
+      const via = tipDoor && this.nodeOpen(this.nodes.get(tipDoor.entrance), when) ? tipDoor.entrance : null;
+      const o = this._option('parking', `park:${p.id}`, destId, dest, when, opts, { parking: p, from: this.nodes.get(`park:${p.id}`), status, rule: st.rule, via });
       if (!o) { excluded.push({ parking: p, code: 'no-route', reason: 'אין מסלול הליכה ידוע בשעה זו' }); continue; }
       const flagged = !!opts.votes?.get(p.id)?.flagged;
       o.flagged = flagged;
       o.score = o.cost / 60 + (STATUS_PENALTY_MIN[status] ?? 0) + (!p.official && !p.prov?.verified ? UNVERIFIED_TIP_PENALTY_MIN : 0) + (flagged ? FLAGGED_PENALTY_MIN : 0);
+      this._applyLocalTip(o, p, dest, when, opts);
       if (status === 'risky') o.warnings.push('risky');
       if (!p.official) o.warnings.push('unofficial');
+      if (st.status === 'unknown' && !p.official) o.warnings.push('parking-hours-unknown');
       if (flagged) o.warnings.push('flagged');
       o.lastVerified = oldest([p.prov?.lastVerified, o.entrance?.prov?.lastVerified]);
       options.push(o);

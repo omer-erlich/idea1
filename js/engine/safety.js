@@ -38,6 +38,13 @@ export function parkingSafetyProblems(parking, zones = []) {
   const p = parking.lat != null ? [parking.lat, parking.lon] : null;
   const z = safetyZoneAt(p, zones);
   if (z) problems.push(`בתוך אזור אסור: ${SAFETY_KINDS[z.kind] || z.kind}`);
+  // the lot's outline (when known) must not overlap a zone either – a lot that is partly disabled-only / helipad is never suggested
+  if (!z && parking.outline && parking.outline.length >= 3) {
+    for (const zone of zones) {
+      if (!zone.polygon || zone.polygon.length < 3 || !['disabled', 'helipad', 'ambulance_bay', 'fire_access'].includes(zone.kind)) continue;
+      if (parking.outline.some(q => pointInPolygon(q, zone.polygon)) || zone.polygon.some(q => pointInPolygon(q, parking.outline))) { problems.push(`חופפת לאזור אסור: ${SAFETY_KINDS[zone.kind] || zone.kind}`); break; }
+    }
+  }
   if (parking.access === 'private') problems.push('חניה פרטית / לא לציבור');
   if ((parking.safetyKinds || []).length) problems.push('מסומנת כאזור בטיחות: ' + parking.safetyKinds.map(k => SAFETY_KINDS[k] || k).join(', '));
   return problems;

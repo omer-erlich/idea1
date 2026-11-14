@@ -5,10 +5,10 @@ Nothing below was guessed into the app as fact. Where a placeholder exists it is
 `node tools/validate-data.mjs` prints the current TODO list.
 
 ## Your first tip – MRI at night
-- [ ] **Coordinates** of the small lot next to the rear MRI corridor (`p-mri-night`) and of the rear door (`ent-mri-rear`).
+- [ ] **Coordinates** of the small lot next to the rear MRI corridor: best guess now wired = OSM way/295751880 (lot) and `ent-mri-rear` = OSM node/6925716764 (east wall of the tower). Confirm or replace (the old placeholder `p-mri-night` stays unrouted).
 - [ ] **Hours**: I used *night 20:00–06:00 = ok, day = risky* as a placeholder. What are the real hours / signs?
 - [ ] Is the rear door open to the public all night? Any intercom / card reader?
-- [ ] Step texts + a photo for the route note `rn-mri-night`.
+- [ ] Check the 4 draft step texts of `rn-mri-night` (best guess, estimated parts marked) and add a photo.
 
 ## Official parking lots without a confident location
 The official list (sheba.co.il/locations) names these, but I could not match them to an OSM area with confidence:
@@ -56,3 +56,38 @@ The official list (sheba.co.il/locations) names these, but I could not match the
 - [ ] **Clinics with no location** (191) still open a screen, but only with the official page link and a "add a location" button – no route is invented.
 - [ ] **Floor-confirmation prompts** ("which floor are you on?") rely on the elevator → floor lists in `data/topology-seed.json`. Floors not mentioned on Sheba's pages are attached to both elevator banks as `inferred`.
 - [ ] **Accessibility outdoors is unverified:** OSM has no steps/ramps mapped inside the hospital area (the only 10 mapped flights are at a school complex ~480 m away), so the "accessible" route cannot yet exclude real hospital steps. The app says so when ♿ is on. Next: re-import crossings/ramps/step_count/incline/covered tags, then have the owner mark steps on one route.
+
+## Night / evening local routes (2026-11-14) – see docs/LOCAL-ROUTES-CANDIDATES.md
+Candidates are in `data/local-route-candidates.json`. Nothing is verified. Please answer on site:
+- [ ] Is OSM way/295751880 (≈1,470 m², access=yes, surface, ≈220 m from the tower) the "small lot outside the central garage" you meant for night MRI? Or is it another lot?
+- [ ] The lot OSM way/295696976 (access=yes) overlaps a disabled-designated zone (way/509023462) and is therefore rejected. Is it the lot you meant? (If so, we need another safe option.)
+- [ ] Which door is the MRI "back entrance": service door node/6925716764 (east wall of the tower), service door node/2994451836 (north, 21 m off the wall), or another door not in OSM?
+- [ ] Is node/6925716764 (entrance=service, wheelchair=yes) open to visitors at night? Card reader, intercom, or sign?
+- [ ] Is node/2994451836 (entrance=service) a public door or staff-only?
+- [ ] Is there a back door on the south or west side of the tower that is not mapped in OSM?
+- [ ] Where does the back door lead: straight into the MRI corridor, or to the lobby / elevators?
+- [ ] Is the chosen lot at ground level, with a direct walk into the tower? Any gate, barrier, or hours at night?
+- [ ] Is the central-garage passage (floor 4) and the cancer-centre passage to the tower open at night? (Currently unknown.)
+- [ ] Is the Safra south door node/4962942604 open to the public at night? (It is the campus-side door tagged access=yes.)
+- [ ] Is the labs door node/4964789436 really closed after 19:00 (OSM opening_hours 06:00-19:00)?
+- [ ] Are the women's-hospital side doors node/2994422647 and node/2994422668 open to the public?
+- [ ] Is lot OSM way/295694762 the right lot for the women's hospital (low-confidence match)?
+- [ ] Should a permanent rule exclude lots inside disabled-designated zones (way/509023462) from all recommendations?
+
+## Night MRI tip wired as a best guess (2026-11-14, tip `tip-mri-night`)
+Lot = way/295751880 (rule: ok 19:00-06:00 "טיפ מהשטח", unknown by day, unofficial). Door = node/6925716764, `publicAccess:"yes"` (owner), hours unknown. Please confirm on site:
+- [ ] Is that door really the back door, is it unlocked and signed at night (card/intercom)? If not, the tip must be removed or moved (`data/local-tips.json`, `ent-mri-rear` in `tools/seed-official.mjs`).
+- [ ] Does the door lead into the imaging/MRI corridor? The link door → `tower/imaging` (40 s) is an inferred estimate.
+- [ ] Walk from the lot to the east wall: the approach (main-door approach + ~35 m along the wall, 181 m, 165 s) is an inferred estimate; is there a real path, or fences/steps?
+- [ ] Garage zone split (central garage floors): skipped – no per-level data in the seed/OSM; need floor list + exits per level from the owner.
+
+## Route scout, first campus-wide pass (2026-11-14) – details in `docs/LOCAL-ROUTES-CANDIDATES.md` (scout section)
+- [ ] Lot OSM way/510271132 (small, east of the children's hospital, ~65 m from a lot OSM marks `access=private`): can visitors park there day/evening/night? Barrier or "staff only" sign? (auto tip `gen-ent-*`, ENT 1.6′ instead of 4.1′ from the women's lot)
+- [ ] Lot OSM way/295809986 (near the simulation centre): can visitors park there? (auto tip `gen-sourasky-*`, Sourasky 2.1′ instead of 5.8′ from the Shi-Lev lot)
+- [ ] ENT side door node/4940704291: public? hours?
+- [x] ER door node/4983837917: **answered by the owner 2026-11-14** – public entrance, open to everyone (`publicAccess:"yes"`, verified, source owner; hours stay 24/7 from OSM). The route scout now allows it (owner verification outranks the OSM `emergency=emergency_ward_entrance` tag for this door only; other emergency-tagged doors and the ambulance-bay zone stay blocked – `tests/scout-routes.test.js`).
+- [ ] Child Development Institute: no location in the graph at all (no route in any band) – pin of the entrance, please.
+- [ ] Garage levels (p-central, p-cancer, p-heart, p-rehab): which floors have a pedestrian exit, and where does each lead?
+  - Owner 2026-11-14: **p-cancer** floor 2 has a pedestrian link to floor 1 of the cancer building (in the graph, conf text). **p-central** floor 3 (owner: "I think 3, check it") links to floor 1 of the tower (in the graph, conf inferred). No information on p-heart / p-rehab.
+- [ ] **Verify the central-garage connection floor**: owner thinks floor 3 → tower floor 1 (`central/F3` → `tower/F1`, inferred, drawn dotted, does not merge building groups). Confirm the floor, where the exit is, and whether it is open at night.
+- [ ] Cancer garage floor 2 → cancer building floor 1: where exactly is the door, hours, wheelchair-accessible? (walking seconds are an estimate)

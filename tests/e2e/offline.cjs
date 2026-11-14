@@ -20,7 +20,7 @@ const { chromium, devices } = require('playwright');
   await ctx.setOffline(true);
   await p.goto('http://localhost:8080/?dest=mri&time=sat-23:00', { waitUntil: 'load' });
   await p.waitForTimeout(2000);
-  ok('offline: result screen works', (await p.isVisible('#sheet')) && (await p.isVisible('#btn-alts')));
+  ok('offline: result screen works', (await p.isVisible('#sheet')) && (await p.isVisible('#chip-routes')));
   await p.goto('http://localhost:8080/', { waitUntil: 'load' });
   await p.waitForTimeout(1000);
   ok('offline: picker lists destinations', (await p.$$('.dest-row')).length > 20);

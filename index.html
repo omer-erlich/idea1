@@ -47,7 +47,8 @@
         <div id="sheet-grab" class="sheet-grab" role="button" tabindex="0" aria-label="הרחבה / כיווץ של הפרטים"><span class="grab-bar"></span></div>
         <div class="sheet-chips">
           <button id="chip-mode" class="chip" aria-haspopup="dialog">🚗 ברכב ▾</button>
-          <button id="chip-opts" class="chip" aria-haspopup="dialog">⚙ אפשרויות</button>
+          <button id="chip-routes" class="chip" aria-haspopup="dialog" aria-label="חלופות מסלול" hidden>🛣️ <span id="routes-n"></span></button>
+          <button id="chip-time" class="chip" aria-haspopup="dialog">🕒 עכשיו ▾</button>
         </div>
         <div id="sheet-main" class="sheet-main"></div>
         <div id="sheet-more" class="sheet-more"></div>
@@ -86,36 +87,37 @@
   </main>
 
   <div id="opts-modal" class="modal" hidden>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-label="אפשרויות המסלול">
-      <div class="modal-head"><b>אפשרויות המסלול</b><button id="opts-close" class="btn btn-primary btn-small">סיום</button></div>
-      <div id="mode-row" class="mode-row" role="group" aria-label="איך מגיעים">
-        <button class="mode" data-mode="car" aria-pressed="true">🚗 <span>ברכב</span></button>
-        <button class="mode" data-mode="bus" aria-pressed="false">🚌 <span>באוטובוס</span></button>
-        <button class="mode" data-mode="here" aria-pressed="false">📍 <span>כבר בשיבא</span></button>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="opts-title">
+      <div class="modal-head"><b id="opts-title">אפשרויות המסלול</b><button id="opts-close" class="btn btn-primary btn-small">סיום</button></div>
+      <div class="opts-sec" data-sec="mode">
+        <div id="mode-row" class="mode-row" role="group" aria-label="איך מגיעים">
+          <button class="mode" data-mode="car" aria-pressed="true">🚗 <span>ברכב</span></button>
+          <button class="mode" data-mode="bus" aria-pressed="false">🚌 <span>באוטובוס</span></button>
+          <button class="mode" data-mode="here" aria-pressed="false">📍 <span>כבר בשיבא</span></button>
+        </div>
+        <div id="pref-row" class="time-row" role="group" aria-label="העדפות">
+          <button class="chip" id="opt-accessible" aria-pressed="false">♿ מסלול נגיש</button>
+          <button class="chip" id="opt-safe" aria-pressed="false">בלי סיכון לדו"ח</button>
+        </div>
       </div>
-      <div id="opts-block">
-        <div id="time-row" class="time-row" role="group" aria-label="מתי ואפשרויות">
+      <div class="opts-sec" data-sec="time" id="opts-block">
+        <div id="time-row" class="time-row" role="group" aria-label="מתי">
           <button class="chip" data-time="now" aria-pressed="true">🕒 עכשיו</button>
           <button class="chip" data-time="08:00" aria-pressed="false">בוקר</button>
-          <button class="chip" data-time="20:00" aria-pressed="false">ערב</button>
+          <button class="chip" data-time="13:00" aria-pressed="false">צהריים</button>
+          <button class="chip" data-time="19:00" aria-pressed="false">ערב</button>
           <button class="chip" data-time="23:00" aria-pressed="false">לילה</button>
           <button class="chip" data-time="custom" aria-pressed="false">שעה אחרת</button>
-          <button class="chip" id="opt-accessible" aria-pressed="false">♿ נגיש</button>
-          <button class="chip" id="opt-safe" aria-pressed="false">בלי סיכון לדו"ח</button>
         </div>
         <div id="custom-time" class="custom-time" hidden>
           <label>יום <select id="day-select"></select></label>
           <label>שעה <input id="time-input" type="time" step="900" value="09:00"></label>
         </div>
       </div>
-      <div id="alt-block" hidden><h4 class="alt-h">חלופות</h4><div id="alt-list" class="alt-list"></div></div>
+      <div class="opts-sec" data-sec="routes" id="alt-block"><div id="alt-list" class="alt-list"></div></div>
     </div>
   </div>
 
-  <footer class="footer">
-    <p><strong>לא רשמי.</strong> האתר אינו קשור למרכז הרפואי שיבא ואינו מטעמו. המידע עשוי להיות שגוי – תמיד בדקו שילוט במקום. לעולם אל תחנו בנתיבי חירום, חניות נכים או דרכי גישה לכבאות.</p>
-    <p class="small">מפה ונתוני מבנים: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> (ODbL). מידע על חניונים ומחירים לפי אתר שיבא. <a href="https://github.com/omer-erlich/idea1/blob/main/SOURCES.md" target="_blank" rel="noopener">מקורות</a> · <a href="?edit=1">הוספת טיפ</a></p>
-  </footer>
   <div id="test-modal" class="modal" hidden>
     <div class="modal-card here-card" role="dialog" aria-modal="true" aria-labelledby="test-modal-title">
       <div class="modal-head"><b id="test-modal-title"></b><button id="test-close" class="btn btn-primary btn-small">סגירה</button></div>

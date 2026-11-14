@@ -88,6 +88,12 @@ export function generateTopoSteps(R, path, ctx) {
       push({ text: `עלו על המסועים${e.note ? ` (${e.note})` : ''} אל: ${shortLabel(B.label)}`, nodeId: B.id, lat: B.lat, lon: B.lon, indoor: true, floor: B.floor, sec: e.sec, kind: 'indoor', ask: 'see', landmark: shortLabel(B.label), building: B.building });
     } else if (e.kind === 'passage') {
       const crossing = B.building && A.building && B.building !== A.building;
+      const fa = +A.floor, fb = +B.floor;
+      if (crossing && A.kind === 'floor' && B.kind === 'floor' && A.floor != null && B.floor != null && Number.isFinite(fa) && Number.isFinite(fb) && fa !== fb) {
+        // e.g. garage floor 2 → floor 1 of another building
+        push({ text: `מ${shortLabel(A.label)} עברו במעבר הפנימי לקומה ${B.floor} ב${bname(B.building)}${e.conf === 'inferred' ? ' (לא מאומת – אם אין מעבר, חזרו אל המעליות)' : ''}`, nodeId: B.id, lat: B.lat, lon: B.lon, indoor: true, floor: B.floor, sec: e.sec, kind: 'passage', ask: 'floor', expectFloor: String(B.floor), landmark: shortLabel(B.label), building: B.building });
+        continue;
+      }
       push({ text: `המשיכו במעבר הפנימי${crossing ? ` אל ${bname(B.building)}` : ''}${e.note ? ` – ${e.note}` : ''}${B.kind === 'hall' && /OSM/.test(B.label) ? '' : `: ${shortLabel(B.label)}`}`, nodeId: B.id, lat: B.lat, lon: B.lon, indoor: true, floor: B.floor, sec: e.sec, kind: 'passage', ask: 'see', landmark: shortLabel(B.label), building: B.building || A.building });
     } else if (B.kind === 'floor') {
       // arriving at a floor node by hallway: the following hop (floor → area) carries the instruction
@@ -106,7 +112,7 @@ export function generateTopoSteps(R, path, ctx) {
 
   // arrival: replace the last "continue to <destination>" step
   const d = ctx.dest, last = N(destId);
-  if (path.hops.length && steps.length && steps[steps.length - 1].nodeId === destId && steps[steps.length - 1].kind !== 'elevator' && steps[steps.length - 1].kind !== 'stairs') steps.pop();
+  if (path.hops.length && steps.length && steps[steps.length - 1].nodeId === destId && steps[steps.length - 1].kind !== 'elevator' && steps[steps.length - 1].kind !== 'stairs' && !(steps[steps.length - 1].kind === 'passage' && steps[steps.length - 1].ask === 'floor')) steps.pop();
   steps.push({ text: `הגעתם: ${d?.name || shortLabel(last.label)}${(d?.floor ?? last.floor) != null && (d?.floor ?? last.floor) !== '' ? `, קומה ${d?.floor ?? last.floor}` : ''}${d?.hint ? ` — ${d.hint}` : ''}`,
     nodeId: destId, lat: last.lat, lon: last.lon, indoor: !!last.building, kind: 'arrive', arrival: true, floor: d?.floor ?? last.floor, sec: 0, meters: 0 });
   if (!steps.length) steps.push({ text: 'אתם כבר ביעד', nodeId: destId, lat: last.lat, lon: last.lon, indoor: true, kind: 'arrive', arrival: true });

@@ -3,8 +3,8 @@
 Unofficial, static, Hebrew/RTL, mobile-first web app: for each clinic at Sheba Medical Center (Tel HaShomer) it suggests where to start (parking, bus stop, or "I'm already here"), the best entrance and step-by-step walking directions, outdoors and **inside** the buildings. Not affiliated with Sheba.
 
 ## Non-negotiables
-1. **Never invent local knowledge.** Facts come from OSM, Sheba's public pages, or the owner. Unknown stays unknown (`null`, `conf:"inferred"`, or an entry in `OPEN_QUESTIONS.md`).
-2. **Safety:** never recommend emergency lanes, ambulance bays, disabled spots, fire access; only routes through doors known to be public (`publicAccess:"yes"`) and open at the chosen time. Unofficial parking always shows `טיפ לא רשמי – על אחריותך, בדוק שילוט במקום`; never say it is legal.
+1. **Local knowledge: open and informal (owner decision, 2026-11-14).** Don't hide useful routes behind heavy verification. Owner tips, OSM-based best guesses and crowd tips may be shown and even ranked first, clearly marked as field tips ("טיפ מהשטח · עזרו לנו לתקן"); mistakes are expected and corrected by user feedback (👍/👎, correction links). Still record where each fact came from (OSM / Sheba page / owner / crowd / guess), keep `est:true` / `conf:"inferred"` on guesses, and never present a guess as confirmed.
+2. **Safety (narrowed by the owner, 2026-11-14):** OSM tags are not ground truth, so do NOT block a route or lot because of OSM-derived claims (access=private/no, staff/emergency door tags, OSM opening hours, a lot only partly overlapping a zone, unknown hours). Show them as warnings plus a small ranking penalty and let the user decide – err on the side of offering the better route. Hard excludes remain only for: parking INSIDE an emergency lane / ambulance bay / helipad / disabled-only zone (centre point inside the zone), doors lying inside the ambulance-bay/helipad zone, and closures stated by the owner or Sheba (official). Unofficial parking always shows `טיפ לא רשמי – על אחריותך, בדוק שילוט במקום`; never say it is legal.
 3. **No personal data** (no phones/e-mails/doctor names stored; anonymous tips only).
 4. **Sources:** only reusable material. **No Google Maps/Places scraping.** Record every source in `SOURCES.md`. Sheba's robots.txt disallows `/api/`.
 5. All campus parking costs the same flat fee → say it once, never per lot.
@@ -34,6 +34,7 @@ Unofficial, static, Hebrew/RTL, mobile-first web app: for each clinic at Sheba M
 | `qa-runner` | haiku | run all tests + e2e, return a ≤10-line digest |
 | `copywriter` | sonnet | names, headlines, Hebrew microcopy; owns `js/strings.he.js` |
 | `graph-keeper` | sonnet | owns the graph: seed, builder, viewer, directory; updates + verifies on every change |
+| `route-scout` | opus | finds + ranks routes for EVERY destination and hour band (small lots, side/back doors, garage zones); owns `tools/scout-routes.mjs`, `data/route-scout.json`, local tips |
 | `strategist` | opus | general thinking: options, trade-offs, priorities, risk review (read-only) |
 
 Rules of thumb: the main session does cross-cutting engineering; give agents a *specific, closed* task and the exact files; ask for a short report. New sessions pick the agents up automatically from `.claude/agents/`.

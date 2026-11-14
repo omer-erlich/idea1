@@ -51,3 +51,24 @@ Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a v
 
 ## OSM accessibility tags (2026-11-14)
 `tools/import-osm.mjs` now keeps optional `tags` on graph edges, nodes and entrances (crossing, kerb, surface, wheelchair, access, level, indoor, door, covered, lit, incline, handrail). Fetched via the OSM API (Overpass mirrors timed out). Counts on edges: surface 353, crossing 66, access 39, entrance 26, wheelchair 9, indoor 9, level 8, lit 5, kerb 3, covered 3, incline 1, handrail 1 (most inside 300 m of the hospital). **No `step_count`, `ramp`, `tactile_paving` or `automatic_door` tags exist in this area** – unknown stays unknown. Note: Node's `fetch` ignores the proxy unless run with `NODE_USE_ENV_PROXY=1`.
+
+## Search aliases (2026-11-14)
+`data/search-aliases.json` (Latin abbreviations and Hebrew typed spellings, intent words): derived from the repo's own names in `data/sheba.json`, `data/clinics-directory.json` and `data/tests-directory.json`, plus common Hebrew spellings typed by users; no web source, language aid only, no facts about Sheba.
+
+## Local route candidates – night/evening (2026-11-14)
+Used for `data/local-route-candidates.json` and `docs/LOCAL-ROUTES-CANDIDATES.md` only. No new scraping; no Google data.
+
+| Source | URL / id | Licence / terms | Retrieved | Used for |
+|---|---|---|---|---|
+| OpenStreetMap extract (cache) | `tools/.cache/osm-raw.json` (ids e.g. way/295751880, node/4964789435) | ODbL 1.0 – © OpenStreetMap contributors | 2026-11-14 | parking lots (`amenity=parking`, access, fee, parking=surface), tower outline, entrances and tags, disabled-designated zone |
+| OpenStreetMap API 0.6 (spot check of tags) | `https://api.openstreetmap.org/api/0.6/{node,way}/{id}` for 14 ids | ODbL 1.0 | 2026-11-14 | confirm current tags of the tower doors, candidate lots, emergency-ward entrance and emergency exit |
+| Project graph (derived from OSM + Sheba text) | `data/topology.json` | derived, ODbL-attributed via OSM | 2026-11-14 | walking metres (outdoor `m`) and indoor seconds for each candidate |
+| Project data | `data/sheba.json` (destinations, parkings, entrances, safetyZones) | derived | 2026-11-14 | destination ids, publicAccess flags, safety zones |
+| Owner tip (primary, unverified) | owner message 2026-11-14 | owner's own knowledge | 2026-11-14 | evening/night MRI: small floor-0 lot outside the central garage, back door of the MRI building. Recorded as "owner tip", never as verified fact |
+| Owner tip wired as best guess | owner message 2026-11-14; OSM node/6925716764 (door, `entrance=service`, lat 32.0457421 lon 34.8438692), way/295751880 (lot) | owner's knowledge / ODbL 1.0 | 2026-11-14 | `tip-mri-night`, unofficial lot rules, `ent-mri-rear`, inferred edges to `tower/imaging`; all weights hand-typed estimates, labelled unverified |
+
+## Route scout (2026-11-14, `tools/scout-routes.mjs`)
+No new external source. The scout only recombines OSM (cache `tools/.cache/osm-raw.json`, retrieved 2026-11-14; optional `--fresh` Overpass re-read of door/parking tags – the 2026-11-14 attempt got no JSON from either mirror, so the cache was used), `data/sheba.json` and `data/topology.json` through the app's own `CampusRouter`. Outputs: `data/route-scout.json`, `data/local-tips.generated.json` (provenance `osm-scout`, unverified). mavat.iplan.gov.il / data.gov.il were not used in this pass.
+
+## Owner knowledge (2026-11-14)
+Three facts from the owner (source string `owner: 2026-11-14`): (1) the ER entrance (OSM node/4983837917, `door:ent-osm-4983837917`) is a public entrance, open to everyone (`tools/seed-official.mjs`, verified); (2) oncology garage (p-cancer) floor 2 has a pedestrian link to floor 1 of the cancer building (`data/topology-seed.json`, conf text, estimated seconds); (3) central garage (p-central) floor 3 (owner unsure, to check) connects to floor 1 of the tower (conf inferred). Nothing known about other garages.
