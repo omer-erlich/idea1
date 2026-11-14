@@ -40,7 +40,7 @@
       <div id="result-map" class="fullmap" role="img" aria-label="מפת המסלול"></div>
       <div class="float-top">
         <button id="res-back" class="fab" aria-label="חזרה לחיפוש">→</button>
-        <div class="dest-pill"><div id="result-title" class="pill-title"></div><div id="result-when" class="pill-sub"></div></div>
+        <div class="dest-pill"><div class="pill-title-row"><div id="result-title" class="pill-title"></div><span class="pill-tag">לא רשמי</span></div><div id="result-when" class="pill-sub"></div></div>
       </div>
       <p id="gate-notice" class="notice float-notice" hidden></p>
       <div id="sheet" class="sheet" data-state="peek">
@@ -58,7 +58,7 @@
     <section id="screen-walk" class="walk" hidden>
       <div class="walk-top">
         <b id="walk-remaining"></b><span id="walk-progress" class="muted small"></span>
-        <button id="walk-exit" class="link-btn">סיום</button>
+        <button id="walk-exit" class="walk-exit" aria-label="יציאה מהניווט">✕</button>
       </div>
       <div class="walk-mapwrap">
         <div id="walk-map" class="fullmap"></div>

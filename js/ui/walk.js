@@ -36,7 +36,12 @@ export function startWalk(option, { data, onExit, router, onRelocate, startIndex
 
   $('#walk-prev').onclick = () => go(W.i - 1, true);
   $('#walk-next').onclick = () => advance();
-  $('#walk-exit').onclick = exit;
+  const ex = $('#walk-exit'); ex.textContent = '✕'; delete ex.dataset.armed;
+  ex.onclick = () => {   // two taps to leave, so a stray touch never ends the walk
+    if (ex.dataset.armed) { clearTimeout(W?.exitT); exit(); return; }
+    ex.dataset.armed = '1'; ex.textContent = t('walkExitAsk');
+    W.exitT = setTimeout(() => { delete ex.dataset.armed; ex.textContent = '✕'; }, 3500);
+  };
   $('#walk-lost').textContent = t('lostLink');
   $('#walk-lost').onclick = () => { const s = W.steps[W.i]; relocate({ building: s.building, floor: s.floor, reason: 'lost' }); };
   $('#walk-recenter').hidden = true;
@@ -46,13 +51,13 @@ export function startWalk(option, { data, onExit, router, onRelocate, startIndex
   if ('geolocation' in navigator) {
     W.watch = navigator.geolocation.watchPosition(onFix, onGpsError, { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
     $('#walk-gps').textContent = 'מחפש מיקום GPS…';
-  } else $('#walk-gps').textContent = 'אין GPS במכשיר – התקדמו בלחיצה על "הבא".';
+  } else $('#walk-gps').textContent = 'אין GPS במכשיר – מתקדמים בלחיצה.';
   keepAwake();
   go(startIndex, false);
 }
 
 const stepPoint = () => { const s = W.steps[W.i]; return s?.lat != null ? [s.lat, s.lon] : null; };
-function onKey(e) { if (e.key === 'ArrowLeft') { if (!$('#walk-next').hidden) $('#walk-next').click(); } else if (e.key === 'ArrowRight') $('#walk-prev').click(); else if (e.key === 'Escape') exit(); }
+function onKey(e) { if (e.key === 'ArrowLeft') { if (!$('#walk-next').hidden) $('#walk-next').click(); } else if (e.key === 'ArrowRight') $('#walk-prev').click(); else if (e.key === 'Escape') $('#walk-exit').click(); }
 function advance() { if (!W) return; if (W.i >= W.steps.length - 1) exit(); else go(W.i + 1, true); }
 
 function go(i, manual) {
@@ -66,7 +71,7 @@ function go(i, manual) {
   $('#walk-remaining').textContent = s.arrival ? 'הגעתם 🎉' : `עוד כ-${Math.max(1, Math.round(leftSec / 60))} דק'`;
   const ph = $('#walk-photo');
   if (s.photo) { ph.src = s.photo; ph.hidden = false; ph.alt = 'תמונה של המקום: ' + s.text; } else { ph.hidden = true; ph.removeAttribute('src'); }
-  $('#walk-mode').textContent = s.arrival ? '🏁 הגעתם' : s.indoor ? '🏢 בפנים · אשרו כל שלב' : '🌤 בחוץ · מתקדם לבד';
+  $('#walk-mode').textContent = s.arrival ? '🏁 הגעתם' : s.indoor ? '🏢 בתוך הבניין' : '🌤 בחוץ';
   $('#walk-prev').disabled = W.i === 0;
   $('#walk-next').textContent = W.i >= W.steps.length - 1 ? 'סיום ✓' : 'הבא ›';
   renderConfirm(s);
@@ -86,21 +91,24 @@ function renderConfirm(s) {
   const lost = '';
   let html = '';
   if (s.ask === 'floor' && W.router && s.building) {
-    const floors = W.router.floorsOf(s.building);
-    html = `<p class="wc-q">${t('floorQ')} <span class="muted small">${t('floorExpected', { floor: esc(s.expectFloor) })}</span></p>
-      <div class="seg wc-floors">${floors.map(f => `<button type="button" data-wc="floor" data-f="${esc(f)}" aria-pressed="${f === s.expectFloor}">${esc(f)}</button>`).join('')}</div>${lost}`;
+    const floors = W.router.floorsOf(s.building), fl = esc(s.expectFloor);
+    html = `<p class="wc-q">${t('floorArriveQ', { floor: fl })}</p>
+      <div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('floorYes', { floor: fl })}</button><button class="btn btn-secondary" data-wc="other">${t('floorOther')}</button></div>
+      <div class="wc-other" hidden><p class="wc-q">${t('floorQ')}</p><div class="wc-floors">${floors.map(f => `<button type="button" data-wc="floor" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div></div>`;
   } else if (s.ask === 'arrive') {
     html = `<p class="wc-q">${t('arriveQ')}</p><div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('arriveYes')}</button></div>${lost}`;
   } else if (s.ask === 'see') {
-    html = `<p class="wc-q">${t('seeQ', { landmark: esc(s.landmark || '') })}</p><div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('seeYes')}</button><button class="btn btn-secondary" data-wc="no">${t('seeNo')}</button></div>${lost}`;
+    html = `<p class="wc-q">${t('seeQ', { landmark: esc(s.landmark || '') })}</p><div class="wc-btns"><button class="btn btn-primary" data-wc="yes">${t('seeYes', { landmark: esc(s.landmark || '') })}</button><button class="btn btn-secondary" data-wc="no">${t('seeNo')}</button></div>${lost}`;
   }
   box.hidden = !html;
-  $('#walk-next').hidden = !!(html && s.ask);   // a question's answer button IS the primary action
+  $('#walk-next').hidden = !!(html && s.ask);
+  $('#walk-gps').hidden = $('#walk-next').hidden;   // no GPS chatter on a question step   // a question's answer button IS the primary action
   box.innerHTML = html;
   box.onclick = ev => {
     const b = ev.target.closest('button'); if (!b) return;
     const w = b.dataset.wc;
     if (w === 'yes') advance();
+    else if (w === 'other') { box.querySelector('.wc-other').hidden = false; box.querySelector('.wc-btns').hidden = true; box.querySelector('.wc-q').hidden = true; }
     else if (w === 'no' || w === 'lost') relocate({ building: s.building, floor: s.floor, reason: w });
     else if (w === 'floor') {
       if (b.dataset.f === s.expectFloor) advance();
@@ -137,7 +145,7 @@ function onFix(pos) {
 }
 
 function onGpsError(err) {
-  $('#walk-gps').textContent = err.code === 1 ? 'אין הרשאת מיקום – אפשר להתקדם בלחיצה על "הבא".' : 'אין קליטת GPS כרגע – התקדמו בלחיצה על "הבא".';
+  $('#walk-gps').textContent = err.code === 1 ? 'אין הרשאת מיקום – מתקדמים בלחיצה.' : 'אין קליטת GPS – מתקדמים בלחיצה.';
 }
 
 async function keepAwake() {

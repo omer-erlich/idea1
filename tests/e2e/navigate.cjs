@@ -84,12 +84,12 @@ const { chromium, devices } = require('playwright');
   // --- walking mode: live-view style confirmations + re-localise
   await p.goto(base + '?dest=mri&time=sun-10:00&mode=here&from=tower/F5/W', { waitUntil: 'load' }); await wait(1500);
   await p.click('#btn-walk'); await wait(1200);
-  ok('walking mode starts indoors with a confirmation prompt', await p.isVisible('#walk-confirm') && /רואים|באיזו קומה|נכנסתם/.test(await p.textContent('#walk-confirm')), (await p.textContent('#walk-confirm')).slice(0, 60));
+  ok('walking mode starts indoors with a confirmation prompt', await p.isVisible('#walk-confirm') && /רואים|לקומה|נכנסתם/.test(await p.textContent('#walk-confirm')), (await p.textContent('#walk-confirm')).slice(0, 60));
   const t1 = await p.textContent('#walk-text');
   ok('first step rides the elevator down', /רדו/.test(t1), t1);
-  ok('elevator step asks which floor you are on', /באיזו קומה/.test(await p.textContent('#walk-confirm')));
+  ok('elevator step asks which floor you are on', /הגעתם לקומה/.test(await p.textContent('#walk-confirm')));
   // confirm the expected floor
-  await p.click('#walk-confirm .wc-floors [aria-pressed="true"]'); await wait(500);
+  await p.click('#walk-confirm [data-wc="yes"]'); await wait(500);
   ok('confirming the expected floor advances', (await p.textContent('#walk-text')) !== t1);
   // say "I'm not sure where I am" → picker → new route
   await p.click('#walk-lost'); await wait(600);
@@ -100,7 +100,7 @@ const { chromium, devices } = require('playwright');
   ok('route is recalculated from the new place and walking continues', await p.isVisible('#screen-walk') && !(await p.isVisible('#here-modal')) && /מסדרון ראשי|אגף דימות|הגעתם|אל:/.test(await p.textContent('#walk-text')), (await p.textContent('#walk-text')).slice(0, 60));
   // wrong floor reported
   await p.goto(base + '?dest=mri&time=sun-10:00&mode=here&from=tower/F5/W&walk=1', { waitUntil: 'load' }); await wait(1500);
-  await p.click('#walk-confirm .wc-floors button:not([aria-pressed="true"])'); await wait(700);
+  await p.click('#walk-confirm [data-wc="other"]'); await p.click('#walk-confirm .wc-floors button:not([data-f="0"])'); await wait(700);
   ok('reporting a different floor asks where you are on that floor', await p.isVisible('#here-modal'));
   await p.keyboard.press('Escape'); await wait(800);
   ok('cancelling resumes the walk', await p.isVisible('#screen-walk'));

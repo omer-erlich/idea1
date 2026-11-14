@@ -145,7 +145,7 @@ function initUi() {
   const today = new Date().getDay();
   days.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => { const d = (today + i) % 7; return `<option value="${d}">${i === 0 ? 'היום' : i === 1 ? 'מחר' : 'יום ' + DAY_NAMES_HE[d]}</option>`; }).join('');
   $('#search').addEventListener('input', renderDestList);
-  $('#search').placeholder = 'לאן? למשל MRI, מכון הלב, מרפאת כתף…';
+  $('#search').placeholder = 'לאן? למשל MRI';
   $$('#time-row [data-time]').forEach(b => b.addEventListener('click', () => {
     const tm = b.dataset.time;
     if (tm === 'custom') {
@@ -246,13 +246,13 @@ function renderDestList() {
   if (q) list.sort((a, b) => rank[a.kind] - rank[b.kind] || (norm(a.name).startsWith(q) ? 0 : 1) - (norm(b.name).startsWith(q) ? 0 : 1));
   const total = list.length;
   list = list.slice(0, MAX_LIST);
-  $('#list-label').textContent = q ? `${total} תוצאות` : 'יעדים מרכזיים · ' + t('clinicsHint');
+  $('#list-label').textContent = q ? `נמצאו ${total}` : 'יעדים נפוצים';
   $('#dest-list').innerHTML = list.map(d => {
     const sub = d.kind === 'test'
       ? [t('testBadge'), d.targets.length === 1 ? S.dests.get(d.targets[0]).name : d.targets.length > 1 ? t('testManyUnits', { n: d.targets.length }) : t('unlocatedBadge')].join(' · ')
       : [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
     const isLast = d.id === last && !q;
-    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : d.kind === 'test' ? '🧪' : '📍'}</span>
+    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : d.kind === 'test' ? '🧪' : d.kind === 'clinic' ? '🏥' : '📍'}</span>
       <span class="dest-txt"><b>${esc(d.name)}</b>${sub || isLast ? `<span class="sub">${isLast ? 'האחרון שבחרת' + (sub ? ' · ' : '') : ''}${esc(sub)}</span>` : ''}</span><span class="dest-chev" aria-hidden="true">‹</span></button></li>`;
   }).join('') + (total > MAX_LIST ? `<li class="muted small" style="padding:10px 4px">${esc(t('moreResults', { n: total - MAX_LIST }))}</li>` : '');
   $('#no-results').hidden = total > 0;
@@ -308,7 +308,7 @@ async function pickStart(preset) {
   S.startNodeId = r.nodeId; S.startLabel = r.label;
   return true;
 }
-const placeLabel = id => (S.router.nodes.get(id)?.label || '').split('·')[0].replace(/^תחנה:\s*/, '').trim();
+const placeLabel = id => (S.router.nodes.get(id)?.label || '').split('·')[0].replace(/^תחנה:\s*/, '').replace(/''/g, '״').trim();
 
 // ---------------------------------------------------------------- result: map + bottom sheet
 const whenNow = () => (S.timeParam === 'now' ? whenFromDate() : parseWhen(S.timeParam));
@@ -379,12 +379,13 @@ function renderSheetBody() {
   const walk = `<div class="sm-time"><b>${o.walkMinutes}</b> דק' הליכה <span class="muted">· ${o.meters} מ'</span>${o.entrance ? ` · <span class="muted">🚪 ${esc(o.entrance.name)}</span>` : ''}</div>`;
   const title = o.kind === 'bus' ? `🚌 ${esc(placeLabel(o.stop.id))}` : o.kind === 'here' ? `📍 ${esc(S.startLabel || 'המיקום שלי')}` : `🅿️ ${esc(p.name || 'חניה')}`;
   let actions = '';
-  if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">🚗 נווטו לחניה</a><button class="link-btn" id="btn-walk">🚶 התחילו הליכה</button>`;
-  else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="link-btn" id="btn-walk">🚶 התחילו הליכה</button>`;
-  else actions = `<button class="btn btn-primary" id="btn-walk">${t('btnStartWalk')}</button><button class="link-btn" id="btn-change-here">${t('btnChangeHere')}</button>`;
+  if (o.kind === 'parking' && p.lat != null) actions = `<a class="btn btn-primary" href="${wazeUrl(p.lat, p.lon)}" target="_blank" rel="noopener">${t('btnNavPark')}</a><button class="btn btn-secondary" id="btn-walk">${t('btnWalkParked')}</button>`;
+  else if (o.kind === 'bus') actions = `<a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=${o.stop.lat},${o.stop.lon}&travelmode=transit" target="_blank" rel="noopener">${t('btnNavStop')}</a><button class="btn btn-secondary" id="btn-walk">${t('btnWalkBus')}</button>`;
+  else actions = `<button class="btn btn-primary" id="btn-walk">${t('btnStartWalk')}</button><button class="btn btn-secondary" id="btn-change-here">${t('btnChangeHere')}</button>`;
   main.innerHTML = `<div class="sm-row">${walk}${statusBadge(o)}</div>
     <div class="sm-name">${title}</div>
     ${o.kind === 'parking' && !p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
+    ${o.warnings?.includes('estimated-route') ? `<p class="notice peek-notice">⚠️ ${esc(t('estimatedNotice'))}</p>` : ''}
     <div class="sm-actions">${actions}</div>
     ${r.options.length > 1 ? `<button class="link-btn alt-link" id="btn-alts">${esc(t('altLink', { n: r.options.length - 1 }))}</button>` : ''}`;
 
@@ -403,7 +404,6 @@ function renderSheetBody() {
   const price = S.data.meta?.parkingFlatRate?.text;
   const warns = [];
   if (o.warnings?.includes('risky')) warns.push('<p class="warn">בשעה זו יש סיכון לדו"ח. אם אפשר – העדיפו חלופה.</p>');
-  if (o.warnings?.includes('estimated-route')) warns.push('<p class="warn">חלק מהמסלול (בעיקר בפנים) משוער ולא נמדד בשטח.</p>');
   if (o.warnings?.includes('inferred-link')) warns.push('<p class="warn">חלק מהמעברים בבניינים לא מאומתים – אם משהו לא תואם, השתמשו בשלט "לא בטוח איפה אני".</p>');
   if (S.opts.accessible) warns.push(`<p class="warn">♿ ${esc(t('accessibleCaveat'))}</p>`);
   if (o.warnings?.includes('entrance-hours-unknown')) warns.push('<p class="warn small">שעות הפתיחה של הכניסה לא ידועות.</p>');
@@ -415,10 +415,11 @@ function renderSheetBody() {
   const votes = backendEnabled() && p && !p.official ? `<div class="votes"><span>עבד לך?</span><button class="btn btn-secondary btn-small" data-vote="1" data-id="${esc(p.id)}">👍 עבד לי</button><button class="btn btn-secondary btn-small" data-vote="-1" data-id="${esc(p.id)}">👎 לא עבד לי</button></div>` : '';
   const gm = o.kind === 'parking' && p.lat != null ? `<a class="btn btn-secondary" href="${gmapsUrl(p.lat, p.lon)}" target="_blank" rel="noopener">Google Maps</a>` : '';
   const indoorBtn = o.indoor?.length ? `<button class="btn btn-secondary" id="btn-indoor">${t('btnIndoor')}</button>` : '';
-  more.innerHTML = `<ul class="facts">${facts.join('')}${o.kind === 'parking' && price ? `<li>💳 ${esc(price)}</li>` : ''}</ul>${warns.join('')}
+  more.innerHTML = `${warns.join('')}${steps}
+    <ul class="facts">${facts.join('')}${o.kind === 'parking' && price ? `<li>💳 ${esc(price)}</li>` : ''}</ul>
     <p class="verified">${esc(verified)}${esc(crowd)}</p>
     <div class="more-actions">${indoorBtn}${gm}<button class="btn btn-secondary" id="btn-share">🔗 שיתוף</button></div>
-    ${steps}${votes}
+    ${votes}
     <p class="small"><a href="?edit=1&kind=correction&target=${encodeURIComponent(p ? p.id : d.id)}&dest=${encodeURIComponent(S.destId)}">דווחו על תיקון</a></p>
     ${officialLink}${legal}`;
 
