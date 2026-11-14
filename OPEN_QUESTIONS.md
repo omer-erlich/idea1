@@ -56,3 +56,20 @@ The official list (sheba.co.il/locations) names these, but I could not match the
 - [ ] **Clinics with no location** (191) still open a screen, but only with the official page link and a "add a location" button – no route is invented.
 - [ ] **Floor-confirmation prompts** ("which floor are you on?") rely on the elevator → floor lists in `data/topology-seed.json`. Floors not mentioned on Sheba's pages are attached to both elevator banks as `inferred`.
 - [ ] **Accessibility outdoors is unverified:** OSM has no steps/ramps mapped inside the hospital area (the only 10 mapped flights are at a school complex ~480 m away), so the "accessible" route cannot yet exclude real hospital steps. The app says so when ♿ is on. Next: re-import crossings/ramps/step_count/incline/covered tags, then have the owner mark steps on one route.
+
+## Night / evening local routes (2026-11-14) – see docs/LOCAL-ROUTES-CANDIDATES.md
+Candidates are in `data/local-route-candidates.json`. Nothing is verified. Please answer on site:
+- [ ] Is OSM way/295751880 (≈1,470 m², access=yes, surface, ≈220 m from the tower) the "small lot outside the central garage" you meant for night MRI? Or is it another lot?
+- [ ] The lot OSM way/295696976 (access=yes) overlaps a disabled-designated zone (way/509023462) and is therefore rejected. Is it the lot you meant? (If so, we need another safe option.)
+- [ ] Which door is the MRI "back entrance": service door node/6925716764 (east wall of the tower), service door node/2994451836 (north, 21 m off the wall), or another door not in OSM?
+- [ ] Is node/6925716764 (entrance=service, wheelchair=yes) open to visitors at night? Card reader, intercom, or sign?
+- [ ] Is node/2994451836 (entrance=service) a public door or staff-only?
+- [ ] Is there a back door on the south or west side of the tower that is not mapped in OSM?
+- [ ] Where does the back door lead: straight into the MRI corridor, or to the lobby / elevators?
+- [ ] Is the chosen lot at ground level, with a direct walk into the tower? Any gate, barrier, or hours at night?
+- [ ] Is the central-garage passage (floor 4) and the cancer-centre passage to the tower open at night? (Currently unknown.)
+- [ ] Is the Safra south door node/4962942604 open to the public at night? (It is the campus-side door tagged access=yes.)
+- [ ] Is the labs door node/4964789436 really closed after 19:00 (OSM opening_hours 06:00-19:00)?
+- [ ] Are the women's-hospital side doors node/2994422647 and node/2994422668 open to the public?
+- [ ] Is lot OSM way/295694762 the right lot for the women's hospital (low-confidence match)?
+- [ ] Should a permanent rule exclude lots inside disabled-designated zones (way/509023462) from all recommendations?

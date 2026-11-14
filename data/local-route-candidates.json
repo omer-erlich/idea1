@@ -1,0 +1,1358 @@
+[
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/imaging: 46 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Owner tip (unverified): night MRI = small floor-0 lot outside the central garage, then the BACK door of the MRI building. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-510271132",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/510271132 amenity=parking only (no access tag), ~830 m2",
+      "graph: lot -> main door outdoors 353 m (path + road), no indoor",
+      "OSM API: no access/fee tag"
+    ],
+    "walkMetersEstimate": 353,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible small lot, but access is not stated in OSM. Ask owner whether it is public and what the signs say (do NOT treat as legal).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295743534",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295743534 amenity=parking only (no access tag), ~17100 m2",
+      "graph: 172 m outdoors then 169 s indoors through the cancer-garage passage (not a small lot)",
+      "OSM API: no access tag"
+    ],
+    "walkMetersEstimate": 172,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Large lot and route runs through the cancer-centre garage. Possibly the eye-institute lot (see OPEN_QUESTIONS). Access unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-1092808003",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/1092808003 amenity=parking only (no access tag), ~7000 m2",
+      "graph: 332 m outdoors then 169 s indoors via the cancer garage",
+      "OSM API: no access tag; lot is one of the two OSM areas near the eye-institute official waze point"
+    ],
+    "walkMetersEstimate": 332,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Access unknown; route also goes through the cancer garage indoors.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-cancer",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/295751881 (OSM: access=yes, fee=yes, opening_hours=24/7, capacity:disabled=yes). Sheba: floor 3+ for oncology patients only",
+      "graph: garage -> cancer building -> tower corridor: 169 s indoors",
+      "not a small lot (multi-storey, ~3600 m2 footprint)"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Not a small lot and not the owner's preferred option; listed for completeness. Indoor passage hours unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": "p-mri-night",
+    "entranceNodeId": "ent-mri-rear",
+    "evidence": [
+      "owner tip only (sheba.json p-mri-night and ent-mri-rear: lat/lon null, hours null)",
+      "no OSM node/way found for a back door of the tower (no entrance tag on the S/SW/W walls)"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "needs-owner-confirmation",
+    "note": "Owner says: small lot at floor 0 + back door of the MRI building. Coordinates and the back door are not identified. Not routable.",
+    "entranceOsm": null,
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "mri",
+    "parkingId": null,
+    "entranceNodeId": "door:ent-osm-2994451899",
+    "evidence": [
+      "OSM node/2994451899 door=emergency_exit, entrance=main (API 2026-11-14)",
+      "located ~140 m NW of the tower outline, next to the central garage"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "rejected",
+    "note": "REJECTED (safety): emergency exit (fire/egress). Never route through it.",
+    "entranceOsm": "node/2994451899",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/imaging: 46 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-510271132",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/510271132 amenity=parking only (no access tag), ~830 m2",
+      "graph: lot -> main door outdoors 353 m (path + road), no indoor",
+      "OSM API: no access/fee tag"
+    ],
+    "walkMetersEstimate": 353,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible small lot, but access is not stated in OSM. Ask owner whether it is public and what the signs say (do NOT treat as legal).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295743534",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295743534 amenity=parking only (no access tag), ~17100 m2",
+      "graph: 172 m outdoors then 169 s indoors through the cancer-garage passage (not a small lot)",
+      "OSM API: no access tag"
+    ],
+    "walkMetersEstimate": 172,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Large lot and route runs through the cancer-centre garage. Possibly the eye-institute lot (see OPEN_QUESTIONS). Access unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-1092808003",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/1092808003 amenity=parking only (no access tag), ~7000 m2",
+      "graph: 332 m outdoors then 169 s indoors via the cancer garage",
+      "OSM API: no access tag; lot is one of the two OSM areas near the eye-institute official waze point"
+    ],
+    "walkMetersEstimate": 332,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Access unknown; route also goes through the cancer garage indoors.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-cancer",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/295751881 (OSM: access=yes, fee=yes, opening_hours=24/7, capacity:disabled=yes). Sheba: floor 3+ for oncology patients only",
+      "graph: garage -> cancer building -> tower corridor: 169 s indoors",
+      "not a small lot (multi-storey, ~3600 m2 footprint)"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Not a small lot and not the owner's preferred option; listed for completeness. Indoor passage hours unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": "p-mri-night",
+    "entranceNodeId": "ent-mri-rear",
+    "evidence": [
+      "owner tip only (sheba.json p-mri-night and ent-mri-rear: lat/lon null, hours null)",
+      "no OSM node/way found for a back door of the tower (no entrance tag on the S/SW/W walls)"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "needs-owner-confirmation",
+    "note": "Owner says: small lot at floor 0 + back door of the MRI building. Coordinates and the back door are not identified. Not routable.",
+    "entranceOsm": null,
+    "targetNodeId": "tower/imaging",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "imaging",
+    "parkingId": null,
+    "entranceNodeId": "door:ent-osm-2994451899",
+    "evidence": [
+      "OSM node/2994451899 door=emergency_exit, entrance=main (API 2026-11-14)",
+      "located ~140 m NW of the tower outline, next to the central garage"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "rejected",
+    "note": "REJECTED (safety): emergency exit (fire/egress). Never route through it.",
+    "entranceOsm": "node/2994451899",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/nuclear: 56 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-510271132",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/510271132 amenity=parking only (no access tag), ~830 m2",
+      "graph: lot -> main door outdoors 353 m (path + road), no indoor",
+      "OSM API: no access/fee tag"
+    ],
+    "walkMetersEstimate": 353,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible small lot, but access is not stated in OSM. Ask owner whether it is public and what the signs say (do NOT treat as legal).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295743534",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295743534 amenity=parking only (no access tag), ~17100 m2",
+      "graph: 172 m outdoors then 169 s indoors through the cancer-garage passage (not a small lot)",
+      "OSM API: no access tag"
+    ],
+    "walkMetersEstimate": 172,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Large lot and route runs through the cancer-centre garage. Possibly the eye-institute lot (see OPEN_QUESTIONS). Access unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-1092808003",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/1092808003 amenity=parking only (no access tag), ~7000 m2",
+      "graph: 332 m outdoors then 169 s indoors via the cancer garage",
+      "OSM API: no access tag; lot is one of the two OSM areas near the eye-institute official waze point"
+    ],
+    "walkMetersEstimate": 332,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Access unknown; route also goes through the cancer garage indoors.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-cancer",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/295751881 (OSM: access=yes, fee=yes, opening_hours=24/7, capacity:disabled=yes). Sheba: floor 3+ for oncology patients only",
+      "graph: garage -> cancer building -> tower corridor: 169 s indoors",
+      "not a small lot (multi-storey, ~3600 m2 footprint)"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Not a small lot and not the owner's preferred option; listed for completeness. Indoor passage hours unknown.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": "p-mri-night",
+    "entranceNodeId": "ent-mri-rear",
+    "evidence": [
+      "owner tip only (sheba.json p-mri-night and ent-mri-rear: lat/lon null, hours null)",
+      "no OSM node/way found for a back door of the tower (no entrance tag on the S/SW/W walls)"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "needs-owner-confirmation",
+    "note": "Owner says: small lot at floor 0 + back door of the MRI building. Coordinates and the back door are not identified. Not routable.",
+    "entranceOsm": null,
+    "targetNodeId": "tower/nuclear",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "nuclear-medicine",
+    "parkingId": null,
+    "entranceNodeId": "door:ent-osm-2994451899",
+    "evidence": [
+      "OSM node/2994451899 door=emergency_exit, entrance=main (API 2026-11-14)",
+      "located ~140 m NW of the tower outline, next to the central garage"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "rejected",
+    "note": "REJECTED (safety): emergency exit (fire/egress). Never route through it.",
+    "entranceOsm": "node/2994451899",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/lobby: 6 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "outpatient",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/lobby: 6 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "gastro",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/lobby: 6 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "neurology-clinics",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/lobby: 6 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "autoimmune",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/lobby",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4964789435 entrance=main only (no back door in OSM); sheba.json publicAccess=yes",
+      "graph: lot -> main door outdoors only (257 m, 0 indoor s); lot centroid 223 m from tower centre",
+      "indoor door -> tower/F-1: 65 s (est.)",
+      "not in any safety zone (nearest disabled zone ~214 m, helipad ~458 m, emergency lane ~319 m, ambulance bay ~328 m)",
+      "level: not tagged in OSM (parking=surface); floor 0 is inferred from the owner tip"
+    ],
+    "walkMetersEstimate": 257,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Fallback only: this is the MAIN door, not the back door the owner describes. Hours of lot and door unknown (no opening_hours tag).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/6925716764 entrance=service wheelchair=yes (API 2026-11-14, version 1, not in sheba.json, not a graph node)",
+      "node sits 1 m from the mapped tower outline (way/295696974), on the EAST wall: bearing 103 deg from tower centre (main door 57 deg)",
+      "no access/opening_hours/publicAccess tags; treated as unknown",
+      "walk estimate = graph lot->main-door outdoors (257 m) + 35 m straight tail to the door (estimate)"
+    ],
+    "walkMetersEstimate": 292,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Best candidate for a \"side/back\" door on the tower, but public access is NOT established. Never route through it until the owner confirms it is open to the public at night.",
+    "entranceOsm": "node/6925716764",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": null,
+    "evidence": [
+      "OSM node/2994451836 entrance=service (API 2026-11-14, version 2)",
+      "not in sheba.json, not a graph node; 21 m outside the mapped tower outline (north side), bearing 350 deg from tower centre",
+      "no hours/access tags",
+      "walk estimate = graph lot->main-door outdoors + 51 m straight tail (estimate)"
+    ],
+    "walkMetersEstimate": 308,
+    "walkSource": "estimate",
+    "status": "needs-owner-confirmation",
+    "note": "Plausible service door, but its link to the tower interior is unknown (21 m off the mapped wall, so it may belong to a canopy or another part).",
+    "entranceOsm": "node/2994451836",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-osm-295696976",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295696976 access=yes fee=yes parking=surface, ~8000 m2",
+      "polygon OVERLAPS safety zone sz-osm-509023462 (way/509023462: disabled=designated, motor_vehicle=no) - distance 0 m",
+      "lot centroid ~100 m W of the central garage centroid (way/414835764)"
+    ],
+    "walkMetersEstimate": 200,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): inside a disabled-designated zone. Never recommend. Owner tip says \"outside the central garage\" – this lot is the closest match in position but cannot be used.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-osm-295741439",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "OSM way/295741439 amenity=parking only (no access tag), ~980 m2",
+      "graph route passes through door:ent-osm-4983837917 (emergency_ward_entrance, ambulance bay within 15 m, OSM API tags emergency=emergency_ward_entrance, opening_hours=24/7)",
+      "lot is ~190 m from the ambulance bay centre and ~150 m from the helipad zone"
+    ],
+    "walkMetersEstimate": 395,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED (safety): would route a visitor through the ER / ambulance area. Never use ambulance or emergency-ward access.",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "kidney-transplant",
+    "parkingId": "p-central",
+    "entranceNodeId": "door:ent-osm-4964789435",
+    "evidence": [
+      "official garage way/414835764 (13 levels, 24/7, paid), Sheba: floors 11+ for patients only",
+      "graph: garage -> central elevators -> floor 4 -> stairs -> tower lobby: 123 s indoors, 0 m outdoors"
+    ],
+    "walkMetersEstimate": 0,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "Owner tip: for evening/night tests avoid the big central tower garage (this is an owner preference, not a safety rule).",
+    "entranceOsm": "node/4964789435",
+    "targetNodeId": "tower/F-1",
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "safra-children",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4962942604",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4962942604 (south door): entrance=main, door=sliding, access=yes, wheelchair=yes, level=0 (south) - sheba.json publicAccess=yes",
+      "graph: 194 m outdoors, 0 s indoors",
+      "not in a safety zone"
+    ],
+    "walkMetersEstimate": 194,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Side door of Safra. Its opening hours are not tagged. NOT the campus south gate (gate closes 17:30 per Sheba, which is a different thing).",
+    "entranceOsm": "node/4962942604",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "safra-children",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4962942603",
+    "evidence": [
+      "OSM way/295751880 access=yes fee=yes parking=surface, ~1470 m2",
+      "OSM node/4962942603 (north door): entrance=main, door=sliding, access=yes, wheelchair=yes, level=0 (south) - sheba.json publicAccess=yes",
+      "graph: 194 m outdoors, 12 s indoors",
+      "not in a safety zone"
+    ],
+    "walkMetersEstimate": 194,
+    "walkSource": "graph",
+    "status": "candidate",
+    "note": "Side door of Safra. Its opening hours are not tagged. NOT the campus south gate (gate closes 17:30 per Sheba, which is a different thing).",
+    "entranceOsm": "node/4962942603",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "safra-children",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-2995052876",
+    "evidence": [
+      "OSM node/2995052876 entrance=staircase, door=sliding, wheelchair=yes (sheba.json publicAccess=unknown)",
+      "graph: 194 m outdoors, 12 s indoors"
+    ],
+    "walkMetersEstimate": 194,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Staircase access; public use not established.",
+    "entranceOsm": "node/2995052876",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "women",
+    "parkingId": "p-women",
+    "entranceNodeId": "door:ent-osm-2994422647",
+    "evidence": [
+      "OSM node/2994422647 entrance=yes (wheelchair=yes on 2994422647); sheba.json publicAccess=unknown",
+      "graph lot p-women (OSM way/295694762, low-confidence match per OPEN_QUESTIONS) -> door: 89 m outdoors, 12 s indoors"
+    ],
+    "walkMetersEstimate": 89,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Side door of the women hospital; public access and hours unknown. Main door 4962942602 is publicAccess=yes but is not a side door.",
+    "entranceOsm": "node/2994422647",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "women",
+    "parkingId": "p-women",
+    "entranceNodeId": "door:ent-osm-2994422668",
+    "evidence": [
+      "OSM node/2994422668 entrance=yes (wheelchair=yes on 2994422647); sheba.json publicAccess=unknown",
+      "graph lot p-women (OSM way/295694762, low-confidence match per OPEN_QUESTIONS) -> door: 89 m outdoors, 12 s indoors"
+    ],
+    "walkMetersEstimate": 89,
+    "walkSource": "graph",
+    "status": "needs-owner-confirmation",
+    "note": "Side door of the women hospital; public access and hours unknown. Main door 4962942602 is publicAccess=yes but is not a side door.",
+    "entranceOsm": "node/2994422668",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "labs",
+    "parkingId": "p-osm-295751880",
+    "entranceNodeId": "door:ent-osm-4964789436",
+    "evidence": [
+      "OSM node/4964789436 entrance=yes, opening_hours=06:00-19:00 (API/cache); note tag \"24/7 access with employee card\" conflicts",
+      "sheba.json publicAccess=unknown",
+      "graph: 72 m outdoors"
+    ],
+    "walkMetersEstimate": 72,
+    "walkSource": "graph",
+    "status": "rejected",
+    "note": "REJECTED for evening: tagged closed after 19:00 and public access unknown.",
+    "entranceOsm": "node/4964789436",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "ent",
+    "parkingId": null,
+    "entranceNodeId": "door:ent-osm-4940704291",
+    "evidence": [
+      "OSM node/4940704291 entrance=yes (cache); sheba.json publicAccess=unknown",
+      "not on the tower; ~390 m N of tower centre",
+      "no lot assigned, walk not computed"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "needs-owner-confirmation",
+    "note": "Side door of the ENT building; access unknown. Not evaluated against lots (no night destination need).",
+    "entranceOsm": "node/4940704291",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  },
+  {
+    "destinationId": "er",
+    "parkingId": null,
+    "entranceNodeId": "door:ent-osm-4983837917",
+    "evidence": [
+      "OSM node/4983837917 emergency=emergency_ward_entrance, entrance=yes, opening_hours=24/7 (API 2026-11-14)",
+      "ambulance_bay safety zone (node/4983837917, radius 15 m)"
+    ],
+    "walkMetersEstimate": null,
+    "walkSource": null,
+    "status": "rejected",
+    "note": "REJECTED for visitor routing: ambulance / emergency-ward access. Use the main ER door door:ent-osm-4983835256 for ER visitors (not evaluated here).",
+    "entranceOsm": "node/4983837917",
+    "targetNodeId": null,
+    "src": "tools/.cache/osm-raw.json (OSM extract 2026-11-14) + OSM API 2026-11-14 + data/topology.json + data/sheba.json",
+    "retrieved": "2026-11-14"
+  }
+]

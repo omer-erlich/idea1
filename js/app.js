@@ -12,6 +12,7 @@ import { indoorHtml } from './ui/indoor.js';
 import { t } from './strings.js';
 import { backendEnabled } from './config.js';
 import { vote } from './backend.js';
+import { prepareAliases, rankDests, unitType } from './engine/search.js';
 
 const S = {
   base: null, topo: null, data: null, router: null, directory: null, dirReady: null, dests: new Map(), votes: new Map(),
@@ -27,6 +28,7 @@ const TYPE_LABEL = { garage: 'חניון מקורה', lot: 'מגרש חניה', 
 const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const dayName = d => DAYS[d];
 const MAX_LIST = 60;
+const UNIT_TAG = { clinic: 'מרפאה', ward: 'מחלקה (אשפוז)', array: 'מערך', institute: 'מכון', unit: 'יחידה' };
 
 // ---------------------------------------------------------------- boot
 async function boot() {
@@ -45,8 +47,9 @@ async function boot() {
   S.router = new CampusRouter(S.topo, S.data);
   S.opts = { ...S.opts, ...store.get('opts', {}) };
   buildDestinations();
+  const loadAliases = fetchJson('data/search-aliases.json').then(d => { S.aliases = prepareAliases(d); }).catch(() => { S.aliases = prepareAliases(null); });
   const loadTests = fetchJson('data/tests-directory.json').then(d => { S.tests = d.tests || []; }).catch(() => { S.tests = []; });
-  S.dirReady = Promise.all([fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; }).catch(() => { S.directory = []; }), loadTests])
+  S.dirReady = Promise.all([fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; }).catch(() => { S.directory = []; }), loadTests, loadAliases])
     .then(() => { buildDestinations(); renderDestList(); });
   initUi();
   await routeFromUrl();
@@ -250,19 +253,15 @@ function renderDestList() {
   const q = norm($('#search').value);
   const last = store.get('lastDest');
   const all = [...S.dests.values()];
-  let list = q
-    ? all.filter(d => norm(d.name).includes(q) || d.aliases.some(a => norm(a).includes(q)))
-    : all.filter(d => d.kind === 'dest');
+  let list = q ? rankDests(all, $('#search').value, S.aliases) : all.filter(d => d.kind === 'dest');
   if (!q && last) list.sort((a, b) => (b.id === last) - (a.id === last));
-  const rank = { dest: 0, clinic: 1, test: 2 };
-  if (q) list.sort((a, b) => rank[a.kind] - rank[b.kind] || (norm(a.name).startsWith(q) ? 0 : 1) - (norm(b.name).startsWith(q) ? 0 : 1));
   const total = list.length;
   list = list.slice(0, MAX_LIST);
   $('#list-label').textContent = q ? `נמצאו ${total}` : 'יעדים נפוצים';
   $('#dest-list').innerHTML = list.map(d => {
     const sub = d.kind === 'test'
       ? [t('testBadge'), d.targets.length === 1 ? S.dests.get(d.targets[0]).name : d.targets.length > 1 ? t('testManyUnits', { n: d.targets.length }) : t('unlocatedBadge')].join(' · ')
-      : [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
+      : [UNIT_TAG[unitType(d.name)] || null, d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
     const isLast = d.id === last && !q;
     return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : d.kind === 'test' ? '🧪' : d.kind === 'clinic' ? '🏥' : '📍'}</span>
       <span class="dest-txt"><b>${esc(d.name)}</b>${sub || isLast ? `<span class="sub">${isLast ? 'האחרון שבחרת' + (sub ? ' · ' : '') : ''}${esc(sub)}</span>` : ''}</span><span class="dest-chev" aria-hidden="true">‹</span></button></li>`;

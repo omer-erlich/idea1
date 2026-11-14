@@ -54,3 +54,14 @@ Crawl etiquette: the lobby (52 pages) and ~520 clinic pages were opened like a v
 
 ## Search aliases (2026-11-14)
 `data/search-aliases.json` (Latin abbreviations and Hebrew typed spellings, intent words): derived from the repo's own names in `data/sheba.json`, `data/clinics-directory.json` and `data/tests-directory.json`, plus common Hebrew spellings typed by users; no web source, language aid only, no facts about Sheba.
+
+## Local route candidates – night/evening (2026-11-14)
+Used for `data/local-route-candidates.json` and `docs/LOCAL-ROUTES-CANDIDATES.md` only. No new scraping; no Google data.
+
+| Source | URL / id | Licence / terms | Retrieved | Used for |
+|---|---|---|---|---|
+| OpenStreetMap extract (cache) | `tools/.cache/osm-raw.json` (ids e.g. way/295751880, node/4964789435) | ODbL 1.0 – © OpenStreetMap contributors | 2026-11-14 | parking lots (`amenity=parking`, access, fee, parking=surface), tower outline, entrances and tags, disabled-designated zone |
+| OpenStreetMap API 0.6 (spot check of tags) | `https://api.openstreetmap.org/api/0.6/{node,way}/{id}` for 14 ids | ODbL 1.0 | 2026-11-14 | confirm current tags of the tower doors, candidate lots, emergency-ward entrance and emergency exit |
+| Project graph (derived from OSM + Sheba text) | `data/topology.json` | derived, ODbL-attributed via OSM | 2026-11-14 | walking metres (outdoor `m`) and indoor seconds for each candidate |
+| Project data | `data/sheba.json` (destinations, parkings, entrances, safetyZones) | derived | 2026-11-14 | destination ids, publicAccess flags, safety zones |
+| Owner tip (primary, unverified) | owner message 2026-11-14 | owner's own knowledge | 2026-11-14 | evening/night MRI: small floor-0 lot outside the central garage, back door of the MRI building. Recorded as "owner tip", never as verified fact |
