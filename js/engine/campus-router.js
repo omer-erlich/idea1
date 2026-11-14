@@ -6,7 +6,7 @@
 import createGraph from '../../vendor/ngraph/ngraph.graph.es.js';
 import { aStar } from '../../vendor/ngraph/ngraph.path.es.js';
 import { haversine, pointInPolygon } from './geo.js';
-import { isOpenAt, parkingStatusAt } from './time.js';
+import { isOpenAt, parkingStatusAt, windowMatches } from './time.js';
 import { parkingSafetyProblems } from './safety.js';
 import { generateTopoSteps } from './topo-steps.js';
 
@@ -14,6 +14,7 @@ export const INFERRED_PENALTY_SEC = 25;      // prefer confirmed links, but stil
 export const DOOR_SEC = 4;
 export const STATUS_PENALTY_MIN = { ok: 0, paid: 1, risky: 8 };
 export const UNVERIFIED_TIP_PENALTY_MIN = 3;
+export const TIP_BONUS_CAP_MIN = 6;   // a local tip can re-rank safe, open options by at most this many minutes
 export const FLAGGED_PENALTY_MIN = 10;
 const WALK_MPS = 1.1;
 
@@ -128,6 +129,26 @@ export class CampusRouter {
     return o;
   }
 
+  /**
+   * Owner / local tips (data/local-tips.json): "for this destination in these hours, park HERE and use THAT door".
+   * A tip only re-ranks an option that already passed safety, rules and door-hours checks; it never opens a closed door,
+   * never overrides an exclusion and never removes the official main garage. Unverified tips are always labelled.
+   * The bonus needs the route to really use the tip's entrance, and that entrance to be public with KNOWN hours that are open now.
+   */
+  _applyLocalTip(o, p, dest, when, opts) {
+    const tip = (opts.tips || []).find(t => t.parking === p.id && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
+    if (!tip) return;
+    const door = tip.entrance ? this.nodes.get(tip.entrance) : null;
+    const usesDoor = !!door && o.path.nodeIds.includes(door.id);
+    const open = !!door && door.publicAccess === 'yes' && door.hours != null && isOpenAt(door.hours, when).open;
+    o.tip = { id: tip.id, noteHe: tip.noteHe || '', status: tip.status || 'unverified', provenance: tip.provenance || 'owner', confidence: tip.confidence || 'low', doorName: door?.label || null };
+    if (!usesDoor) { o.tip.noBonusReason = 'route-skips-door'; return; }
+    if (!open) { o.tip.noBonusReason = door?.publicAccess !== 'yes' ? 'door-not-public' : door?.hours == null ? 'door-hours-unknown' : 'door-closed'; return; }
+    o.tip.bonusMin = Math.min(tip.bonusMin ?? 0, TIP_BONUS_CAP_MIN);
+    o.score -= o.tip.bonusMin;
+    o.tipOption = true;
+  }
+
   parkingExclusion(p, when, opts = {}) {
     const safety = parkingSafetyProblems(p, this.sheba.safetyZones);
     if (safety.length) return { code: 'safety', reason: safety.join('; ') };
@@ -179,6 +200,7 @@ export class CampusRouter {
       const flagged = !!opts.votes?.get(p.id)?.flagged;
       o.flagged = flagged;
       o.score = o.cost / 60 + (STATUS_PENALTY_MIN[status] ?? 0) + (!p.official && !p.prov?.verified ? UNVERIFIED_TIP_PENALTY_MIN : 0) + (flagged ? FLAGGED_PENALTY_MIN : 0);
+      this._applyLocalTip(o, p, dest, when, opts);
       if (status === 'risky') o.warnings.push('risky');
       if (!p.official) o.warnings.push('unofficial');
       if (flagged) o.warnings.push('flagged');

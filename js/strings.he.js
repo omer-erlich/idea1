@@ -34,6 +34,7 @@ export const HE = {
   testBadge: 'בדיקה', testManyUnits: 'במספר יחידות ({n})', testPickTitle: 'איפה מבצעים: {name}?',
   testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
   estimatedNotice: 'חלק מהמסלול (בעיקר בפנים) משוער ולא נמדד בשטח.',
+  tipUnverified: 'טיפ מקומי · לא מאומת', tipConfirmed: 'טיפ מקומי · אומת',
   altLink: 'חלופות ({n})',
   lostLink: 'לא בטוח איפה אני',
   floorQ: 'באיזו קומה אתם?', floorArriveQ: 'בדקו את השלט: הגעתם לקומה {floor}?', floorYes: '✓ אני בקומה {floor}', floorOther: 'אני בקומה אחרת', walkExitAsk: 'לצאת? לחצו שוב', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',

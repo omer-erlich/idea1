@@ -47,6 +47,7 @@ async function boot() {
   S.router = new CampusRouter(S.topo, S.data);
   S.opts = { ...S.opts, ...store.get('opts', {}) };
   buildDestinations();
+  fetchJson('data/local-tips.json').then(d => { S.tips = d.tips || []; if (S.destId && !$('#screen-result').hidden) renderResult({ keepSheet: true }); }).catch(() => { S.tips = []; });
   const loadAliases = fetchJson('data/search-aliases.json').then(d => { S.aliases = prepareAliases(d); }).catch(() => { S.aliases = prepareAliases(null); });
   const loadTests = fetchJson('data/tests-directory.json').then(d => { S.tests = d.tests || []; }).catch(() => { S.tests = []; });
   S.dirReady = Promise.all([fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; }).catch(() => { S.directory = []; }), loadTests, loadAliases])
@@ -327,7 +328,7 @@ const whenNow = () => (S.timeParam === 'now' ? whenFromDate() : parseWhen(S.time
 function recommend() {
   const d = S.dests.get(S.destId);
   if (!d.topoNode) return { destination: d, options: [], excluded: [], noRoute: true };
-  return S.router.recommend(d.topoNode, d, whenNow(), { ...S.opts, mode: S.mode, startNodeId: S.startNodeId, votes: S.votes });
+  return S.router.recommend(d.topoNode, d, whenNow(), { ...S.opts, mode: S.mode, startNodeId: S.startNodeId, votes: S.votes, tips: S.tips || [] });
 }
 
 function renderResult({ keepSheet = false } = {}) {
@@ -396,6 +397,8 @@ function renderSheetBody() {
   main.innerHTML = `<div class="sm-row">${walk}${statusBadge(o)}</div>
     <div class="sm-name">${title}</div>
     ${o.kind === 'parking' && !p.official ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
+    ${o.tip ? `<div class="tip-line"><span class="tip-badge">${esc(t(o.tip.status === 'confirmed' ? 'tipConfirmed' : 'tipUnverified'))}</span> ${esc(o.tip.noteHe)}</div>` : ''}
+    ${o.tip && !(o.kind === 'parking' && !p.official) ? `<div class="unofficial">⚠️ ${UNOFFICIAL}</div>` : ''}
     ${o.warnings?.includes('estimated-route') ? `<p class="notice peek-notice">⚠️ ${esc(t('estimatedNotice'))}</p>` : ''}
     <div class="sm-actions">${actions}</div>
 `;

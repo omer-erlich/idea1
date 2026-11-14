@@ -264,3 +264,6 @@ body[data-screen="result"] main, body[data-screen="walk"] main { padding: 0; max
 .opts-sec + .opts-sec { margin-top: 8px; }
 #pref-row { margin-top: 4px; flex-wrap: wrap; }
 .modal-card .time-row { flex-wrap: wrap; }
+
+.tip-line { margin: 4px 0; font-size: 16px; }
+.tip-badge { display: inline-block; font-size: 15px; font-weight: 800; padding: 0 8px; border-radius: 99px; border: 2px solid var(--unofficial); color: var(--unofficial); background: var(--unofficial-soft); margin-inline-end: 6px; }
