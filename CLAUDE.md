@@ -34,6 +34,7 @@ Unofficial, static, Hebrew/RTL, mobile-first web app: for each clinic at Sheba M
 | `qa-runner` | haiku | run all tests + e2e, return a ≤10-line digest |
 | `copywriter` | sonnet | names, headlines, Hebrew microcopy; owns `js/strings.he.js` |
 | `graph-keeper` | sonnet | owns the graph: seed, builder, viewer, directory; updates + verifies on every change |
+| `route-scout` | opus | finds + ranks routes for EVERY destination and hour band (small lots, side/back doors, garage zones); owns `tools/scout-routes.mjs`, `data/route-scout.json`, local tips |
 | `strategist` | opus | general thinking: options, trade-offs, priorities, risk review (read-only) |
 
 Rules of thumb: the main session does cross-cutting engineering; give agents a *specific, closed* task and the exact files; ask for a short report. New sessions pick the agents up automatically from `.claude/agents/`.

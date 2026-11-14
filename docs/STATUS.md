@@ -24,3 +24,7 @@ Rules and map of the repo: `CLAUDE.md`. Open questions: `OPEN_QUESTIONS.md`. Sou
 - Node `fetch` ignores the proxy: run network scripts with `NODE_USE_ENV_PROXY=1`.
 - E2E tests need `python3 -m http.server 8080` running.
 - Demo artifact (private, snapshot, no tiles/GPS): https://claude.ai/artifact/KyCx7aPfYetwwhqv4yZMbc
+
+## Backlog (owner decisions)
+- Feedback (👍/👎, corrections) needs the Supabase backend: **postponed by the owner**; the feedback button stays a no-op for now.
+- Route discovery is the standing job of the `route-scout` agent (all destinations × day/evening/night), not individual owner examples.
