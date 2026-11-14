@@ -56,7 +56,7 @@
     { "id": "tower/F6/W", "label": "קומה 6 – אגף מערבי", "kind": "hall", "building": "tower", "floor": "6", "conf": "text", "src": "clinics-lobby/bone-marrow-day-hospitalization" },
 
     { "id": "cancer-garage/F2", "label": "חניון מרכז הסרטן – קומה 2", "kind": "floor", "building": "cancer-garage", "floor": "2", "conf": "text", "src": "owner: 2026-11-14" },
-    { "id": "central/F3", "label": "החניון המרכזי – קומה 3 (לאימות)", "kind": "floor", "building": "central", "floor": "3", "conf": "inferred", "src": "owner: 2026-11-14 (unsure of floor, to check)" },
+    { "id": "central/F3", "label": "החניון המרכזי – קומה 3", "kind": "floor", "building": "central", "floor": "3", "conf": "inferred", "src": "owner: 2026-11-14 (unsure of floor, to check)" },
     { "id": "cancer/lobby", "label": "מרכז הסרטן – כניסה / קצה המסדרון", "kind": "lobby", "building": "cancer", "floor": "0", "conf": "text", "src": "directions-clinics/directions-cancer-center" },
     { "id": "cancer/elev", "label": "מעליות מרכז הסרטן", "kind": "elevator", "building": "cancer", "floor": "0", "conf": "inferred", "src": "locations (כיסאות גלגלים: חניון קומה 2, מרכז הסרטן)", "serves": ["0", "1", "2", "3"] },
     { "id": "cancer/ella", "label": "אזור מכון אלה / המטולוגיה (קומת כניסה)", "kind": "hall", "building": "cancer", "floor": "0", "conf": "text", "src": "directions-clinics/directions-hematology-lab" },

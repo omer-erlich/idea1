@@ -26,7 +26,8 @@ export const BANDS = [
   { id: 'night', he: 'לילה', from: '22:00', to: '07:00', samples: ['sun-23:00', 'mon-02:00', 'mon-05:30'] },
 ];
 const UNSAFE_TAG = t => !!(t && (t.emergency || t.entrance === 'emergency' || t.door === 'emergency_exit' || /^(private|no|staff|employees|permit|delivery)$/.test(t.access || '')));
-const STAFF_NOTE = t => /employee|staff|עובד|צוות/i.test(`${t?.note || ''} ${t?.description || ''}`);
+const GARAGE_FLOOR_RE = /^(cancer-garage\/F\d+|central\/F3)$/;   // garage floor nodes with pedestrian links (owner 2026-11-14)
+const STAFF_NOTE =t => /employee|staff|עובד|צוות/i.test(`${t?.note || ''} ${t?.description || ''}`);
 
 // ---------------------------------------------------------------- helpers
 const read = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
@@ -75,11 +76,18 @@ function lotLabel(sheba, pid) {
 }
 
 // ---------------------------------------------------------------- safety knowledge
+/** Door node ids the OWNER verified as public (sheba.entrances: prov.verified + prov.source "owner" + publicAccess "yes").
+ *  The owner's confirmation outranks an OSM emergency-entrance tag for THAT door only. */
+export function ownerVerifiedDoors(sheba) {
+  return new Set((sheba.entrances || []).filter(e => e.prov?.verified === true && e.prov?.source === 'owner' && e.publicAccess === 'yes').map(e => e.nodeId || `door:${e.id}`));
+}
 export function unsafeDoors(R, sheba, osm) {
   const out = new Map();
+  const owner = ownerVerifiedDoors(sheba);
   const amb = (sheba.safetyZones || []).filter(z => z.kind === 'ambulance_bay' || z.kind === 'helipad');
   for (const n of R.nodes.values()) {
     if (n.kind !== 'entrance') continue;
+    if (owner.has(n.id) && n.publicAccess === 'yes') continue;   // owner-verified public door (e.g. the ER entrance, owner 2026-11-14)
     const tags = osm.nodes.get(osmIdOf(n.src))?.tags;
     if (UNSAFE_TAG(tags)) { out.set(n.id, `OSM tags: ${JSON.stringify(tags)}`); continue; }
     if (n.publicAccess === 'no') { out.set(n.id, 'publicAccess=no'); continue; }
@@ -95,12 +103,16 @@ export function lotSafety(p, sheba) {
   }
   return [...new Set(problems)];
 }
-function pathSafety(R, o, badDoors, zones) {
+/** The estimated ambulance-bay zone drawn around an owner-verified public door (same OSM node) is that door's own
+ *  forecourt: a walk that ENDS at that door may enter it (warning only). Every other route through it stays rejected. */
+export function pathSafety(R, o, badDoors, zones, ownerDoors = new Set()) {
   const rej = [], warn = [];
   for (const id of o.path.nodeIds) if (badDoors.has(id)) rej.push(`המסלול עובר בדלת אסורה ${id} (${badDoors.get(id)})`);
   const pts = samplePoints(o.coords || []);
+  const usedOwnerDoorOsm = o.path.nodeIds.filter(id => ownerDoors.has(id)).map(id => osmIdOf(R.nodes.get(id)?.src)).filter(Boolean);
   for (const z of zones) {
     if (!pts.some(p => zoneHit(p, z))) continue;
+    if (z.kind === 'ambulance_bay' && usedOwnerDoorOsm.includes(osmIdOf(z.prov?.osm))) { warn.push('er-forecourt-owner-verified-door'); continue; }
     if (z.kind === 'ambulance_bay' || z.kind === 'helipad' || z.kind === 'fire_access') rej.push(`המסלול עובר ב${SAFETY_KINDS[z.kind]} (${z.prov?.osm || z.id})`);
     else warn.push(`walk-crosses-${z.kind}`);
   }
@@ -133,6 +145,7 @@ export function scout({ sheba, topo, handTips = [], osmRaw = null, generatedAt =
   const P = new ProbeRouter(topo, sheba);
   const osm = osmIndex(osmRaw);
   const badDoors = unsafeDoors(R, sheba, osm);
+  const ownerDoors = ownerVerifiedDoors(sheba);
   const zones = sheba.safetyZones || [];
   const lots = (sheba.parkings || []).filter(p => R.nodes.has(`park:${p.id}`));
   const unplacedLots = (sheba.parkings || []).filter(p => !R.nodes.has(`park:${p.id}`)).map(p => ({ id: p.id, name: p.name, reason: p.lat == null ? 'no-coords' : 'not-in-graph' }));
@@ -175,7 +188,7 @@ export function scout({ sheba, topo, handTips = [], osmRaw = null, generatedAt =
       const withHand = R.recommend(dest.topoNode, dest, mid, { limit: 3, tips: handTips }).options[0] || null;
       const d0 = def[1] || def.find(Boolean);
       const defaultSec = d0 ? Math.max(...def.filter(Boolean).map(o => o.seconds)) : null;
-      const defaultOpt = d0 ? { parking: d0.parking.id, parkingName: d0.parking.name, entrance: d0.entrance?.id || null, minutes: r1(defaultSec / 60), walkMinutes: d0.walkMinutes, unsafe: pathSafety(R, d0, badDoors, zones).rej } : null;
+      const defaultOpt = d0 ? { parking: d0.parking.id, parkingName: d0.parking.name, entrance: d0.entrance?.id || null, minutes: r1(defaultSec / 60), walkMinutes: d0.walkMinutes, unsafe: pathSafety(R, d0, badDoors, zones, ownerDoors).rej, viaGarageFloor: d0.path.nodeIds.filter(id => GARAGE_FLOOR_RE.test(id)) } : null;
       const cell = { default: defaultOpt, withHandTips: withHand ? { parking: withHand.parking.id, entrance: withHand.entrance?.id || null, tip: withHand.tip?.id || null } : null, options: [], rejected: [], candidates: [] };
       const seen = new Set();
       for (const p of lots) {
@@ -210,7 +223,9 @@ export function scout({ sheba, topo, handTips = [], osmRaw = null, generatedAt =
           seen.add(key);
           const sec = Math.max(...ok.map(x => x.seconds));
           const info = describe(R, o);
-          const safety = pathSafety(R, o, badDoors, zones);
+          const safety = pathSafety(R, o, badDoors, zones, ownerDoors);
+          const viaGarageFloor = o.path.nodeIds.filter(id => GARAGE_FLOOR_RE.test(id));
+          if (viaGarageFloor.length) safety.warn.push(`via-garage-floor:${viaGarageFloor.join(',')}`);
           if (doorId && info.doors.filter(x => x !== doorId).some(x => R.nodes.get(x).building !== bKey)) safety.warn.push('passes-through-another-building');
           if (doorId && o.path.nodeIds.slice(o.path.nodeIds.indexOf(doorId) + 1).some(x => R.nodes.get(x)?.kind === 'entrance')) continue;   // walks in, out again and through another door: not a real "use this door" option
           const st = parkingStatusAt(p, mid).status;
@@ -278,14 +293,28 @@ export function scout({ sheba, topo, handTips = [], osmRaw = null, generatedAt =
   }
 
   // internal parking division: only what the graph supports
-  const garageLevels = [...R.nodes.values()].filter(n => n.kind === 'parking' && n.building).map(n => ({ id: n.id, building: n.building, floor: n.floor, label: n.label, src: n.src }));
-  const garages = (sheba.parkings || []).filter(p => p.type === 'garage').map(p => ({ id: p.id, name: p.name, levelsInData: garageLevels.filter(g => `park:${p.id}` === g.id || (p.id === 'p-central' && g.building === 'central')).map(g => g.id) }));
+  // garage buildings = graph buildings a lot node links into directly (e.g. park:p-cancer → cancer-garage/F2, park:p-central → central/lobby)
+  const linkedBuildings = pid => new Set((topo.edges || []).filter(e => e.a === `park:${pid}` || e.b === `park:${pid}`).map(e => R.nodes.get(e.a === `park:${pid}` ? e.b : e.a)?.building).filter(b => b && (topo.buildings || []).some(x => x.id === b && /garage|חניון/i.test(`${x.id} ${x.name || ''}`))));
+  const garageBuildings = new Set((sheba.parkings || []).flatMap(p => [...linkedBuildings(p.id)]));
+  const garageLevels = [...R.nodes.values()].filter(n => (n.kind === 'parking' && n.building) || (n.kind === 'floor' && garageBuildings.has(n.building))).map(n => ({ id: n.id, building: n.building, floor: n.floor, label: n.label.includes('חניון') ? n.label : `${(topo.buildings || []).find(x => x.id === n.building)?.name || n.building} – ${n.label}`, conf: n.conf || null, src: n.src, links: (topo.edges || []).filter(e => (e.a === n.id || e.b === n.id) && ['passage', 'stairs', 'link'].includes(e.kind)).map(e => ({ to: e.a === n.id ? e.b : e.a, kind: e.kind, conf: e.conf || null, src: e.src || null })) }));
+  const garages = (sheba.parkings || []).filter(p => p.type === 'garage').map(p => { const bs = linkedBuildings(p.id); return { id: p.id, name: p.name, levelsInData: garageLevels.filter(g => `park:${p.id}` === g.id || bs.has(g.building)).map(g => g.id) }; });
+  // forced checks through the owner's new garage floor links: does going via the floor node change anything? (day, mid sample)
+  const garageViaChecks = [];
+  { const w = parseWhen(BANDS[0].samples[1]);
+    for (const g of garageLevels.filter(x => GARAGE_FLOOR_RE.test(x.id))) {
+      const pid = (sheba.parkings || []).find(p => linkedBuildings(p.id).has(g.building))?.id;
+      const targets = new Set(g.links.filter(l => l.kind === 'passage').map(l => R.nodes.get(l.to)?.building));
+      for (const dest of (sheba.destinations || []).filter(d => targets.has(R.nodes.get(d.topoNode)?.building))) {
+        const a = pid && R.findPath(`park:${pid}`, dest.topoNode, w), b = pid && R.findPathVia(`park:${pid}`, g.id, dest.topoNode, w);
+        garageViaChecks.push({ via: g.id, parking: pid, destination: dest.id, defaultMin: a ? r1(a.cost / 60) : null, viaMin: b ? r1(b.cost / 60) : null, wins: !!(a && b && b.cost < a.cost) });
+      }
+    } }
   return {
     report: {
       _readme: 'Generated by tools/scout-routes.mjs – do not edit by hand. Minutes are the router\'s estimates (worst of 3 sample times per band). "options" can be used by the app today; "candidates" need an owner answer (door access unknown / lot without hour rules); "rejected" never.',
       generatedAt, bands: BANDS.map(({ id, from, to, samples }) => ({ id, from, to, samples })),
       thresholds: { MIN_SAVING_SEC, GENERATED_BONUS_MAX, UNSAFE_DOOR_DIST_M },
-      unsafeDoors: Object.fromEntries(badDoors), unplacedLots, garages, garageLevels,
+      unsafeDoors: Object.fromEntries(badDoors), ownerVerifiedDoors: [...ownerDoors], unplacedLots, garages, garageLevels, garageViaChecks,
       rejectedForSafety: [...rejectedForSafety.values()],
       destinations: results,
     },
@@ -324,7 +353,17 @@ export function coverageMarkdown(report, tips, prev) {
   L.push('', '### שאלות לבעלים (מהסריקה הזו)', '');
   ownerQuestions(report, tips).forEach((q, i) => L.push(`${i + 1}. ${q}`));
   L.push('', '### חלוקה פנימית של חניונים', '');
-  for (const g of report.garages) L.push(`- ${g.id} (${g.name}): ${g.levelsInData.length ? 'רמות בנתונים: ' + g.levelsInData.join(', ') + ' (אין קישור דלת לכל קומה)' : 'אין נתוני קומות/אזורים – לא הומצאו'}`);
+  for (const g of report.garages) L.push(`- ${g.id} (${g.name}): ${g.levelsInData.length ? 'רמות בנתונים: ' + g.levelsInData.join(', ') : 'אין נתוני קומות/אזורים – לא הומצאו'}`);
+  for (const g of (report.garageLevels || []).filter(x => x.links?.length && GARAGE_FLOOR_RE.test(x.id))) L.push(`  - ${g.id} (${g.conf}): ${g.links.map(l => `${l.kind} → ${l.to} (${l.conf}, ${l.src})`).join('; ')}`);
+  const viaG = report.destinations.flatMap(d => d.bands ? BANDS.map(b => [d, b, d.bands[b.id]]) : []).filter(([, , c]) => c.default?.viaGarageFloor?.length || c.options.some(o => o.warnings.some(w => w.startsWith('via-garage-floor')) && !o.fallback));
+  L.push('', '#### היכן הקישורים החדשים מהחניונים (cancer-garage/F2, central/F3) משנים תוצאה', '');
+  if (!viaG.length) L.push('אף תא לא משתמש בהם.');
+  const vc = report.garageViaChecks || [];
+  if (vc.length) L.push('', `בדיקה מאולצת (יום, עלות נתב בדק'): ${[...new Set(vc.map(v => v.via))].map(via => { const xs = vc.filter(v => v.via === via); return `${via}: ${xs.filter(v => v.wins).length}/${xs.length} יעדים מהירים יותר (למשל ${xs.slice(0, 2).map(v => `${v.destination} ${v.viaMin}′ מול ${v.defaultMin}′`).join(', ')})`; }).join(' · ')}. הקישור מוצע רק אם הוא באמת מהיר יותר; central/F3 מסומן inferred ולכן מקבל עונש עד לאימות הקומה.`);
+  for (const [d, b, c] of viaG) {
+    const o = c.options.find(x => x.warnings.some(w => w.startsWith('via-garage-floor')));
+    L.push(`- ${d.destination}/${b.id}: ${c.default?.viaGarageFloor?.length ? `ברירת המחדל עוברת ב-${c.default.viaGarageFloor.join(', ')} (${c.default.parking}, ${c.default.minutes}′)` : `אפשרות ${o.parking} דרך ${o.warnings.find(w => w.startsWith('via-garage-floor')).split(':')[1]} – ${o.minutes}′ (${o.savedVsDefaultMin >= 0 ? '−' : '+'}${Math.abs(o.savedVsDefaultMin)} מול ברירת המחדל)`}`);
+  }
   L.push('', '### חניות שלא נבדקו (אין מיקום בגרף)', '', report.unplacedLots.map(u => `${u.id} (${u.reason})`).join(', ') || '–');
   if (prev) L.push('', '### מה השתנה מאז הריצה הקודמת', '', prev);
   L.push('', '<!-- scout:end -->');
@@ -343,9 +382,12 @@ export function ownerQuestions(report, tips) {
     Q.push(`הדלת ${c.entrance.replace('door:ent-osm-', 'OSM node/')} (${(c.entranceName || '').split('·').pop().trim()}): פתוחה לציבור? באילו שעות? (חוסכת כ-${Math.round(c.savedVsDefaultMin)} דק' מ-${c.parking})`);
   }
   for (const d of report.destinations) if (d.bands && BANDS.every(b => !d.bands[b.id].default)) Q.push(`${d.name || d.destination}: אין מיקום/חיבור בגרף – סמן נעץ לכניסה לבניין (אין מסלול בכלל כרגע).`);
-  if (report.unsafeDoors && Object.keys(report.unsafeDoors).length) Q.push(`${Object.keys(report.unsafeDoors).map(x => x.replace('door:', '')).join(', ')} מסומנת "כניסת מיון" (emergency_ward_entrance) – האם זו דלת הולכי רגל למטופלים או רמפת אמבולנסים? עד תשובה הסורק לא משתמש בה.`);
+  // doors blocked only by an OSM emergency tag (not by publicAccess=no or ambulance distance): ask once; the owner can verify them like the ER door
+  const tagOnly = Object.entries(report.unsafeDoors || {}).filter(([, why]) => /^OSM tags/.test(why) && /emergency/.test(why)).map(([id]) => id.replace('door:', ''));
+  if (tagOnly.length) Q.push(`${tagOnly.join(', ')} מסומנת ב-OSM ככניסת חירום – האם זו דלת ציבורית להולכי רגל? עד תשובה הסורק לא משתמש בה.`);
+  for (const g of report.garageLevels || []) for (const l of g.links || []) if (l.conf === 'inferred' && l.kind === 'passage') Q.push(`${g.label}: האם המעבר להולכי רגל אל ${l.to} יוצא באמת מקומה ${g.floor}? (צילום שלט הקומה ליד המעבר מספיק)`);
   const g = report.garages.filter(x => !x.levelsInData.length).map(x => x.id);
-  if (g.length) Q.push(`חלוקה פנימית: לאילו קומות/אזורים ב-${g.join(', ')} יש יציאה ישירה להולכי רגל (ובאיזו קומה ב-p-central יוצאים הכי קרוב למגדל)?`);
+  if (g.length) Q.push(`חלוקה פנימית: לאילו קומות/אזורים ב-${g.join(', ')} יש יציאה ישירה להולכי רגל?`);
   return Q.slice(0, 15);
 }
 
