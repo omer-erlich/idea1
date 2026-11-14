@@ -4,7 +4,7 @@ export const HE = {
   // ---- how are you getting there?
   modeCar: 'ברכב', modeBus: 'באוטובוס', modeHere: 'כבר בשיבא',
   tagRec: 'מומלץ', tagAlt: 'חלופה', tagFallback: 'רשמי · גיבוי', tagStop: 'תחנה', tagHere: 'מכאן',
-  btnNavStop: '🚌 נווטו לתחנה', btnStartWalk: '🚶 התחילו הליכה', btnIndoor: '🏢 מסלול בפנים', btnChangeHere: '📍 שנו מיקום',
+  btnNavStop: '🚌 מסלול לתחנה ב-Google Maps', btnNavPark: '🚗 נווטו לחניה ב-Waze', btnWalkParked: '🚶 כבר חניתי – הוראות הליכה', btnWalkBus: '🚶 ירדתי בתחנה – הוראות הליכה', btnStartWalk: '🚶 התחילו הליכה', btnIndoor: '🏢 מסלול בפנים', btnChangeHere: '📍 שנו מיקום',
   busLines: 'קווים: {lines}', busNoLines: 'עדיין אין לנו את מספרי הקווים – בדקו באתר שיבא',
   hereNeedStart: 'בחרו איפה אתם נמצאים ונחשב מסלול משם',
 
@@ -30,12 +30,13 @@ export const HE = {
   indoorFloor: 'קומה {floor}', indoorClose: 'סגירה', indoorEst: 'משוער', indoorAllOutside: 'כל המסלול בחוץ',
 
   // ---- walking mode: live-view style confirmations
-  seeQ: 'רואים {landmark}?', seeYes: '✓ רואים', seeNo: 'לא רואים',
+  seeQ: 'רואים {landmark}?', seeYes: '✓ אני רואה: {landmark}', seeNo: 'לא מוצאים',
   testBadge: 'בדיקה', testManyUnits: 'במספר יחידות ({n})', testPickTitle: 'איפה מבצעים: {name}?',
   testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
+  estimatedNotice: 'חלק מהמסלול (בעיקר בפנים) משוער ולא נמדד בשטח.',
   altLink: 'חלופות ({n})',
   lostLink: 'לא בטוח איפה אני',
-  floorQ: 'באיזו קומה אתם?', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',
+  floorQ: 'באיזו קומה אתם?', floorArriveQ: 'בדקו את השלט: הגעתם לקומה {floor}?', floorYes: '✓ אני בקומה {floor}', floorOther: 'אני בקומה אחרת', walkExitAsk: 'לצאת? לחצו שוב', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',
   arriveQ: 'נכנסתם לבניין?', arriveYes: '✓ נכנסנו',
   rerouting: 'מחשבים מסלול חדש…', rerouted: 'חישבנו מחדש מ: {place}', floorMismatch: 'זו לא הקומה הצפויה – מחשבים מסלול חדש',
   gpsIndoorHint: 'בתוך בניינים ה-GPS לא מדויק – אשרו כל שלב',

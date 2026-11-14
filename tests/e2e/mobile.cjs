@@ -65,7 +65,7 @@ const { chromium, devices } = require('playwright');
   ok('next advances step', (await p.textContent('#walk-text')) !== t1);
   await p.click('#walk-prev'); await p.waitForTimeout(200);
   ok('prev goes back', (await p.textContent('#walk-text')) === t1);
-  await p.click('#walk-exit'); await p.waitForTimeout(800);
+  await p.click('#walk-exit'); await p.click('#walk-exit'); await p.waitForTimeout(800);
   ok('exit returns to result', await p.isVisible('#sheet') && !(await p.isVisible('#screen-walk')));
 
   // back button → picker
