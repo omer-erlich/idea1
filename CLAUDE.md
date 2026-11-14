@@ -3,8 +3,8 @@
 Unofficial, static, Hebrew/RTL, mobile-first web app: for each clinic at Sheba Medical Center (Tel HaShomer) it suggests where to start (parking, bus stop, or "I'm already here"), the best entrance and step-by-step walking directions, outdoors and **inside** the buildings. Not affiliated with Sheba.
 
 ## Non-negotiables
-1. **Never invent local knowledge.** Facts come from OSM, Sheba's public pages, or the owner. Unknown stays unknown (`null`, `conf:"inferred"`, or an entry in `OPEN_QUESTIONS.md`).
-2. **Safety:** never recommend emergency lanes, ambulance bays, disabled spots, fire access; only routes through doors known to be public (`publicAccess:"yes"`) and open at the chosen time. Unofficial parking always shows `טיפ לא רשמי – על אחריותך, בדוק שילוט במקום`; never say it is legal.
+1. **Local knowledge: open and informal (owner decision, 2026-11-14).** Don't hide useful routes behind heavy verification. Owner tips, OSM-based best guesses and crowd tips may be shown and even ranked first, clearly marked as field tips ("טיפ מהשטח · עזרו לנו לתקן"); mistakes are expected and corrected by user feedback (👍/👎, correction links). Still record where each fact came from (OSM / Sheba page / owner / crowd / guess), keep `est:true` / `conf:"inferred"` on guesses, and never present a guess as confirmed.
+2. **Safety (still hard):** never recommend emergency lanes, ambulance bays, disabled spots or fire access; never route through a door known to be non-public or known to be closed at the chosen time (unknown hours only produce a warning). Unofficial parking always shows `טיפ לא רשמי – על אחריותך, בדוק שילוט במקום`; never say it is legal.
 3. **No personal data** (no phones/e-mails/doctor names stored; anonymous tips only).
 4. **Sources:** only reusable material. **No Google Maps/Places scraping.** Record every source in `SOURCES.md`. Sheba's robots.txt disallows `/api/`.
 5. All campus parking costs the same flat fee → say it once, never per lot.

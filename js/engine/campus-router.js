@@ -133,17 +133,17 @@ export class CampusRouter {
    * Owner / local tips (data/local-tips.json): "for this destination in these hours, park HERE and use THAT door".
    * A tip only re-ranks an option that already passed safety, rules and door-hours checks; it never opens a closed door,
    * never overrides an exclusion and never removes the official main garage. Unverified tips are always labelled.
-   * The bonus needs the route to really use the tip's entrance, and that entrance to be public with KNOWN hours that are open now.
+   * The bonus needs the route to really use the tip's entrance, and that entrance to be public and not KNOWN to be closed now (unknown hours just show a warning; feedback from users corrects mistakes).
    */
   _applyLocalTip(o, p, dest, when, opts) {
     const tip = (opts.tips || []).find(t => t.parking === p.id && (t.destinations || []).includes(dest?.id) && (t.when || []).some(w => windowMatches(w, when)));
     if (!tip) return;
     const door = tip.entrance ? this.nodes.get(tip.entrance) : null;
     const usesDoor = !!door && o.path.nodeIds.includes(door.id);
-    const open = !!door && door.publicAccess === 'yes' && door.hours != null && isOpenAt(door.hours, when).open;
+    const open = !!door && door.publicAccess === 'yes' && (door.hours == null || isOpenAt(door.hours, when).open);   // unknown hours are fine (shown as a warning); KNOWN closed is not
     o.tip = { id: tip.id, noteHe: tip.noteHe || '', status: tip.status || 'unverified', provenance: tip.provenance || 'owner', confidence: tip.confidence || 'low', doorName: door?.label || null };
     if (!usesDoor) { o.tip.noBonusReason = 'route-skips-door'; return; }
-    if (!open) { o.tip.noBonusReason = door?.publicAccess !== 'yes' ? 'door-not-public' : door?.hours == null ? 'door-hours-unknown' : 'door-closed'; return; }
+    if (!open) { o.tip.noBonusReason = door?.publicAccess !== 'yes' ? 'door-not-public' : 'door-closed'; return; }
     o.tip.bonusMin = Math.min(tip.bonusMin ?? 0, TIP_BONUS_CAP_MIN);
     o.score -= o.tip.bonusMin;
     o.tipOption = true;

@@ -35,7 +35,7 @@ test('the shipped tips file parses and has no personal data', () => {
   }
 });
 
-test('a tip inside its window with a public door that has known open hours lowers the score (capped); outside the window it does nothing', () => {
+test('a tip inside its window with a public door that is open (or whose hours are unknown) lowers the score (capped); outside the window it does nothing', () => {
   const f = fixture(T => { for (const n of T.nodes) if (n.kind === 'entrance') n.hours = [{ days: [0, 1, 2, 3, 4, 5, 6], from: '00:00', to: '24:00' }]; });
   assert.ok(f, 'an official lot with a public door on its way to the MRI exists');
   const R = new CampusRouter(f.T, sheba);
@@ -47,10 +47,12 @@ test('a tip inside its window with a public door that has known open hours lower
   assert.ok(!day.tip && !day.tipOption, 'no tip at noon');
 });
 
-test('no bonus when the door has unknown hours, is closed now, or is not public', () => {
+test('unknown door hours still get the bonus (with the hours warning); no bonus when the door is known closed now or not public', () => {
   const f = fixture(T => { for (const n of T.nodes) if (n.kind === 'entrance') n.hours = [{ days: [0, 1, 2, 3, 4, 5, 6], from: '00:00', to: '24:00' }]; });
+  const un = (() => { const T = structuredClone(f.T); T.nodes.find(n => n.id === f.door.id).hours = null; const R = new CampusRouter(T, sheba); return score(R, f.p.id, night, [tipFor(f.p, f.door)]); })();
+  assert.ok(un.tipOption && un.warnings.includes('entrance-hours-unknown'), 'unknown hours: bonus + warning');
   const mk = (patch) => { const T = structuredClone(f.T); Object.assign(T.nodes.find(n => n.id === f.door.id), patch); return new CampusRouter(T, sheba); };
-  for (const [patch, reason] of [[{ hours: null }, 'door-hours-unknown'], [{ hours: [{ days: [0, 1, 2, 3, 4, 5, 6], from: '07:00', to: '19:00' }] }, null], [{ publicAccess: 'no' }, null]]) {
+  for (const [patch, reason] of [[{ hours: [{ days: [0, 1, 2, 3, 4, 5, 6], from: '07:00', to: '19:00' }] }, null], [{ publicAccess: 'no' }, null]]) {
     const R = mk(patch);
     const o = score(R, f.p.id, night, [tipFor(f.p, f.door)]);
     // a closed or non-public door is simply not routed through; either way there is never a bonus
