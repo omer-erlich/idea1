@@ -24,6 +24,18 @@ const { chromium, devices } = require('playwright');
   const steps = await p.$$eval('#sheet-more .steps-list li', els => els.map(e => e.textContent));
   ok('steps end with the arrival at the clinic', /הגעתם/.test(steps[steps.length - 1] || ''), (steps[steps.length - 1] || '').slice(0, 60));
 
+  // --- a test: searchable, linked to the unit that performs it
+  await p.goto(base, { waitUntil: 'load' }); await wait(1500);
+  await p.fill('#search', 'אקו לב'); await wait(400);
+  const testRows = await p.$$eval('.dest-row', els => els.map(e => e.textContent));
+  ok('search finds tests and marks them as tests', testRows.some(r => /בדיקה/.test(r) && /אקו/.test(r)), testRows.slice(0, 3).join(' | '));
+  await p.click('.dest-row:has-text("בדיקה")'); await wait(1500);
+  const urlT = await p.evaluate(() => location.search);
+  const modalT = await p.isVisible('#test-modal');
+  ok('a test opens the unit that performs it (or asks which)', /test=/.test(urlT) || modalT, urlT);
+  if (modalT) { await p.click('#test-list .here-row'); await wait(1200); }
+  ok('the result says which test it is for', /בדיקה:/.test(await p.textContent('#result-when')), await p.textContent('#result-when'));
+
   // --- a clinic with no known position: honest message, official link, no fake route
   await p.goto(base + '?dest=c:cancer__oncology__adults-preventive-oncology-clinic', { waitUntil: 'load' }); await wait(1500);
   const txt0 = await p.textContent('#sheet-main');

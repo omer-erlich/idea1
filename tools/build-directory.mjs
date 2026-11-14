@@ -73,6 +73,28 @@ if (fs.existsSync(SITEMAP)) {
   }
 }
 
+// ---- link tests to clinics (crawl file on disk; tolerate absence / re-runs; never invent a link)
+let crawlTests = [];
+try { crawlTests = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/tests-crawl.json'), 'utf8')).tests || []; } catch { /* no crawl yet */ }
+const crawlByUrl = new Map(), crawlBySlug = new Map();
+for (const ct of crawlTests) { if (ct.url) crawlByUrl.set(String(ct.url).replace(/\/+$/, ''), ct); if (ct.slug && !crawlBySlug.has(ct.slug)) crawlBySlug.set(ct.slug, ct); }
+const clinicById = new Map(clinics.map(c => [c.id, c]));
+// a clinic linked from a large share of test pages (e.g. a site-wide banner) says nothing about where a test is performed
+const linkCount = new Map();
+for (const ct of crawlTests) for (const id of new Set(ct.clinicLinks || [])) linkCount.set(id, (linkCount.get(id) || 0) + 1);
+const BOILERPLATE = new Set([...linkCount].filter(([, n]) => n > Math.max(30, crawlTests.length * 0.3)).map(([id]) => id));
+for (const t of tests) {
+  const ct = crawlByUrl.get(t.url.replace(/\/+$/, '')) || crawlBySlug.get(t.slug);
+  t.title = ct?.title || null;
+  t.clinicIds = [...new Set((ct?.clinicLinks || []).filter(id => clinicById.has(id) && !BOILERPLATE.has(id)))];
+  t.located = !!(t.unit || t.building || t.clinicIds.some(id => clinicById.get(id).location?.building));
+}
+const tStats = {
+  total: tests.length, titled: tests.filter(t => t.title).length, linked: tests.filter(t => t.clinicIds.length).length,
+  located: tests.filter(t => t.located).length,
+  linkedLocated: tests.filter(t => t.clinicIds.some(id => clinicById.get(id).location?.building)).length,
+};
+
 // ---------------------------------------------------------------- write data
 const stats = {
   lobbyEntries: clinics.length, crawled: clinics.filter(c => c.crawled).length,
@@ -110,6 +132,11 @@ let md = `# כיסוי מרפאות ובדיקות – מה יש, מה חסר, �
 | כבר יעד באפליקציה (שם זהה) | ${stats.inApp} |
 | הבניין שלהן מכוסה באפליקציה (יש יעד באותו בניין) | ${stats.buildingCovered} |
 | דפי בדיקות (מה-sitemap) | ${tests.length} |
+| בדיקות עם כותרת (מהסריקה) | ${tStats.titled} |
+| בדיקות המקושרות ל-מרפאה אחת לפחות | ${tStats.linked} |
+| בדיקות המקושרות למרפאה עם מיקום בגרף (בניין) | ${tStats.linkedLocated} |
+| בדיקות עם מיקום כלשהו (\`located\`) | ${tStats.located} |
+| בדיקות ללא קישור למרפאה | ${tStats.total - tStats.linked} |
 
 האפליקציה כוללת כרגע ${sheba.destinations.length} יעדים מרוכזים (מכונים ומרפאות מרכזיות) – ולכן כמעט כל הרשימה למטה "חסרה" כיעד חיפוש. כולם כבר מופיעים כצמתים בגרף הפנימי (\`graph.html\`) אם נקלט להם בניין.
 
@@ -138,6 +165,8 @@ for (const [sec, list] of [...bySec].sort((a, b) => b[1].length - a[1].length)) 
   const t0 = list[0];
   md += `| ${t0.sectionHe} | ${list.length} | ${t0.unit ? `${t0.unit} – ${bName[t0.building]}${t0.floor != null ? ', קומה ' + t0.floor : ''}` : 'לא צוין – יש לברר מול המחלקה'} |\n`;
 }
+const unlinked = tests.filter(t => !t.clinicIds.length);
+md += `\n**ללא קישור למרפאה (${unlinked.length})** – ${unlinked.slice(0, 15).map(t => t.title || t.slug).join('; ') || '—'}${unlinked.length > 15 ? ' …' : ''}\n`;
 md += `\n<details><summary>כל כתובות דפי הבדיקות</summary>\n\n`;
 for (const [sec, list] of [...bySec].sort((a, b) => b[1].length - a[1].length)) md += `**${list[0].sectionHe}**\n\n${list.map(t => `- [${t.slug}](${t.url})`).join('\n')}\n\n`;
 md += `</details>\n`;

@@ -31,6 +31,8 @@ export const HE = {
 
   // ---- walking mode: live-view style confirmations
   seeQ: 'רואים {landmark}?', seeYes: '✓ רואים', seeNo: 'לא רואים',
+  testBadge: 'בדיקה', testManyUnits: 'במספר יחידות ({n})', testPickTitle: 'איפה מבצעים: {name}?',
+  testPerformedAt: 'לפי אתר שיבא, הבדיקה מתבצעת ב: {names}', testUnknownUnit: 'באתר שיבא לא מצוין איפה מתבצעת הבדיקה ({area}). פנו לזימון התורים או לעמוד הבדיקה.',
   altLink: 'חלופות ({n})',
   lostLink: 'לא בטוח איפה אני',
   floorQ: 'באיזו קומה אתם?', floorExpected: 'לפי המסלול: קומה {floor}', floorOk: '✓ קומה {floor}',

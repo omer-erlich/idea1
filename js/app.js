@@ -45,7 +45,9 @@ async function boot() {
   S.router = new CampusRouter(S.topo, S.data);
   S.opts = { ...S.opts, ...store.get('opts', {}) };
   buildDestinations();
-  S.dirReady = fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; buildDestinations(); renderDestList(); }).catch(() => { S.directory = []; });
+  const loadTests = fetchJson('data/tests-directory.json').then(d => { S.tests = d.tests || []; }).catch(() => { S.tests = []; });
+  S.dirReady = Promise.all([fetchJson('data/clinics-directory.json').then(d => { S.directory = d.clinics; }).catch(() => { S.directory = []; }), loadTests])
+    .then(() => { buildDestinations(); renderDestList(); });
   initUi();
   await routeFromUrl();
   window.addEventListener('popstate', routeFromUrl);
@@ -79,6 +81,15 @@ function buildDestinations() {
     m.set('c:' + c.id, { id: 'c:' + c.id, name: c.name, aliases: [], buildingName: bld(node?.building || c.location?.building), floor: node?.floor ?? c.location?.floor ?? null, topoNode: node ? nid : null,
       officialUrl: `https://www.sheba.co.il/${c.href.replace(/^\/+/, '')}`, hint: c.location?.text || null, kind: 'clinic', unlocated: !node });
   }
+  // tests: searchable like clinics; a test is performed at one or more clinics/units (only links the Sheba pages state)
+  const destOfClinic = new Map((S.directory || []).map(c => [c.id, c.inApp || 'c:' + c.id]));
+  for (const x of S.tests || []) {
+    if (!x.title) continue;
+    const targets = [...new Set((x.clinicIds || []).map(id => destOfClinic.get(id)).filter(id => m.has(id)))];
+    const names = targets.map(id => m.get(id).name);
+    m.set('t:' + x.slug, { id: 't:' + x.slug, name: x.title, aliases: [], buildingName: null, floor: null, topoNode: null, officialUrl: x.url, kind: 'test', targets,
+      hint: names.length ? t('testPerformedAt', { names: names.join(', ') }) : t('testUnknownUnit', { area: x.sectionHe || '' }), unlocated: !targets.length });
+  }
   S.dests = m;
 }
 
@@ -89,6 +100,7 @@ async function routeFromUrl() {
   if (q.has('acc')) S.opts.accessible = q.get('acc') === '1';
   if (q.has('safe')) S.opts.avoidRisky = q.get('safe') === '1';
   S.mode = ['bus', 'here'].includes(q.get('mode')) ? q.get('mode') : 'car';
+  S.viaTest = null;
   S.startNodeId = null; S.startLabel = null;
   if (S.mode === 'here') {
     const from = q.get('from');
@@ -96,9 +108,11 @@ async function routeFromUrl() {
   }
   syncControls();
   const dest = q.get('dest');
-  if (dest && dest.startsWith('c:') && !S.dests.has(dest)) await S.dirReady;
+  if (dest && /^[ct]:/.test(dest) && !S.dests.has(dest)) await S.dirReady;
+  if (q.get('test') && !S.dests.has('t:' + q.get('test'))) await S.dirReady;
   if (dest && S.dests.has(dest)) {
     S.destId = dest;
+    if (q.get('test') && S.dests.has('t:' + q.get('test'))) S.viaTest = 't:' + q.get('test');
     S.selected = +(q.get('opt') || 0) || 0;
     renderResult({});
     if (q.get('walk') === '1') openWalk(S.selected, false);
@@ -111,7 +125,7 @@ function pushUrl(params, replace = false) {
   const url = location.pathname + (q.toString() ? '?' + q.toString().replace(/%3A/g, ':').replace(/%2F/g, '/') : '');
   (replace ? history.replaceState : history.pushState).call(history, null, '', url);
 }
-const currentParams = (extra = {}) => ({ dest: S.destId, time: S.timeParam !== 'now' ? S.timeParam : null, acc: S.opts.accessible || null, safe: S.opts.avoidRisky || null,
+const currentParams = (extra = {}) => ({ dest: S.destId, test: S.viaTest ? S.viaTest.slice(2) : null, time: S.timeParam !== 'now' ? S.timeParam : null, acc: S.opts.accessible || null, safe: S.opts.avoidRisky || null,
   mode: S.mode !== 'car' ? S.mode : null, from: S.mode === 'here' ? S.startNodeId : null, ...extra });
 
 function show(name) {
@@ -123,7 +137,7 @@ function show(name) {
   window.scrollTo(0, 0);
 }
 
-function goHome() { S.destId = null; pushUrl({}); show('picker'); }
+function goHome() { S.destId = null; S.viaTest = null; pushUrl({}); show('picker'); }
 
 // ---------------------------------------------------------------- search screen + options
 function initUi() {
@@ -153,6 +167,8 @@ function initUi() {
   $('#chip-mode').addEventListener('click', openOpts);
   $('#chip-opts').addEventListener('click', openOpts);
   $('#opts-close').addEventListener('click', closeOpts);
+  $('#test-close').addEventListener('click', () => { $('#test-modal').hidden = true; });
+  $('#test-modal').addEventListener('click', e => { if (e.target.id === 'test-modal') e.currentTarget.hidden = true; });
   $('#opts-modal').addEventListener('click', e => { if (e.target.id === 'opts-modal') closeOpts(); });
   $('#indoor-close').addEventListener('click', () => { $('#indoor-overlay').hidden = true; });
   $('#indoor-overlay').addEventListener('click', e => { if (e.target.id === 'indoor-overlay') e.currentTarget.hidden = true; });
@@ -226,24 +242,50 @@ function renderDestList() {
     ? all.filter(d => norm(d.name).includes(q) || d.aliases.some(a => norm(a).includes(q)))
     : all.filter(d => d.kind === 'dest');
   if (!q && last) list.sort((a, b) => (b.id === last) - (a.id === last));
-  if (q) list.sort((a, b) => (a.kind === 'dest' ? 0 : 1) - (b.kind === 'dest' ? 0 : 1) || (norm(a.name).startsWith(q) ? 0 : 1) - (norm(b.name).startsWith(q) ? 0 : 1));
+  const rank = { dest: 0, clinic: 1, test: 2 };
+  if (q) list.sort((a, b) => rank[a.kind] - rank[b.kind] || (norm(a.name).startsWith(q) ? 0 : 1) - (norm(b.name).startsWith(q) ? 0 : 1));
   const total = list.length;
   list = list.slice(0, MAX_LIST);
   $('#list-label').textContent = q ? `${total} תוצאות` : 'יעדים מרכזיים · ' + t('clinicsHint');
   $('#dest-list').innerHTML = list.map(d => {
-    const sub = [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
+    const sub = d.kind === 'test'
+      ? [t('testBadge'), d.targets.length === 1 ? S.dests.get(d.targets[0]).name : d.targets.length > 1 ? t('testManyUnits', { n: d.targets.length }) : t('unlocatedBadge')].join(' · ')
+      : [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null, d.unlocated ? t('unlocatedBadge') : null].filter(Boolean).join(' · ');
     const isLast = d.id === last && !q;
-    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : '📍'}</span>
+    return `<li><button class="dest-row" data-id="${esc(d.id)}"><span class="dest-ico${isLast ? ' last' : ''}" aria-hidden="true">${isLast ? '🕘' : d.unlocated ? '❔' : d.kind === 'test' ? '🧪' : '📍'}</span>
       <span class="dest-txt"><b>${esc(d.name)}</b>${sub || isLast ? `<span class="sub">${isLast ? 'האחרון שבחרת' + (sub ? ' · ' : '') : ''}${esc(sub)}</span>` : ''}</span><span class="dest-chev" aria-hidden="true">‹</span></button></li>`;
   }).join('') + (total > MAX_LIST ? `<li class="muted small" style="padding:10px 4px">${esc(t('moreResults', { n: total - MAX_LIST }))}</li>` : '');
   $('#no-results').hidden = total > 0;
-  $$('#dest-list .dest-row').forEach(btn => btn.addEventListener('click', () => {
-    S.destId = btn.dataset.id; S.selected = 0;
+  $$('#dest-list .dest-row').forEach(btn => btn.addEventListener('click', () => openDestination(btn.dataset.id)));
+}
+
+/** Open a destination; a test resolves to the clinic that performs it (asks when there are several). */
+function openDestination(id) {
+  S.viaTest = null;
+  const d = S.dests.get(id);
+  if (d?.kind === 'test') {
+    const located = d.targets.filter(x => S.dests.get(x)?.topoNode);
+    if (located.length > 1) return pickTestClinic(d, located);
+    if (located.length === 1) { S.viaTest = id; id = located[0]; }
+  }
+  {
+    S.destId = id; S.selected = 0;
     S.mode = store.get('mode') === 'bus' ? 'bus' : 'car'; S.startNodeId = null; S.startLabel = null;
     store.set('lastDest', S.destId);
     pushUrl(currentParams());
     renderResult({});
+  }
+}
+
+function pickTestClinic(test, located) {
+  $('#test-modal-title').textContent = t('testPickTitle', { name: test.name });
+  $('#test-list').innerHTML = located.map(id => `<button class="here-row" data-id="${esc(id)}"><span class="grow"><b>${esc(S.dests.get(id).name)}</b><br><span class="muted small">${esc([S.dests.get(id).buildingName, S.dests.get(id).floor != null && S.dests.get(id).floor !== '' ? `קומה ${S.dests.get(id).floor}` : null].filter(Boolean).join(' · '))}</span></span><span class="dest-chev" aria-hidden="true">‹</span></button>`).join('');
+  $$('#test-list .here-row').forEach(b => b.addEventListener('click', () => {
+    $('#test-modal').hidden = true;
+    S.viaTest = test.id; S.destId = b.dataset.id; S.selected = 0;
+    pushUrl(currentParams()); renderResult({});
   }));
+  $('#test-modal').hidden = false;
 }
 
 // ---------------------------------------------------------------- start mode (car / bus / here)
@@ -286,7 +328,7 @@ function renderResult({ keepSheet = false } = {}) {
   syncControls();
   const d = r.destination;
   $('#result-title').textContent = d.name;
-  $('#result-when').textContent = [d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null].filter(Boolean).join(' · ') +
+  $('#result-when').textContent = [S.viaTest ? t('testBadge') + ': ' + S.dests.get(S.viaTest).name : null, d.buildingName, d.floor != null && d.floor !== '' ? `קומה ${d.floor}` : null].filter(Boolean).join(' · ') +
     ` · ${S.timeParam === 'now' ? 'עכשיו' : 'יום ' + DAY_NAMES_HE[when.day] + ' ' + fmtHM(when.minutes)}${S.opts.accessible ? ' · ♿' : ''}`;
   const closedGates = S.mode === 'car' ? (S.data.gates || []).filter(g => g.hours && !isOpenAt(g.hours, when).open) : [];
   $('#gate-notice').hidden = !closedGates.length;
